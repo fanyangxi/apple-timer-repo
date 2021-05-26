@@ -2,14 +2,14 @@ import React, { ReactElement } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Radiuses, Spacings } from '@/theme/Variables'
-import SvgInfographics20 from '@/components/BlackBackground'
+import SvgDarkAnd from '@/components/DarkAnd'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { Common, Fonts, Gutters } = useTheme()
 
   return (
     <React.Fragment>
-      <SvgInfographics20 style={styles.background} />
+      <SvgDarkAnd style={styles.background} />
       <View style={styles.rootContainer}>
         {/* @summary-section: */}
         <View style={styles.summarySection}>
@@ -126,10 +126,7 @@ const styles = StyleSheet.create({
   pause: {},
   stop: {},
   background: {
+    flex: 1,
     position: 'absolute',
-    left: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
   },
 })
