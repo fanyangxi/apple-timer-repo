@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { ThemeState } from '@/store2/Theme/index'
+import { ThemeState } from '@/store/Theme/index'
 
 interface PayloadInterface {
   payload: Partial<ThemeState>

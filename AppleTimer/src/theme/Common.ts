@@ -5,7 +5,7 @@
  */
 import { StyleSheet } from 'react-native'
 import buttonStyles from './components/Buttons'
-import { ThemeCommonParams } from '@/theme2/theme.type'
+import { ThemeCommonParams } from '@/theme/theme.type'
 /**
  *
  * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}

@@ -3,9 +3,9 @@ import {
   buildAsyncActions,
   buildAsyncReducers,
 } from '@thecodingmachine/redux-toolkit-wrapper'
-import FetchOne from '@/store2/User/FetchOne'
+import FetchOne from '@/store/User/FetchOne'
 import { navigateAndSimpleReset } from '@/Navigators/Root'
-import DefaultTheme from '@/store2/Theme/DefaultTheme'
+import DefaultTheme from '@/store/Theme/DefaultTheme'
 
 export default {
   initialState: buildAsyncState(),

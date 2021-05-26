@@ -1,4 +1,4 @@
-import { ThemeColors, ThemeNavigationColors } from '@/theme2/theme.type'
+import { ThemeColors, ThemeNavigationColors } from '@/theme/theme.type'
 
 const Colors: ThemeColors = {
   primary: 'lightblue',

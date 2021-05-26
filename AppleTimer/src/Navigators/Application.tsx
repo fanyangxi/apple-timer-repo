@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { navigationRef } from '@/Navigators/Root'
 import { SafeAreaView, StatusBar } from 'react-native'
-import { useTheme } from '@/theme2'
-import { StartupState } from '@/store2/Startup'
+import { useTheme } from '@/theme'
+import { StartupState } from '@/store/Startup'
 
 const Stack = createStackNavigator()
 

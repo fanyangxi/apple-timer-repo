@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Image } from 'react-native'
-import { useTheme } from '@/theme2'
+import { useTheme } from '@/theme'
 
 interface Props {
   height?: number | string

@@ -2,7 +2,7 @@
  * This file contains all application's style relative to fonts
  */
 import { StyleSheet } from 'react-native'
-import { ThemeVariables, ThemeFonts } from '@/theme2/theme.type'
+import { ThemeVariables, ThemeFonts } from '@/theme/theme.type'
 
 /**
  *

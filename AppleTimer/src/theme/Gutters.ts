@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { ThemeGutters, ThemeVariables } from '@/theme2/theme.type'
+import { ThemeGutters, ThemeVariables } from '@/theme/theme.type'
 
 /**
  * Generate Styles depending on MetricsSizes vars availabled at ./Theme/Variables
