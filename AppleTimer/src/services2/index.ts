@@ -1,6 +1,6 @@
 import axios from 'axios'
-import handleError from '@/Services/utils/handleError'
-import { Config } from '@/Config'
+import handleError from '@/services2/utils/handleError'
+import { Config } from '@/configs'
 
 const instance = axios.create({
   baseURL: Config.API_URL,
