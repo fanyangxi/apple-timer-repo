@@ -21,6 +21,9 @@ import { ThemeGutters, ThemeVariables } from '@/theme/theme.type'
  */
 export default function ({ MetricsSizes }: ThemeVariables): ThemeGutters {
   return StyleSheet.create({
+    aaa: {
+      marginBottom: 2,
+    },
     ...Object.entries(MetricsSizes).reduce(
       (acc, [key, value]) => ({
         ...acc,

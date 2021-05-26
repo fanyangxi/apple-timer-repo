@@ -52,3 +52,18 @@ export const MetricsSizes: ThemeMetricsSizes = {
   regular,
   large,
 }
+
+export const Spacings = {
+  s_4: 4,
+  s_8: 8,
+  s_16: 16,
+  s_24: 24,
+  s_32: 32,
+  s_40: 40,
+  s_48: 48,
+}
+
+export const Radiuses = {
+  r4: 4,
+  r8: 8,
+}

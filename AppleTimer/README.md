@@ -28,15 +28,17 @@ Toggle Mute Button:
 ? time-renaming:
 ? total-time:
 
-@details-section:
+@details-section (Normal state):
 current preset:
     - prepare: in Sec
-    - work: in Sec
+    - workout: in Sec
     - rest: in Sec
-    - cycles count: int,
-    - sets-divider: in Sec
+    - cycles-count: int,
     - sets-count:
-
+In-timer-phase state (Prepare|Workout|Rest)
+    - phase-name
+    - time-left-in-phase 
+    
 @action-section:
 start-workout-button:
 
