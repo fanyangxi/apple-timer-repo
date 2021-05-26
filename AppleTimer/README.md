@@ -43,6 +43,6 @@ In-timer-phase state (Prepare|Workout|Rest)
 start-workout-button:
 
 
-
+svgr --replace-attr-values "#fff=currentColor" icon.svg -d ./
 
 +
