@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { IndexStartupContainer } from '@/Containers'
 import { useSelector } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
-import { navigationRef } from '@/Navigators/Root'
+import { navigationRef } from '@/navigators2/Root'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { useTheme } from '@/theme'
 import { StartupState } from '@/store/Startup'
@@ -23,7 +23,7 @@ const ApplicationNavigator = () => {
 
   useEffect(() => {
     if (MainNavigator == null && !applicationIsLoading) {
-      MainNavigator = require('@/Navigators/Main').default
+      MainNavigator = require('@/navigators2/Main').default
       setIsApplicationLoaded(true)
     }
   }, [applicationIsLoading])

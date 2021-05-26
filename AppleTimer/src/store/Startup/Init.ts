@@ -4,7 +4,7 @@ import {
   buildAsyncReducers,
 } from '@thecodingmachine/redux-toolkit-wrapper'
 import FetchOne from '@/store/User/FetchOne'
-import { navigateAndSimpleReset } from '@/Navigators/Root'
+import { navigateAndSimpleReset } from '@/navigators2/Root'
 import DefaultTheme from '@/store/Theme/DefaultTheme'
 
 export default {

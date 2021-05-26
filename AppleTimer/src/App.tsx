@@ -3,7 +3,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from '@/store'
-import { ApplicationNavigator } from '@/Navigators'
+import { ApplicationNavigator } from '@/navigators2'
 import './translations'
 
 const App = () => (
