@@ -1,5 +1,5 @@
 import axios from 'axios'
-import handleError from '@/services2/utils/handleError'
+import handleError from '@/services/utils/handleError'
 import { Config } from '@/configs'
 
 const instance = axios.create({

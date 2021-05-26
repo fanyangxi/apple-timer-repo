@@ -3,7 +3,7 @@ import {
   buildAsyncReducers,
   buildAsyncActions,
 } from '@thecodingmachine/redux-toolkit-wrapper'
-import fetchOneUserService from '@/services2/User/FetchOne'
+import fetchOneUserService from '@/services/User/FetchOne'
 
 export default {
   initialState: buildAsyncState('fetchOne'),
