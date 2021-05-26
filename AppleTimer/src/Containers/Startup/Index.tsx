@@ -4,7 +4,7 @@ import { useTheme } from '@/Theme'
 import { useDispatch } from 'react-redux'
 import InitStartup from '@/Store/Startup/Init'
 import { useTranslation } from 'react-i18next'
-import { Brand } from '@/components2'
+import { Brand } from '@/components'
 
 const IndexStartupContainer = () => {
   const { Layout, Gutters, Fonts } = useTheme()

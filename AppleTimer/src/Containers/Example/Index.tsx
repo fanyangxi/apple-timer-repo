@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
-import { Brand } from '@/components2'
+import { Brand } from '@/components'
 import { useTheme } from '@/Theme'
 import FetchOne from '@/Store/User/FetchOne'
 import ChangeTheme from '@/Store/Theme/ChangeTheme'
