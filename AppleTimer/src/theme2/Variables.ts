@@ -10,7 +10,7 @@ import {
   ThemeFontSize,
   ThemeMetricsSizes,
   ThemeNavigationColors,
-} from '@/Theme/theme.type'
+} from '@/theme2/theme.type'
 
 /**
  * Colors

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, View, Text } from 'react-native'
-import { useTheme } from '@/Theme'
+import { useTheme } from '@/theme2'
 import { useDispatch } from 'react-redux'
-import InitStartup from '@/Store/Startup/Init'
+import InitStartup from '@/store2/Startup/Init'
 import { useTranslation } from 'react-i18next'
 import { Brand } from '@/components'
 

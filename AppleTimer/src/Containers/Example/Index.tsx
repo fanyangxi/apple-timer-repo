@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Brand } from '@/components'
-import { useTheme } from '@/Theme'
-import FetchOne from '@/Store/User/FetchOne'
-import ChangeTheme from '@/Store/Theme/ChangeTheme'
+import { useTheme } from '@/theme2'
+import FetchOne from '@/store2/User/FetchOne'
+import ChangeTheme from '@/store2/Theme/ChangeTheme'
 import { useTranslation } from 'react-i18next'
-import { UserState } from '@/Store/User'
-import { ThemeState } from '@/Store/Theme'
+import { UserState } from '@/store2/User'
+import { ThemeState } from '@/store2/Theme'
 
 const IndexExampleContainer = () => {
   const { t } = useTranslation()

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { ThemeLayout, ThemeVariables } from '@/Theme/theme.type'
+import { ThemeLayout, ThemeVariables } from '@/theme2/theme.type'
 
 /**
  *
