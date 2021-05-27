@@ -12,17 +12,17 @@ import Svg, {
 
 const SvgDarkAnd = (props: SvgProps) => (
   <Svg
-    height="100%"
+    height="400"
     preserveAspectRatio="xMinYMin slice"
-    width="100%"
-    viewBox="49 49 51 51"
+    width="400"
+    viewBox="0 0 100 100"
     {...props}
   >
     <Defs>
-      <ClipPath clipPathUnits="userSpaceOnUse" id="DarkAnd_svg__b">
+      <ClipPath id="DarkAnd_svg__b">
         <Path d="M0 800h800V0H0z" />
       </ClipPath>
-      <ClipPath clipPathUnits="userSpaceOnUse" id="DarkAnd_svg__c">
+      <ClipPath id="DarkAnd_svg__c">
         <Path d="M0 800h800V-.326H0z" />
       </ClipPath>
       <RadialGradient
@@ -33,7 +33,6 @@ const SvgDarkAnd = (props: SvgProps) => (
         r={1}
         gradientUnits="userSpaceOnUse"
         gradientTransform="matrix(561.3584 0 0 -561.3584 400 399.837)"
-        spreadMethod="pad"
         id="DarkAnd_svg__a"
       >
         <Stop offset={0} stopColor="#474747" />
