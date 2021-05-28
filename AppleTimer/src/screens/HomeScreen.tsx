@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Radiuses, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
-import SvgAlertBell from '@/components/AlertBell'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { Common, Fonts, Gutters } = useTheme()
@@ -11,7 +10,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   return (
     <React.Fragment>
       <SvgComponent style={styles.background} />
-      <SvgAlertBell />
       <View style={styles.rootContainer}>
         {/* @summary-section: */}
         <View style={styles.summarySection}>
