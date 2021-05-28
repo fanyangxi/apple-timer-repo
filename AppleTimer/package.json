@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "type-check": "tsc --build plugins/typescript/template/tsconfig.json"
+    "type-check": "tsc --build plugins/typescript/template/tsconfig.json",
+    "convert-svg": "npx @svgr/cli --native -d ./ DarkAnd.svg"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.14.1",

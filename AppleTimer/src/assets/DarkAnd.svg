@@ -43,20 +43,17 @@
                 width="48"
                 height="48"
                 id="pattern139">
-            <g transform="translate(0,-3.6001)"
-               id="g89">
+            <g transform="translate(0,-3.6001)" id="g89">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path87" />
             </g>
-            <g transform="translate(24,-3.6001)"
-               id="g93">
+            <g transform="translate(24,-3.6001)" id="g93">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path91" />
             </g>
-            <g transform="translate(48,-3.6001)"
-               id="g97">
+            <g transform="translate(48,-3.6001)" id="g97">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path95" />
@@ -71,23 +68,20 @@
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path103" />
             </g>
-            <g transform="translate(48,20.3999)"
-               id="g109">
+            <g transform="translate(48,20.3999)" id="g109">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path107" />
             </g>
-            <g transform="translate(0,44.3999)"
-               id="g113">
+            <g transform="translate(0,44.3999)" id="g113">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
                       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
                       id="path111" />
             </g>
             <g transform="translate(24,44.3999)" id="g117">
-                <path
-                        d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
-                        style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-                        id="path115" />
+                <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
+                      style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                      id="path115" />
             </g>
             <g transform="translate(48,44.3999)" id="g121">
                 <path d="M 0,0 C 1.988,0 3.6,1.611 3.6,3.6 3.6,5.588 1.988,7.2 0,7.2 -1.989,7.2 -3.6,5.588 -3.6,3.6 -3.6,1.611 -1.989,0 0,0"
