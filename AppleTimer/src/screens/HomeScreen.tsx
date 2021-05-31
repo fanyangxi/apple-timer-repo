@@ -1,11 +1,13 @@
 import React, { ReactElement } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
-import { Radiuses, Spacings } from '@/theme/Variables'
+import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
+import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
+import { Divider } from 'native-base'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
-  const { Common, Fonts, Gutters } = useTheme()
+  const { Common, Gutters } = useTheme()
 
   return (
     <React.Fragment>
@@ -14,55 +16,48 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         {/* @summary-section: */}
         <View style={styles.summarySection}>
           <View style={styles.title}>
-            <TouchableOpacity
-              style={[Common.button.rounded, Gutters.regularBMargin]}
-              onPress={() => {}}
-            >
-              <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>
-            </TouchableOpacity>
+            {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>*/}
+            {/*  <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>*/}
+            {/*</TouchableOpacity>*/}
+            <LinkButton theme={LinkButtonTheme.Normal} text={'Change-Preset'} textColor={'white'} onPress={() => {}} />
           </View>
+          <Divider />
           <View style={styles.summaryContent}>
-            <View style={styles.timeRemaining}>
-              <Text style={Fonts.textRegular}>Time-Remaining:</Text>
-              <Text style={Fonts.textRegular}>{'07:20'}</Text>
+            <View style={styles.timeRemainingContainer}>
+              <Text style={styles.itemValue}>{'07:20'}</Text>
+              <Text style={styles.itemLabel}>Time-Remaining:</Text>
             </View>
-            <View style={styles.totalTime}>
-              <Text style={Fonts.textRegular}>Total-Time:</Text>
-              <Text style={Fonts.textRegular}>{'07:20'}</Text>
+            <View style={styles.totalTimeContainer}>
+              <Text style={styles.itemValue}>{'07:20'}</Text>
+              <Text style={styles.itemLabel}>Total-Time:</Text>
             </View>
           </View>
         </View>
 
         {/* @details-section: */}
         <View style={styles.detailsSection}>
-          <Text style={Fonts.textRegular}>Rest:</Text>
-          <Text style={Fonts.textRegular}>{'00:15'}</Text>
-          <Text style={Fonts.textRegular}>Prepare:</Text>
-          <Text style={Fonts.textRegular}>{'00:08'}</Text>
-          <Text style={Fonts.textRegular}>Workout:</Text>
-          <Text style={Fonts.textRegular}>{'00:40'}</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>Rest:</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>Prepare:</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>Workout:</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
 
-          <Text style={Fonts.textRegular}>Cycles:</Text>
-          <Text style={Fonts.textRegular}>{'8'}</Text>
-          <Text style={Fonts.textRegular}>Sets:</Text>
-          <Text style={Fonts.textRegular}>{'1'}</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>Cycles:</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>Sets:</Text>
+          <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
         </View>
 
         {/* @action-section: */}
         <View style={styles.actionSection}>
           <View style={[styles.start]}>
-            <TouchableOpacity
-              style={[Common.button.rounded]}
-              onPress={() => {}}
-            >
+            <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
               <Text style={Fonts.textRegular}>{'Start'}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.stop}>
-            <TouchableOpacity
-              style={[Common.button.rounded]}
-              onPress={() => {}}
-            >
+            <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
               <Text style={Fonts.textRegular}>{'Pause/Stop'}</Text>
             </TouchableOpacity>
           </View>
@@ -88,8 +83,8 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.s_4,
     // alignItems: 'center',
     // justifyContent: 'center',
-    backgroundColor: 'lightblue', // '#202021',
-    borderRadius: Radiuses.r8,
+    backgroundColor: '#202021', // '#202021',
+    borderRadius: Radiuses.r4,
   },
   summaryContent: {
     flexDirection: 'row',
@@ -98,11 +93,21 @@ const styles = StyleSheet.create({
   title: {
     alignItems: 'center',
   },
-  timeRemaining: {
+  timeRemainingContainer: {
     alignItems: 'center',
   },
-  totalTime: {
+  totalTimeContainer: {
     alignItems: 'center',
+    color: '#FFFFFF',
+    ...Fonts.textLarge,
+  },
+  itemLabel: {
+    ...Fonts.textSmall,
+    ...FontColors.white,
+  },
+  itemValue: {
+    ...Fonts.textRegular,
+    ...FontColors.white,
   },
   // @details-section:
   detailsSection: {
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.s_8,
     paddingVertical: Spacings.s_4,
     borderRadius: 2,
-    backgroundColor: 'lightyellow', // '#202021',
+    backgroundColor: '#202021', // '#202021',
   },
   // @action-section:
   actionSection: {

@@ -11,6 +11,7 @@ import {
   ThemeMetricsSizes,
   ThemeNavigationColors,
 } from '@/theme/theme.type'
+import { TextStyle } from 'react-native'
 
 /**
  * Colors
@@ -66,4 +67,60 @@ export const Spacings = {
 export const Radiuses = {
   r4: 4,
   r8: 8,
+}
+
+export const FontSizes = {
+  f10: 10,
+  f12: 12,
+  f14: 14,
+  f16: 16,
+  f20: 20,
+  f40: 40,
+}
+export const FontColors = {
+  white: {
+    color: 'white',
+  } as TextStyle,
+  red: {
+    color: 'red',
+  } as TextStyle,
+  black: {
+    color: 'black',
+  } as TextStyle,
+}
+
+// text-display-64, text-heading-40, text-subheading-20, text-paragraph-12, text-body-16, text-caption-12, text-label-14
+// fontFamily?: string;
+// fontSize?: number;
+// fontStyle?: 'normal' | 'italic';
+// fontWeight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+// letterSpacing?: number;
+// lineHeight?: number;
+export const Fonts = {
+  textSmall: {
+    fontSize: FontSizes.f12,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    // fontFamily: '',
+    // letterSpacing?: number;
+    // lineHeight?: number;
+  } as TextStyle,
+  textRegular: {
+    fontSize: FontSizes.f20,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  } as TextStyle,
+  textLarge: {
+    fontSize: FontSizes.f40,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  } as TextStyle,
+  titleSmall: {
+    fontSize: FontSize.small * 2,
+    fontWeight: 'bold',
+  } as TextStyle,
+  titleRegular: {
+    fontSize: FontSize.regular * 2,
+    fontWeight: 'bold',
+  } as TextStyle,
 }
