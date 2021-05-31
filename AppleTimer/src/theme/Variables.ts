@@ -57,6 +57,7 @@ export const MetricsSizes: ThemeMetricsSizes = {
 export const Spacings = {
   s_4: 4,
   s_8: 8,
+  s_12: 12,
   s_16: 16,
   s_24: 24,
   s_32: 32,
@@ -75,6 +76,7 @@ export const FontSizes = {
   f14: 14,
   f16: 16,
   f20: 20,
+  f30: 30,
   f40: 40,
 }
 export const FontColors = {
@@ -89,7 +91,13 @@ export const FontColors = {
   } as TextStyle,
 }
 
-// text-display-64, text-heading-40, text-subheading-20, text-paragraph-12, text-body-16, text-caption-12, text-label-14
+// - text-display-64,
+// - text-heading-40,
+// - text-subheading-20,
+// - text-paragraph-12,
+// - text-body-16,
+// - text-caption-12,
+// - text-label-14
 // fontFamily?: string;
 // fontSize?: number;
 // fontStyle?: 'normal' | 'italic';
@@ -97,6 +105,14 @@ export const FontColors = {
 // letterSpacing?: number;
 // lineHeight?: number;
 export const Fonts = {
+  textCaption30: {
+    fontSize: FontSizes.f30,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    // fontFamily: '',
+    // letterSpacing?: number;
+    // lineHeight?: number;
+  } as TextStyle,
   textSmall: {
     fontSize: FontSizes.f12,
     fontStyle: 'normal',
