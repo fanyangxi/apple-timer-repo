@@ -7,16 +7,16 @@ export enum TickingType {
 export class CountdownTimer {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
-  private readonly _onTicked?: (type: TickingType, secsLeft: number) => void
+  private readonly _onTicked?: (type: TickingType, secsLeft: number) => Promise<void>
   private _isPaused: boolean = false
   private _timerId?: NodeJS.Timeout
   private _delayTimerId?: NodeJS.Timeout
-  private _remainingCountdownSecs: number = 0
-  private _beforeResumeDelay: number = 0
+  private _remainingCountdownMilliSecs: number = 0
   private _runStartTime: number = 0
 
-  constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => void) {
+  constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => Promise<void>) {
     this._initialCountdownSecs = countdownSecs
+    this._remainingCountdownMilliSecs = countdownSecs * 1000
     this._onTicked = onTicked
 
     if ((countdownSecs * 1000) % this.INTERVAL !== 0) {
@@ -28,82 +28,84 @@ export class CountdownTimer {
 
   async start(): Promise<void> {
     this.clear()
-    this._remainingCountdownSecs = this._initialCountdownSecs
-    await this.runSlices(this._remainingCountdownSecs, 0)
+    await this.runSlices(this._initialCountdownSecs, 0)
   }
 
   pause() {
     if (!this._isPaused) {
       this.clear()
       const pausedTime = new Date().getTime()
-      const timeLeft = this.getRemainingCountdownTime() - (pausedTime - this._runStartTime)
-      console.log(
-        `>>> pausedTime:${pausedTime} | _runStartTime:${this._runStartTime}, DIFF: ${pausedTime - this._runStartTime};
-_getRemainingCountdownTime: ${this.getRemainingCountdownTime()}
-_beforeResumeDelay: ${this._beforeResumeDelay};
-_remainingCountdownSecs:${this._remainingCountdownSecs}`,
-      )
-      this._beforeResumeDelay = timeLeft % this.INTERVAL
-      this._remainingCountdownSecs = Math.floor(timeLeft / this.INTERVAL)
-      console.log(`>>>: 
-After:_beforeResumeDelay: ${this._beforeResumeDelay};
-After:_remainingCountdownSecs:${this._remainingCountdownSecs}`)
+      // Exclude the passed milli-secs, then get the remaining milli-secs.
+      const temp = this._remainingCountdownMilliSecs
+      const timeLeft = this._remainingCountdownMilliSecs - (pausedTime - this._runStartTime)
+      this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
       this._isPaused = true
+      console.log(
+        `[Paused] RemainingCountdownMilliSecs: before:${temp}|after:${this._remainingCountdownMilliSecs};` +
+          `runStartTime: ${this._runStartTime}; pausedTime: ${pausedTime}; Diff: ${pausedTime - this._runStartTime}` +
+          '',
+      )
     }
   }
 
   async resume() {
     if (this._isPaused) {
-      await this.runSlices(this._remainingCountdownSecs, this._beforeResumeDelay)
+      const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
+      const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
+      console.log(`[Resumed] countdownSecs:${countdownSecs}, beforeStartDelay:${beforeStartDelayMilliSecs}`)
+
+      // Update the `_isPaused` must be here.
+      this._isPaused = false
+      await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
     }
   }
 
   clear() {
     this._delayTimerId && clearInterval(this._delayTimerId)
+    this._delayTimerId = undefined
     this._timerId && clearInterval(this._timerId)
-    console.log(`>>> _timerId:${this._timerId}, _delayTimerId:${this._delayTimerId}`)
+    this._timerId = undefined
   }
 
   stop() {
     this.clear()
+    this._remainingCountdownMilliSecs = 0
   }
 
   isPaused() {
     return this._isPaused
   }
 
-  private getRemainingCountdownTime() {
-    return this._remainingCountdownSecs * 1000 + this._beforeResumeDelay
-  }
-
-  private async runSlices(countdownTime: number, beforeStartDelay?: number): Promise<void> {
-    console.log(`>>> countdownTime:${countdownTime}, beforeStartDelay:${beforeStartDelay}`)
+  private async runSlices(countdownSecs: number, beforeStartDelayMilliSecs?: number): Promise<void> {
     return new Promise(resolve => {
       const extracted = () => {
-        let counter = countdownTime
-        this._onTicked && this._onTicked(TickingType.Started, counter)
+        let counter = countdownSecs
+        this._onTicked && this._onTicked(TickingType.Started, counter) // trigger this call asynchronously
 
         if (counter === 0) {
+          this._timerId && clearInterval(this._timerId)
+          this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
+          this._remainingCountdownMilliSecs = 0
           resolve()
           return
         }
 
-        this._isPaused = false
         this._runStartTime = new Date().getTime()
         this._timerId = setInterval(() => {
           counter--
           if (counter === 0) {
             this._timerId && clearInterval(this._timerId)
-            this._onTicked && this._onTicked(TickingType.Finished, counter)
+            this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
+            this._remainingCountdownMilliSecs = 0
             resolve()
           } else {
-            this._onTicked && this._onTicked(TickingType.Ticked, counter)
+            this._onTicked && this._onTicked(TickingType.Ticked, counter) // trigger this call asynchronously
           }
         }, this.INTERVAL)
       }
 
-      beforeStartDelay
-        ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelay || 0))
+      beforeStartDelayMilliSecs
+        ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))
         : extracted.call(this)
       //
       console.log('>>>>>> lalal')
