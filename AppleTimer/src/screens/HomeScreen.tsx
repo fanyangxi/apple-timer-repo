@@ -1,16 +1,26 @@
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
-import { Divider } from 'native-base'
-import { runPreset } from '@/services/timer-service'
+import { Button, Divider } from 'native-base'
+import timerService from '@/services/timer-service'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TimerPhase } from '@/models/timer-phase'
-import { TickingType } from '@/utils/date-util'
+import { TickingType } from '@/services/countdown-timer'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
+  const [currentTimerPhase, setCurrentTimerPhase] = useState<TimerPhase>()
+  const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
+  const [prepareRemainingSecs, setPrepareRemainingSecs] = useState<number>()
+  const [workoutRemainingSecs, setWorkoutRemainingSecs] = useState<number>()
+  const [restRemainingSecs, setRestRemainingSecs] = useState<number>()
+  const [cyclesRemainingCount, setCyclesRemainingCount] = useState<number>()
+  const [setsRemainingCount, setSetsRemainingCount] = useState<number>()
+  const [isRunning, setIsRunning] = useState<boolean>()
+  const [isPaused, setIsPaused] = useState<boolean>()
+
   const { Common } = useTheme()
   const preset: Preset = {
     prepareSecs: 3,
@@ -20,30 +30,47 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     setsCount: 2,
   }
 
-  useEffect(() => {
-    const asyncCalls = async () => {
-      // await startCountdown(5, (type, secsLeft) => {
-      //   console.log(`Set-A: ${type},${secsLeft}`)
-      // })
-      // await startCountdown(3, (type, secsLeft) => {
-      //   console.log(`Set-B: ${type},${secsLeft}`)
-      // })
-      await runPreset(
-        preset,
-        (
-          currentSet: number,
-          currentCycle: number,
-          currentPhase: TimerPhase,
-          type: TickingType,
-          secsLeft: number,
-          tickedPreset: TickedPreset,
-        ) => {
-          console.log(`[Set:${currentSet}/Cycle:${currentCycle}]: ${currentPhase},${type},${secsLeft},${JSON.stringify(tickedPreset)}`)
-        },
-      )
-    }
-    asyncCalls()
-  }, [])
+  // useEffect(() => {}, [])
+  const onStartPressed = async () => {
+    await timerService.runPreset(
+      preset,
+      () => {
+        setIsRunning(true)
+      },
+      (
+        currentSet: number,
+        currentCycle: number,
+        currentPhase: TimerPhase,
+        type: TickingType,
+        secsLeft: number,
+        tickedPreset: TickedPreset,
+      ) => {
+        setCurrentTimerPhase(currentPhase)
+        setSecsLeftInCurrentPhase(secsLeft)
+        setPrepareRemainingSecs(tickedPreset.prepareRemainingSecs)
+        setWorkoutRemainingSecs(tickedPreset.workoutRemainingSecs)
+        setRestRemainingSecs(tickedPreset.restRemainingSecs)
+        setCyclesRemainingCount(tickedPreset.cyclesRemainingCount)
+        setSetsRemainingCount(tickedPreset.setsRemainingCount)
+        console.log(
+          `[Set:${currentSet}/Cycle:${currentCycle}]: ${currentPhase},${type},${secsLeft},${JSON.stringify(
+            tickedPreset,
+          )}`,
+        )
+      },
+      () => {
+        setIsRunning(false)
+      },
+    )
+  }
+
+  const onPausedPressed = () => {
+    timerService.togglePause2()
+  }
+
+  const onStopPressed = () => {
+    timerService.stop()
+  }
 
   return (
     <React.Fragment>
@@ -101,24 +128,30 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           <Divider style={styles.contentDivider} />
           <View style={styles.summaryContent}>
             <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Current Phase: Workout</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'00:36'}</Text>
+              <Text style={styles.itemLabel}>Current Phase: {currentTimerPhase}</Text>
+              <Text style={[Fonts.textSmall, FontColors.white]}>{secsLeftInCurrentPhase}</Text>
             </View>
           </View>
         </View>
 
         {/* @action-section: */}
         <View style={styles.actionSection}>
-          <View style={[styles.start]}>
-            <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
-              <Text style={Fonts.textRegular}>{'Start'}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.stop}>
-            <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
-              <Text style={Fonts.textRegular}>{'Pause/Stop'}</Text>
-            </TouchableOpacity>
-          </View>
+          {isRunning ? (
+            <React.Fragment>
+              <View style={[styles.start]}>
+                <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
+                  <Text style={Fonts.textRegular}>{'Pause'}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.stop}>
+                <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
+                  <Text style={Fonts.textRegular}>{'Stop'}</Text>
+                </TouchableOpacity>
+              </View>
+            </React.Fragment>
+          ) : (
+            <Button onPress={() => onStartPressed()}>PRIMARY</Button>
+          )}
         </View>
       </View>
     </React.Fragment>
