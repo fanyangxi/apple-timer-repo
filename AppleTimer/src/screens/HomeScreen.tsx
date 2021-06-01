@@ -1,13 +1,49 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Divider } from 'native-base'
+import { runPreset } from '@/services/timer-service'
+import { Preset, TickedPreset } from '@/models/preset'
+import { TimerPhase } from '@/models/timer-phase'
+import { TickingType } from '@/utils/date-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { Common } = useTheme()
+  const preset: Preset = {
+    prepareSecs: 3,
+    workoutSecs: 6,
+    restSecs: 2,
+    cyclesCount: 3,
+    setsCount: 2,
+  }
+
+  useEffect(() => {
+    const asyncCalls = async () => {
+      // await startCountdown(5, (type, secsLeft) => {
+      //   console.log(`Set-A: ${type},${secsLeft}`)
+      // })
+      // await startCountdown(3, (type, secsLeft) => {
+      //   console.log(`Set-B: ${type},${secsLeft}`)
+      // })
+      await runPreset(
+        preset,
+        (
+          currentSet: number,
+          currentCycle: number,
+          currentPhase: TimerPhase,
+          type: TickingType,
+          secsLeft: number,
+          tickedPreset: TickedPreset,
+        ) => {
+          console.log(`[Set:${currentSet}/Cycle:${currentCycle}]: ${currentPhase},${type},${secsLeft},${JSON.stringify(tickedPreset)}`)
+        },
+      )
+    }
+    asyncCalls()
+  }, [])
 
   return (
     <React.Fragment>

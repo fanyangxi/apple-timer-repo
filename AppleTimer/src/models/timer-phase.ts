@@ -1,7 +1,7 @@
 export enum TimerPhase {
-  Prepare = 1,
-  Workout = 2,
-  Rest = 3,
+  Prepare = 'Prepare',
+  Workout = 'Workout',
+  Rest = 'Rest',
 }
 
 //

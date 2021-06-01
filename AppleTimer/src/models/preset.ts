@@ -11,6 +11,14 @@ export interface Preset {
   setsCount: number
 }
 
+export interface TickedPreset {
+  prepareRemainingSecs: number
+  workoutRemainingSecs: number
+  restRemainingSecs: number
+  cyclesRemainingCount: number
+  setsRemainingCount: number
+}
+
 // //// Timer Section:
 // @summary-section:
 //   ? change-current-preset-button:
