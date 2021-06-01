@@ -45,4 +45,5 @@ start-workout-button:
 
 svgr --replace-attr-values "#fff=currentColor" icon.svg -d ./
 
+https://github.com/mathiasvr/tiny-timer/blob/master/src/tiny-timer.ts
 +

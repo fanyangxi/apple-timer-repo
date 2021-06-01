@@ -11,6 +11,8 @@ export type PresetTickedEventHandler = (
   tickedPreset: TickedPreset,
 ) => void
 
+let countdownTimer: CountdownTimer
+
 const runPreset = async (
   preset: Preset,
   onStarted?: () => void,
@@ -28,48 +30,74 @@ const runPreset = async (
   onStarted && onStarted()
 
   // Phase: 1.Prepare
-  await CountdownTimer.startCountdown(preset.prepareSecs, (type: TickingType, secsLeft: number) => {
+  countdownTimer = new CountdownTimer(preset.prepareSecs, (type: TickingType, secsLeft: number) => {
     tickedPreset = { ...tickedPreset, prepareRemainingSecs: secsLeft }
     onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, tickedPreset)
   })
-  for (let setIndex = preset.setsCount; setIndex > 0; setIndex--) {
-    for (let cycleIndex = preset.cyclesCount; cycleIndex > 0; cycleIndex--) {
-      // Phase: 2.Workout
-      await CountdownTimer.startCountdown(preset.workoutSecs, (type: TickingType, secsLeft: number) => {
-        tickedPreset = {
-          ...tickedPreset,
-          workoutRemainingSecs: secsLeft,
-          cyclesRemainingCount: cycleIndex,
-          setsRemainingCount: setIndex,
-        }
-        onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Workout, type, secsLeft, tickedPreset)
-      })
-      // Phase: 3.Rest
-      await CountdownTimer.startCountdown(preset.restSecs, (type: TickingType, secsLeft: number) => {
-        tickedPreset = {
-          ...tickedPreset,
-          restRemainingSecs: secsLeft,
-          cyclesRemainingCount: cycleIndex,
-          setsRemainingCount: setIndex,
-        }
-        onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Rest, type, secsLeft, tickedPreset)
-      })
-    }
-  }
+  await countdownTimer.start()
+  // for (let setIndex = preset.setsCount; setIndex > 0; setIndex--) {
+  //   for (let cycleIndex = preset.cyclesCount; cycleIndex > 0; cycleIndex--) {
+  //     // Phase: 2.Workout
+  //     countdownTimer = new CountdownTimer(preset.workoutSecs, (type: TickingType, secsLeft: number) => {
+  //       tickedPreset = {
+  //         ...tickedPreset,
+  //         workoutRemainingSecs: secsLeft,
+  //         cyclesRemainingCount: cycleIndex,
+  //         setsRemainingCount: setIndex,
+  //       }
+  //       onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Workout, type, secsLeft, tickedPreset)
+  //     })
+  //     await countdownTimer.start()
+  //     // Phase: 3.Rest
+  //     countdownTimer = new CountdownTimer(preset.restSecs, (type: TickingType, secsLeft: number) => {
+  //       tickedPreset = {
+  //         ...tickedPreset,
+  //         restRemainingSecs: secsLeft,
+  //         cyclesRemainingCount: cycleIndex,
+  //         setsRemainingCount: setIndex,
+  //       }
+  //       onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Rest, type, secsLeft, tickedPreset)
+  //     })
+  //     await countdownTimer.start()
+  //   }
+  // }
 
   onFinished && onFinished()
 }
 
-const togglePause2 = () => {
-  CountdownTimer.togglePause()
+const togglePause2 = async () => {
+  if (!countdownTimer) {
+    return
+  }
+
+  if (countdownTimer.isPaused()) {
+    await countdownTimer.resume()
+  } else {
+    countdownTimer.pause()
+  }
+}
+
+const pause = () => {
+  countdownTimer && countdownTimer.pause()
+}
+
+const resume = async () => {
+  countdownTimer && (await countdownTimer.resume())
+}
+
+const isPaused = (): boolean => {
+  return countdownTimer && countdownTimer.isPaused()
 }
 
 const stop = () => {
-  CountdownTimer.stop()
+  countdownTimer && countdownTimer.stop()
 }
 
 export default {
   runPreset,
   togglePause2,
+  pause,
+  resume,
+  isPaused,
   stop,
 }

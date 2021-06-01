@@ -23,7 +23,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   const { Common } = useTheme()
   const preset: Preset = {
-    prepareSecs: 3,
+    prepareSecs: 7,
     workoutSecs: 6,
     restSecs: 2,
     cyclesCount: 3,
@@ -65,7 +65,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onPausedPressed = () => {
-    timerService.togglePause2()
+    setIsPaused(true)
+    timerService.pause()
+  }
+
+  const onResumePressed = async () => {
+    setIsPaused(false)
+    await timerService.resume()
   }
 
   const onStopPressed = () => {
@@ -138,11 +144,19 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <View style={styles.actionSection}>
           {isRunning ? (
             <React.Fragment>
-              <View style={[styles.start]}>
-                <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
-                  <Text style={Fonts.textRegular}>{'Pause'}</Text>
-                </TouchableOpacity>
-              </View>
+              {isPaused ? (
+                <View style={[styles.start]}>
+                  <TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>
+                    <Text style={Fonts.textRegular}>{'Resume'}</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={[styles.start]}>
+                  <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
+                    <Text style={Fonts.textRegular}>{'Pause'}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.stop}>
                 <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
                   <Text style={Fonts.textRegular}>{'Stop'}</Text>
