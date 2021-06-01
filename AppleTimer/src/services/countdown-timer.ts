@@ -18,6 +18,12 @@ export class CountdownTimer {
   constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => void) {
     this._initialCountdownSecs = countdownSecs
     this._onTicked = onTicked
+
+    if ((countdownSecs * 1000) % this.INTERVAL !== 0) {
+      throw new Error(
+        `The countdownSecs:${countdownSecs} should be divided by INTERVAL:${this.INTERVAL} with no remainder.`,
+      )
+    }
   }
 
   async start(): Promise<void> {
