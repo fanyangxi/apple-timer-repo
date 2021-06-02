@@ -55,7 +55,6 @@ export class CountdownTimer {
       console.log(`[Resumed] countdownSecs:${countdownSecs}, beforeStartDelay:${beforeStartDelayMilliSecs}`)
 
       // Update the `_isPaused` must be here.
-      this._isPaused = false
       await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
     }
   }
@@ -90,7 +89,6 @@ export class CountdownTimer {
           return
         }
 
-        this._runStartTime = new Date().getTime()
         this._timerId = setInterval(() => {
           counter--
           if (counter === 0) {
@@ -104,6 +102,8 @@ export class CountdownTimer {
         }, this.INTERVAL)
       }
 
+      this._isPaused = false
+      this._runStartTime = new Date().getTime()
       beforeStartDelayMilliSecs
         ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))
         : extracted.call(this)
