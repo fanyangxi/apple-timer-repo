@@ -90,11 +90,11 @@ export class CountdownTimer {
     return new Promise(resolve => {
       const extracted = () => {
         let counter = countdownSecs
-        this._onTicked && this._onTicked(TickingType.Started, counter) // trigger this call asynchronously
+        this.triggerCallback(TickingType.Started, counter) // trigger this call asynchronously
 
         if (counter === 0) {
           this.stop()
-          this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
+          this.triggerCallback(TickingType.Finished, counter) // trigger this call asynchronously
           resolve()
           return
         }
@@ -103,10 +103,10 @@ export class CountdownTimer {
           counter--
           if (counter === 0) {
             this.stop()
-            this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
+            this.triggerCallback(TickingType.Finished, counter) // trigger this call asynchronously
             resolve()
           } else {
-            this._onTicked && this._onTicked(TickingType.Ticked, counter) // trigger this call asynchronously
+            this.triggerCallback(TickingType.Ticked, counter) // trigger this call asynchronously
           }
         }, this.INTERVAL)
       }
@@ -118,5 +118,10 @@ export class CountdownTimer {
       //
       console.log('>>>>>> lalal')
     })
+  }
+
+  private triggerCallback(type: TickingType, secsLeft: number) {
+    const aaa = secsLeft
+    this._onTicked && this._onTicked(type, aaa)
   }
 }
