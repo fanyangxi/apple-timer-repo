@@ -1,5 +1,5 @@
 import { Preset, TickedPreset } from '@/models/preset'
-import { CountdownTimer, TickingType } from '@/services/countdown-timer'
+import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
 import { TimerPhase } from '@/models/timer-phase'
 import { Sleep } from '@/utils/common-util'
 
@@ -32,10 +32,9 @@ const runPreset = async (
 
   // Phase: 1.Prepare
   countdownTimer = new CountdownTimer(preset.prepareSecs, async (type: TickingType, secsLeft: number) => {
+    tickedPreset = { ...tickedPreset, prepareRemainingSecs: secsLeft }
+    onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, tickedPreset)
     await Sleep(5000)
-    const aaa = { ...tickedPreset, prepareRemainingSecs: secsLeft }
-    onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, aaa)
-    tickedPreset = aaa
   })
   await countdownTimer.start()
   // for (let setIndex = preset.setsCount; setIndex > 0; setIndex--) {
@@ -73,7 +72,7 @@ const togglePause2 = async () => {
     return
   }
 
-  if (countdownTimer.isPaused()) {
+  if (countdownTimer.Status === TimerStatus.PAUSED) {
     await countdownTimer.resume()
   } else {
     countdownTimer.pause()
@@ -88,12 +87,12 @@ const resume = async () => {
   countdownTimer && (await countdownTimer.resume())
 }
 
-const isPaused = (): boolean => {
-  return countdownTimer && countdownTimer.isPaused()
+const status = (): TimerStatus => {
+  return countdownTimer && countdownTimer.Status
 }
 
 const stop = () => {
-  countdownTimer && countdownTimer.stop()
+  countdownTimer && countdownTimer.exStop()
 }
 
 export default {
@@ -101,6 +100,6 @@ export default {
   togglePause2,
   pause,
   resume,
-  isPaused,
+  status,
   stop,
 }
