@@ -4,6 +4,12 @@ export enum TickingType {
   Finished = 'Finished',
 }
 
+export enum TimerStatus {
+  IDLE = 'idle',
+  PAUSED = 'paused',
+  TICKING = 'ticking',
+}
+
 export class CountdownTimer {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
@@ -13,6 +19,8 @@ export class CountdownTimer {
   private _delayTimerId?: NodeJS.Timeout
   private _remainingCountdownMilliSecs: number = 0
   private _runStartTime: number = 0
+
+  public Status: TimerStatus = TimerStatus.IDLE
 
   constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => Promise<void>) {
     this._initialCountdownSecs = countdownSecs
@@ -27,12 +35,14 @@ export class CountdownTimer {
   }
 
   async start(): Promise<void> {
+    this.Status = TimerStatus.TICKING
     this.clear()
     await this.runSlices(this._initialCountdownSecs, 0)
   }
 
   pause() {
     if (!this._isPaused) {
+      this.Status = TimerStatus.PAUSED
       this.clear()
       const pausedTime = new Date().getTime()
       // Exclude the passed milli-secs, then get the remaining milli-secs.
@@ -50,11 +60,11 @@ export class CountdownTimer {
 
   async resume() {
     if (this._isPaused) {
+      this.Status = TimerStatus.TICKING
       const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
       const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
       console.log(`[Resumed] countdownSecs:${countdownSecs}, beforeStartDelay:${beforeStartDelayMilliSecs}`)
-
-      // Update the `_isPaused` must be here.
+      this._isPaused = false
       await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
     }
   }
@@ -67,6 +77,7 @@ export class CountdownTimer {
   }
 
   stop() {
+    this.Status = TimerStatus.IDLE
     this.clear()
     this._remainingCountdownMilliSecs = 0
   }
@@ -82,9 +93,8 @@ export class CountdownTimer {
         this._onTicked && this._onTicked(TickingType.Started, counter) // trigger this call asynchronously
 
         if (counter === 0) {
-          this._timerId && clearInterval(this._timerId)
+          this.stop()
           this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
-          this._remainingCountdownMilliSecs = 0
           resolve()
           return
         }
@@ -92,9 +102,8 @@ export class CountdownTimer {
         this._timerId = setInterval(() => {
           counter--
           if (counter === 0) {
-            this._timerId && clearInterval(this._timerId)
+            this.stop()
             this._onTicked && this._onTicked(TickingType.Finished, counter) // trigger this call asynchronously
-            this._remainingCountdownMilliSecs = 0
             resolve()
           } else {
             this._onTicked && this._onTicked(TickingType.Ticked, counter) // trigger this call asynchronously
@@ -102,7 +111,6 @@ export class CountdownTimer {
         }, this.INTERVAL)
       }
 
-      this._isPaused = false
       this._runStartTime = new Date().getTime()
       beforeStartDelayMilliSecs
         ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))

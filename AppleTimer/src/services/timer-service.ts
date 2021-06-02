@@ -30,8 +30,9 @@ const runPreset = async (
   onStarted && onStarted()
 
   // Phase: 1.Prepare
-  countdownTimer = new CountdownTimer(preset.prepareSecs, (type: TickingType, secsLeft: number) => {
+  countdownTimer = new CountdownTimer(preset.prepareSecs, async (type: TickingType, secsLeft: number) => {
     tickedPreset = { ...tickedPreset, prepareRemainingSecs: secsLeft }
+    // await Sleep(5000)
     onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, tickedPreset)
   })
   await countdownTimer.start()

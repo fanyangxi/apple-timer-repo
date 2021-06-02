@@ -45,5 +45,6 @@ start-workout-button:
 
 svgr --replace-attr-values "#fff=currentColor" icon.svg -d ./
 
+https://stackoverflow.com/questions/21277900/how-can-i-pause-setinterval-functions
 https://github.com/mathiasvr/tiny-timer/blob/master/src/tiny-timer.ts
 +
