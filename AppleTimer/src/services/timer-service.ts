@@ -67,18 +67,6 @@ const runPreset = async (
   onFinished && onFinished()
 }
 
-const togglePause2 = async () => {
-  if (!countdownTimer) {
-    return
-  }
-
-  if (countdownTimer.Status === TimerStatus.PAUSED) {
-    await countdownTimer.resume()
-  } else {
-    countdownTimer.pause()
-  }
-}
-
 const pause = () => {
   countdownTimer && countdownTimer.pause()
 }
@@ -98,7 +86,6 @@ const stop = () => {
 
 export default {
   runPreset,
-  togglePause2,
   pause,
   resume,
   status,

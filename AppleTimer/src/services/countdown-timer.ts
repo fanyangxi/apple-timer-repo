@@ -7,6 +7,7 @@ export enum TickingType {
   Finished = 'Finished',
 }
 
+// Start, Pause + Resume, Stop, Reset
 export enum TimerStatus {
   IDLE = 'idle',
   PAUSED = 'paused',
