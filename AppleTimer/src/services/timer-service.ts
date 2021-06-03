@@ -56,6 +56,70 @@ const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: n
   }
 }
 
+const getUpdatedPreset2 = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
+  const elapsedSecs = originalPreset.TotalPresetDurationSecs() - remainingPresetDurationSecs
+  if (elapsedSecs < 0) {
+    throw new Error(
+      `Invalid remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
+        `should be less/equal than: ${originalPreset.TotalPresetDurationSecs()}`,
+    )
+  }
+
+  let result: TickedPreset = {
+    setsRemainingCount: originalPreset.SetsCount,
+    setCyclesRemainingCount: originalPreset.CyclesCount,
+    setCurrentPhase: undefined,
+    setPrepareRemainingSecs: originalPreset.PrepareSecs,
+    cycleWorkoutRemainingSecs: originalPreset.WorkoutSecs,
+    cycleRestRemainingSecs: originalPreset.RestSecs,
+  }
+  let togoSecsInPhase = elapsedSecs // remainingSecsInPhase
+  for (let setIndex = originalPreset.SetsCount; setIndex > 0; setIndex--) {
+    togoSecsInPhase = originalPreset.PrepareSecs - Math.abs(togoSecsInPhase)
+    if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.PrepareSecs) {
+      result = {
+        ...result,
+        setsRemainingCount: setIndex,
+        setCurrentPhase: TimerPhase.Prepare,
+        setPrepareRemainingSecs: togoSecsInPhase,
+      }
+      return result
+    }
+
+    for (let cycleIndex = originalPreset.CyclesCount; cycleIndex > 0; cycleIndex--) {
+      togoSecsInPhase = originalPreset.WorkoutSecs - Math.abs(togoSecsInPhase)
+      if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.WorkoutSecs) {
+        result = {
+          ...result,
+          setCyclesRemainingCount: cycleIndex,
+          setCurrentPhase: TimerPhase.Workout,
+          setPrepareRemainingSecs: 0,
+          cycleWorkoutRemainingSecs: togoSecsInPhase,
+        }
+        return result
+      }
+
+      togoSecsInPhase = originalPreset.RestSecs - Math.abs(togoSecsInPhase)
+      if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.RestSecs) {
+        result = {
+          ...result,
+          setCyclesRemainingCount: cycleIndex,
+          setCurrentPhase: TimerPhase.Rest,
+          setPrepareRemainingSecs: 0,
+          cycleWorkoutRemainingSecs: 0,
+          cycleRestRemainingSecs: togoSecsInPhase,
+        }
+        return result
+      }
+    }
+  }
+
+  throw new Error(
+    `Failed to get TickedPreset from remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
+      `for preset with total: ${originalPreset.TotalPresetDurationSecs()}`,
+  )
+}
+
 const runPreset = async (
   preset: Preset,
   onStarted?: () => void,
@@ -132,7 +196,7 @@ const stop = () => {
 }
 
 export default {
-  getUpdatedPreset,
+  getUpdatedPreset2,
   runPreset,
   pause,
   resume,
