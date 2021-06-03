@@ -11,6 +11,7 @@ import { TimerPhase } from '@/models/timer-phase'
 import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
+import { Sleep } from '@/utils/common-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [currentTimerPhase, setCurrentTimerPhase] = useState<TimerPhase>()
@@ -39,7 +40,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       () => {
         setIsRunning(true)
       },
-      (
+      async (
         currentSet: number,
         currentCycle: number,
         currentPhase: TimerPhase,
@@ -54,6 +55,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         setRestRemainingSecs(tickedPreset.restRemainingSecs)
         setCyclesRemainingCount(tickedPreset.cyclesRemainingCount)
         setSetsRemainingCount(tickedPreset.setsRemainingCount)
+        await Sleep(5000)
         console.log(
           `>>> [(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Set:${currentSet}/Cycle:` +
             `${currentCycle},${currentPhase},${type},${JSON.stringify(tickedPreset)}`,

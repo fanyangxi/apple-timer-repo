@@ -19,10 +19,10 @@ export class CountdownTimer {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
   private readonly _onTicked?: (type: TickingType, secsLeft: number) => Promise<void>
+  private _remainingCountdownMilliSecs: number = 0
   private _timerId?: NodeJS.Timeout
   private _delayTimerId?: NodeJS.Timeout
-  private _remainingCountdownMilliSecs: number = 0
-  private _runStartTime: number = 0
+  private _runStartedAt: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
 
@@ -55,14 +55,14 @@ export class CountdownTimer {
     this.clear()
     this.Status = TimerStatus.PAUSED
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
-    const pausedTime = new Date().getTime()
-    const temp = this._remainingCountdownMilliSecs
-    const timeLeft = this._remainingCountdownMilliSecs - (pausedTime - this._runStartTime)
+    const pausedAt = new Date().getTime()
+    const before = this._remainingCountdownMilliSecs
+    const timeLeft = this._remainingCountdownMilliSecs - (pausedAt - this._runStartedAt)
     this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
     // Logs:
     console.log(
-      `[Paused] RemainingCountdownMilliSecs: before:${temp}|after:${this._remainingCountdownMilliSecs};` +
-        `runStartTime: ${this._runStartTime}; pausedTime: ${pausedTime}; Diff: ${pausedTime - this._runStartTime}`,
+      `[Paused] RemainingCountdownMilliSecs: before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
+        `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; Diff:${pausedAt - this._runStartedAt}`,
     )
   }
 
@@ -116,7 +116,7 @@ export class CountdownTimer {
         }, this.INTERVAL)
       }
 
-      this._runStartTime = new Date().getTime()
+      this._runStartedAt = new Date().getTime()
       beforeStartDelayMilliSecs
         ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))
         : extracted.call(this)
@@ -126,7 +126,7 @@ export class CountdownTimer {
   }
 
   private triggerCallback(type: TickingType, secsLeft: number) {
-    console.log(`>>> [(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
+    console.log(`[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this._onTicked && this._onTicked(type, secsLeft).catch(e => console.log('Error while executing _onTicked:', e))
   }

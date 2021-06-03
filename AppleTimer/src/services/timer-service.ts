@@ -1,7 +1,6 @@
 import { Preset, TickedPreset } from '@/models/preset'
 import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
 import { TimerPhase } from '@/models/timer-phase'
-import { Sleep } from '@/utils/common-util'
 
 export type PresetTickedEventHandler = (
   currentSet: number,
@@ -34,7 +33,6 @@ const runPreset = async (
   countdownTimer = new CountdownTimer(preset.prepareSecs, async (type: TickingType, secsLeft: number) => {
     tickedPreset = { ...tickedPreset, prepareRemainingSecs: secsLeft }
     onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, tickedPreset)
-    await Sleep(5000)
   })
   await countdownTimer.start()
   // for (let setIndex = preset.setsCount; setIndex > 0; setIndex--) {
