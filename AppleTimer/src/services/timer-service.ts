@@ -92,7 +92,8 @@ const status = (): TimerStatus => {
 }
 
 const stop = () => {
-  countdownTimer && countdownTimer.exStop()
+  countdownTimer && countdownTimer.stop()
+  countdownTimer && countdownTimer.start()
 }
 
 export default {

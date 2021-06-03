@@ -87,11 +87,6 @@ export class CountdownTimer {
     this._remainingCountdownMilliSecs = 0
   }
 
-  exStop() {
-    this.stop()
-    this.start()
-  }
-
   private clear() {
     this._delayTimerId && clearInterval(this._delayTimerId)
     this._delayTimerId = undefined
