@@ -25,14 +25,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [isPaused, setIsPaused] = useState<boolean>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset(7, 6, 2, 3, 2)
-  // {
-  //   prepareSecs: 7,
-  //   workoutSecs: 6,
-  //   restSecs: 2,
-  //   cyclesCount: 3,
-  //   setsCount: 2,
-  // }
+  const preset: Preset = new Preset(3, 4, 2, 2, 2)
 
   // useEffect(() => {}, [])
   const onStartPressed = async () => {
