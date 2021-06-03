@@ -105,34 +105,6 @@ const runPreset = async (
 
   console.log('>>> 1.Prepare started')
   onFinished && onFinished()
-
-  // for (let setIndex = preset.SetsCount; setIndex > 0; setIndex--) {
-  //   for (let cycleIndex = preset.CyclesCount; cycleIndex > 0; cycleIndex--) {
-  //     countdownTimer = new CountdownTimer(preset.WorkoutSecs, async (type: TickingType, secsLeft: number) => {
-  //       tickedPreset = {
-  //         ...tickedPreset,
-  //         setsRemainingCount: setIndex,
-  //         setCyclesRemainingCount: cycleIndex,
-  //         cycleWorkoutRemainingSecs: secsLeft,
-  //       }
-  //       onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Workout, type, secsLeft, tickedPreset)
-  //     })
-  //     await countdownTimer.start()
-  //     console.log(`>>> 2.Workout started: S${setIndex}C${cycleIndex}`)
-  //
-  //     countdownTimer = new CountdownTimer(preset.RestSecs, async (type: TickingType, secsLeft: number) => {
-  //       tickedPreset = {
-  //         ...tickedPreset,
-  //         setsRemainingCount: setIndex,
-  //         setCyclesRemainingCount: cycleIndex,
-  //         cycleRestRemainingSecs: secsLeft,
-  //       }
-  //       onTicked && onTicked(setIndex, cycleIndex, TimerPhase.Rest, type, secsLeft, tickedPreset)
-  //     })
-  //     await countdownTimer.start()
-  //     console.log(`>>> 3.Rest started: S${setIndex}C${cycleIndex}`)
-  //   }
-  // }
 }
 
 const pause = () => {

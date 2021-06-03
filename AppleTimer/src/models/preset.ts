@@ -1,16 +1,3 @@
-// export interface Preset {
-//   // Phase: prepare duration of the Set.
-//   prepareSecs: number
-//   // Phase: workout duration of the CYCLE.
-//   workoutSecs: number
-//   // Phase: rest duration of the CYCLE.
-//   restSecs: number
-//   // A cycle includes 3 phases: prepare, workout, rest.
-//   cyclesCount: number
-//   // A set includes multiple cycles.
-//   setsCount: number
-// }
-
 import { TimerPhase } from '@/models/timer-phase'
 
 export class Preset {
@@ -35,12 +22,6 @@ export class Preset {
 
   public TotalPresetDurationSecs = () =>
     (this.PrepareSecs + (this.WorkoutSecs + this.RestSecs) * this.CyclesCount) * this.SetsCount
-
-  public SetDurationSecs = () => this.PrepareSecs + (this.WorkoutSecs + this.RestSecs) * this.CyclesCount
-
-  public SetCycleDurationSecs = () => this.WorkoutSecs + this.RestSecs
-
-  public SetTotalCyclesDurationSecs = () => (this.WorkoutSecs + this.RestSecs) * this.CyclesCount
 }
 
 export interface TickedPreset {
@@ -54,16 +35,3 @@ export interface TickedPreset {
   cycleWorkoutRemainingSecs: number
   cycleRestRemainingSecs: number
 }
-
-// //// Timer Section:
-// @summary-section:
-//   ? change-current-preset-button:
-//     ? time-renaming:
-//     ? total-time:
-//
-// @details-section (Normal state):
-// current preset:
-// In-timer-phase state (Prepare|Workout|Rest)
-// - phase-name
-// - time-left-in-phase
-//
