@@ -44,6 +44,7 @@ export class CountdownTimer {
     this.clear()
     this.Status = TimerStatus.TICKING
     await this.runSlices(this._initialCountdownSecs, 0)
+    console.log('lalal start')
   }
 
   pause() {
@@ -76,6 +77,7 @@ export class CountdownTimer {
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.Status = TimerStatus.TICKING
     await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
+    console.log('lalal resume')
   }
 
   stopAndReset() {
@@ -120,8 +122,6 @@ export class CountdownTimer {
       beforeStartDelayMilliSecs
         ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))
         : extracted.call(this)
-      //
-      console.log('lalal')
     })
   }
 

@@ -1,20 +1,34 @@
-import { runPreset } from '@/services/timer-service'
 import { Preset, TickedPreset } from '@/models/preset'
+import timerService from '@/services/timer-service'
 import { TimerPhase } from '@/models/timer-phase'
-import { TickingType } from '@/utils/date-util'
 
 describe('timer-service', () => {
-  const preset: Preset = {
-    prepareSecs: 3,
-    workoutSecs: 6,
-    restSecs: 2,
-    cyclesCount: 2,
-    setsCount: 1,
+  const presetMock: Preset = new Preset(3, 10, 4, 3, 2)
+  const tickedPresetMock: TickedPreset = {
+    setsRemainingCount: presetMock.SetsCount,
+    setCyclesRemainingCount: presetMock.CyclesCount,
+    setCurrentPhase: undefined,
+    setPrepareRemainingSecs: presetMock.PrepareSecs,
+    cycleWorkoutRemainingSecs: presetMock.WorkoutSecs,
+    cycleRestRemainingSecs: presetMock.RestSecs,
   }
 
   it('renders correctly', () => {
-    runPreset(preset, (currentPhase: TimerPhase, type: TickingType, secsLeft: number, tickedPreset: TickedPreset) => {
-      console.log(`${currentPhase},${type},${secsLeft},${tickedPreset}`)
+    // timerService.runPreset(
+    //   preset,
+    //   (currentPhase: TimerPhase, type: TickingType, secsLeft: number, tickedPreset: TickedPreset) => {
+    //     console.log(`${currentPhase},${type},${secsLeft},${tickedPreset}`)
+    //   },
+    // )
+  })
+
+  describe('getUpdatedPreset', () => {
+    it.each`
+      remainingSecs | expected
+      ${89}         | ${{ ...tickedPresetMock, setPrepareRemainingSecs: 3, setCurrentPhase: TimerPhase.Prepare }}
+    `('should update preset with remaining $remainingPresetDurationSecs, $expected', ({ remainingSecs, expected }) => {
+      const result = timerService.getUpdatedPreset(presetMock, remainingSecs)
+      expect(result).toEqual(expected)
     })
   })
 })

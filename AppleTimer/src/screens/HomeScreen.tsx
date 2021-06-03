@@ -11,7 +11,7 @@ import { TimerPhase } from '@/models/timer-phase'
 import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
-import { Sleep } from '@/utils/common-util'
+// import { Sleep } from '@/utils/common-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [currentTimerPhase, setCurrentTimerPhase] = useState<TimerPhase>()
@@ -25,13 +25,14 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [isPaused, setIsPaused] = useState<boolean>()
 
   const { Common } = useTheme()
-  const preset: Preset = {
-    prepareSecs: 7,
-    workoutSecs: 6,
-    restSecs: 2,
-    cyclesCount: 3,
-    setsCount: 2,
-  }
+  const preset: Preset = new Preset(7, 6, 2, 3, 2)
+  // {
+  //   prepareSecs: 7,
+  //   workoutSecs: 6,
+  //   restSecs: 2,
+  //   cyclesCount: 3,
+  //   setsCount: 2,
+  // }
 
   // useEffect(() => {}, [])
   const onStartPressed = async () => {
@@ -55,10 +56,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         setRestRemainingSecs(tickedPreset.restRemainingSecs)
         setCyclesRemainingCount(tickedPreset.cyclesRemainingCount)
         setSetsRemainingCount(tickedPreset.setsRemainingCount)
-        await Sleep(5000)
+        // await Sleep(5000)
         console.log(
-          `>>> [(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Set:${currentSet}/Cycle:` +
-            `${currentCycle},${currentPhase},${type},${JSON.stringify(tickedPreset)}`,
+          `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
+            `${currentPhase},${type},${JSON.stringify(tickedPreset)}`,
         )
       },
       () => {

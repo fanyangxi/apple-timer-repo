@@ -10,6 +10,8 @@ Preset:
 - sets-divider: in Sec
 - sets-count:
 
+Secs: short for seconds.
+
 Cycle:
 
 Set: has multiple cycles.
