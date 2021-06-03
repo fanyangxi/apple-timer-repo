@@ -57,6 +57,17 @@ const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: n
 }
 
 const getUpdatedPreset2 = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
+  if (remainingPresetDurationSecs === 0) {
+    return {
+      setsRemainingCount: 0,
+      setCyclesRemainingCount: 0,
+      setCurrentPhase: undefined,
+      setPrepareRemainingSecs: 0,
+      cycleWorkoutRemainingSecs: 0,
+      cycleRestRemainingSecs: 0,
+    }
+  }
+
   const elapsedSecs = originalPreset.TotalPresetDurationSecs() - remainingPresetDurationSecs
   if (elapsedSecs < 0) {
     throw new Error(
@@ -73,41 +84,43 @@ const getUpdatedPreset2 = (originalPreset: Preset, remainingPresetDurationSecs: 
     cycleWorkoutRemainingSecs: originalPreset.WorkoutSecs,
     cycleRestRemainingSecs: originalPreset.RestSecs,
   }
-  let togoSecsInPhase = elapsedSecs // remainingSecsInPhase
+  let remainingElapsedSecs = elapsedSecs // remainingSecsInPhase
   for (let setIndex = originalPreset.SetsCount; setIndex > 0; setIndex--) {
-    togoSecsInPhase = originalPreset.PrepareSecs - Math.abs(togoSecsInPhase)
-    if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.PrepareSecs) {
+    remainingElapsedSecs = Math.abs(remainingElapsedSecs) - originalPreset.PrepareSecs
+    if (remainingElapsedSecs < 0) {
       result = {
         ...result,
         setsRemainingCount: setIndex,
         setCurrentPhase: TimerPhase.Prepare,
-        setPrepareRemainingSecs: togoSecsInPhase,
+        setPrepareRemainingSecs: Math.abs(remainingElapsedSecs),
       }
       return result
     }
 
     for (let cycleIndex = originalPreset.CyclesCount; cycleIndex > 0; cycleIndex--) {
-      togoSecsInPhase = originalPreset.WorkoutSecs - Math.abs(togoSecsInPhase)
-      if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.WorkoutSecs) {
+      remainingElapsedSecs = Math.abs(remainingElapsedSecs) - originalPreset.WorkoutSecs
+      if (remainingElapsedSecs < 0) {
         result = {
           ...result,
+          setsRemainingCount: setIndex,
           setCyclesRemainingCount: cycleIndex,
           setCurrentPhase: TimerPhase.Workout,
           setPrepareRemainingSecs: 0,
-          cycleWorkoutRemainingSecs: togoSecsInPhase,
+          cycleWorkoutRemainingSecs: Math.abs(remainingElapsedSecs),
         }
         return result
       }
 
-      togoSecsInPhase = originalPreset.RestSecs - Math.abs(togoSecsInPhase)
-      if (togoSecsInPhase > 0 && togoSecsInPhase <= originalPreset.RestSecs) {
+      remainingElapsedSecs = Math.abs(remainingElapsedSecs) - originalPreset.RestSecs
+      if (remainingElapsedSecs < 0) {
         result = {
           ...result,
+          setsRemainingCount: setIndex,
           setCyclesRemainingCount: cycleIndex,
           setCurrentPhase: TimerPhase.Rest,
           setPrepareRemainingSecs: 0,
           cycleWorkoutRemainingSecs: 0,
-          cycleRestRemainingSecs: togoSecsInPhase,
+          cycleRestRemainingSecs: Math.abs(remainingElapsedSecs),
         }
         return result
       }

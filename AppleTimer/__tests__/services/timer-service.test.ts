@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset } from '@/models/preset'
 import timerService from '@/services/timer-service'
 import { TimerPhase } from '@/models/timer-phase'
 
@@ -15,14 +15,6 @@ describe('timer-service', () => {
 
   describe('getUpdatedPreset', () => {
     const presetMock: Preset = new Preset(3, 4, 2, 2, 2)
-    const tickedPresetMock: TickedPreset = {
-      setsRemainingCount: presetMock.SetsCount,
-      setCyclesRemainingCount: presetMock.CyclesCount,
-      setCurrentPhase: undefined,
-      setPrepareRemainingSecs: presetMock.PrepareSecs,
-      cycleWorkoutRemainingSecs: presetMock.WorkoutSecs,
-      cycleRestRemainingSecs: presetMock.RestSecs,
-    }
 
     it.each`
       remainingSecs | expected
@@ -55,8 +47,8 @@ describe('timer-service', () => {
       ${4}          | ${{ setsRemainingCount: 1, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 2, cycleRestRemainingSecs: 2, setCurrentPhase: TimerPhase.Workout }}
       ${3}          | ${{ setsRemainingCount: 1, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 1, cycleRestRemainingSecs: 2, setCurrentPhase: TimerPhase.Workout }}
       ${2}          | ${{ setsRemainingCount: 1, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 2, setCurrentPhase: TimerPhase.Rest }}
-      ${1}          | ${{ setsRemainingCount: 2, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 1, setCurrentPhase: TimerPhase.Rest }}
-      ${0}          | ${{ ...tickedPresetMock, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 9, setCurrentPhase: TimerPhase.Workout }}
+      ${1}          | ${{ setsRemainingCount: 1, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 1, setCurrentPhase: TimerPhase.Rest }}
+      ${0}          | ${{ setsRemainingCount: 0, setCyclesRemainingCount: 0, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 0, setCurrentPhase: undefined }}
     `('should update preset with remaining $remainingSecs, $expected', ({ remainingSecs, expected }) => {
       const result = timerService.getUpdatedPreset2(presetMock, remainingSecs)
       expect(result).toEqual(expected)
