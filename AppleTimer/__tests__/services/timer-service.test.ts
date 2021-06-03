@@ -50,7 +50,7 @@ describe('timer-service', () => {
       ${1}          | ${{ setsRemainingCount: 1, setCyclesRemainingCount: 1, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 1, setCurrentPhase: TimerPhase.Rest }}
       ${0}          | ${{ setsRemainingCount: 0, setCyclesRemainingCount: 0, setPrepareRemainingSecs: 0, cycleWorkoutRemainingSecs: 0, cycleRestRemainingSecs: 0, setCurrentPhase: undefined }}
     `('should update preset with remaining $remainingSecs, $expected', ({ remainingSecs, expected }) => {
-      const result = timerService.getUpdatedPreset2(presetMock, remainingSecs)
+      const result = timerService.getUpdatedPreset(presetMock, remainingSecs)
       expect(result).toEqual(expected)
     })
   })

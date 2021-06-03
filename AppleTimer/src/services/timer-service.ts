@@ -15,48 +15,6 @@ export type PresetTickedEventHandler = (
 let countdownTimer: CountdownTimer
 
 const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
-  if (originalPreset.TotalPresetDurationSecs() < remainingPresetDurationSecs) {
-    throw new Error(
-      `Invalid remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
-        `should be less/equal than: ${originalPreset.TotalPresetDurationSecs()}`,
-    )
-  }
-
-  const ongoingSetRemainingSecs = remainingPresetDurationSecs % originalPreset.SetDurationSecs()
-  const ongoingPrepareRemainingSecs = PositiveOr0(ongoingSetRemainingSecs - originalPreset.SetTotalCyclesDurationSecs())
-  const ongoingCycleRemainingSecs = PositiveOr0(
-    (ongoingSetRemainingSecs - ongoingPrepareRemainingSecs) % originalPreset.SetCycleDurationSecs(),
-  )
-  const ongoingWorkoutRemainingSecs = PositiveOr0(ongoingCycleRemainingSecs - originalPreset.RestSecs)
-  const ongoingRestRemainingSecs = PositiveOr0(ongoingCycleRemainingSecs - ongoingWorkoutRemainingSecs)
-
-  const setsRemainingCount = Math.ceil(remainingPresetDurationSecs / originalPreset.SetDurationSecs())
-  const cyclesRemainingCount = Math.ceil(
-    (ongoingSetRemainingSecs - originalPreset.PrepareSecs) / originalPreset.SetCycleDurationSecs(),
-  )
-
-  let currentPhase: TimerPhase | undefined
-  if (ongoingPrepareRemainingSecs > 0 && ongoingPrepareRemainingSecs <= originalPreset.PrepareSecs) {
-    currentPhase = TimerPhase.Prepare
-  }
-  if (ongoingWorkoutRemainingSecs > 0 && ongoingWorkoutRemainingSecs <= originalPreset.WorkoutSecs) {
-    currentPhase = TimerPhase.Workout
-  }
-  if (ongoingRestRemainingSecs > 0 && ongoingRestRemainingSecs <= originalPreset.RestSecs) {
-    currentPhase = TimerPhase.Rest
-  }
-
-  return {
-    setsRemainingCount,
-    setCyclesRemainingCount: cyclesRemainingCount,
-    setCurrentPhase: currentPhase,
-    setPrepareRemainingSecs: ongoingPrepareRemainingSecs || originalPreset.PrepareSecs,
-    cycleWorkoutRemainingSecs: ongoingWorkoutRemainingSecs || originalPreset.WorkoutSecs,
-    cycleRestRemainingSecs: ongoingRestRemainingSecs || originalPreset.RestSecs,
-  }
-}
-
-const getUpdatedPreset2 = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
   if (remainingPresetDurationSecs === 0) {
     return {
       setsRemainingCount: 0,
@@ -209,7 +167,7 @@ const stop = () => {
 }
 
 export default {
-  getUpdatedPreset2,
+  getUpdatedPreset,
   runPreset,
   pause,
   resume,
