@@ -7,7 +7,8 @@ export enum TickingType {
   Finished = 'Finished',
 }
 
-// Start, Pause + Resume, Stop, Reset
+// Actions: Start, Pause + Resume, StopAndReset
+// Statuses: IDLE, PAUSED, TICKING
 export enum TimerStatus {
   IDLE = 'idle',
   PAUSED = 'paused',
@@ -81,7 +82,7 @@ export class CountdownTimer {
     await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
   }
 
-  stop() {
+  stopAndReset() {
     this.clear()
     this._isPaused = false
     this.Status = TimerStatus.IDLE
@@ -102,7 +103,7 @@ export class CountdownTimer {
         this.triggerCallback(TickingType.Started, counter)
 
         if (counter === 0) {
-          this.stop()
+          this.stopAndReset()
           this.triggerCallback(TickingType.Finished, counter)
           resolve()
           return
@@ -111,7 +112,7 @@ export class CountdownTimer {
         this._timerId = setInterval(() => {
           counter--
           if (counter === 0) {
-            this.stop()
+            this.stopAndReset()
             this.triggerCallback(TickingType.Finished, counter)
             resolve()
           } else {

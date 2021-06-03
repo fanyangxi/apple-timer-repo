@@ -80,7 +80,7 @@ const status = (): TimerStatus => {
 }
 
 const stop = () => {
-  countdownTimer && countdownTimer.stop()
+  countdownTimer && countdownTimer.stopAndReset()
   countdownTimer && countdownTimer.start()
 }
 
