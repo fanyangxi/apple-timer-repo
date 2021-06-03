@@ -40,7 +40,7 @@ const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: n
     cycleWorkoutRemainingSecs: originalPreset.WorkoutSecs,
     cycleRestRemainingSecs: originalPreset.RestSecs,
   }
-  let remainingElapsedSecs = elapsedSecs // remainingSecsInPhase
+  let remainingElapsedSecs = elapsedSecs
   for (let setIndex = originalPreset.SetsCount; setIndex > 0; setIndex--) {
     remainingElapsedSecs = Math.abs(remainingElapsedSecs) - originalPreset.PrepareSecs
     if (remainingElapsedSecs < 0) {
@@ -103,7 +103,6 @@ const runPreset = async (
   })
   await countdownTimer.start()
 
-  console.log('>>> 1.Prepare started')
   onFinished && onFinished()
 }
 
