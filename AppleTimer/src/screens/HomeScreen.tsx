@@ -7,20 +7,14 @@ import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Button, Divider } from 'native-base'
 import timerService from '@/services/timer-service'
 import { Preset, TickedPreset } from '@/models/preset'
-import { TimerPhase } from '@/models/timer-phase'
 import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
 // import { Sleep } from '@/utils/common-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
-  const [currentTimerPhase, setCurrentTimerPhase] = useState<TimerPhase>()
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
-  const [prepareRemainingSecs, setPrepareRemainingSecs] = useState<number>()
-  const [workoutRemainingSecs, setWorkoutRemainingSecs] = useState<number>()
-  const [restRemainingSecs, setRestRemainingSecs] = useState<number>()
-  const [cyclesRemainingCount, setCyclesRemainingCount] = useState<number>()
-  const [setsRemainingCount, setSetsRemainingCount] = useState<number>()
+  const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
 
@@ -37,22 +31,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       async (
         currentSet: number,
         currentCycle: number,
-        currentPhase: TimerPhase,
         type: TickingType,
         secsLeft: number,
         tickedPreset: TickedPreset,
       ) => {
-        setCurrentTimerPhase(currentPhase)
         setSecsLeftInCurrentPhase(secsLeft)
-        setPrepareRemainingSecs(tickedPreset.prepareRemainingSecs)
-        setWorkoutRemainingSecs(tickedPreset.workoutRemainingSecs)
-        setRestRemainingSecs(tickedPreset.restRemainingSecs)
-        setCyclesRemainingCount(tickedPreset.cyclesRemainingCount)
-        setSetsRemainingCount(tickedPreset.setsRemainingCount)
+        setStateTickedPreset(tickedPreset)
         // await Sleep(5000)
         console.log(
           `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
-            `${currentPhase},${type},${JSON.stringify(tickedPreset)}`,
+            `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
         )
       },
       () => {
@@ -130,9 +118,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           {/* current phase info */}
           <Divider style={styles.contentDivider} />
           <View style={styles.summaryContent}>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Current Phase: {currentTimerPhase}</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{secsLeftInCurrentPhase}</Text>
+            <View style={styles.itemsContainer}>
+              <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
+              <Text style={styles.itemLabel}>setCyclesRemainingCount:{stateTickedPreset?.setCyclesRemainingCount}</Text>
+              <Text style={styles.itemLabel}>setPrepareSecs:{stateTickedPreset?.setPrepareRemainingSecs}</Text>
+              <Text style={styles.itemLabel}>cycleWorkoutSecs:{stateTickedPreset?.cycleWorkoutRemainingSecs}</Text>
+              <Text style={styles.itemLabel}>cycleRestSecs:{stateTickedPreset?.cycleRestRemainingSecs}</Text>
+            </View>
+            <View style={styles.itemsContainer}>
+              <Text style={styles.itemLabel}>Total: {secsLeftInCurrentPhase}</Text>
+              <Text style={styles.itemLabel}>setCurrentPhase: {stateTickedPreset?.setCurrentPhase}</Text>
             </View>
           </View>
         </View>
@@ -226,6 +221,12 @@ const styles = StyleSheet.create({
   },
   contentDivider: {
     marginVertical: Spacings.s_16,
+  },
+  itemsContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    color: '#FFFFFF',
+    ...Fonts.textLarge,
   },
   // @action-section:
   actionSection: {

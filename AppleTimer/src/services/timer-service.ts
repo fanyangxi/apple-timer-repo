@@ -5,7 +5,6 @@ import { TimerPhase } from '@/models/timer-phase'
 export type PresetTickedEventHandler = (
   currentSet: number,
   currentCycle: number,
-  currentPhase: TimerPhase,
   type: TickingType,
   secsLeft: number,
   tickedPreset: TickedPreset,
@@ -100,7 +99,7 @@ const runPreset = async (
 
   countdownTimer = new CountdownTimer(preset.TotalPresetDurationSecs(), async (type: TickingType, secsLeft: number) => {
     const tickedPreset = getUpdatedPreset(preset, secsLeft)
-    onTicked && onTicked(0, 0, TimerPhase.Prepare, type, secsLeft, tickedPreset)
+    onTicked && onTicked(0, 0, type, secsLeft, tickedPreset)
   })
   await countdownTimer.start()
 
