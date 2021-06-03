@@ -19,7 +19,6 @@ export class CountdownTimer {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
   private readonly _onTicked?: (type: TickingType, secsLeft: number) => Promise<void>
-  private _isPaused: boolean = false
   private _timerId?: NodeJS.Timeout
   private _delayTimerId?: NodeJS.Timeout
   private _remainingCountdownMilliSecs: number = 0
@@ -43,19 +42,17 @@ export class CountdownTimer {
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
     this.clear()
-    this._isPaused = false
     this.Status = TimerStatus.TICKING
     await this.runSlices(this._initialCountdownSecs, 0)
   }
 
   pause() {
-    if (this._isPaused || this.Status !== TimerStatus.TICKING) {
+    if (this.Status !== TimerStatus.TICKING) {
       return
     }
 
     // 1.Pause:
     this.clear()
-    this._isPaused = true
     this.Status = TimerStatus.PAUSED
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const pausedTime = new Date().getTime()
@@ -70,21 +67,19 @@ export class CountdownTimer {
   }
 
   async resume() {
-    if (!this._isPaused || this.Status !== TimerStatus.PAUSED) {
+    if (this.Status !== TimerStatus.PAUSED) {
       return
     }
 
     console.log(`[Resumed] With remainingCountdownMilliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
-    this._isPaused = false
     this.Status = TimerStatus.TICKING
     await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
   }
 
   stopAndReset() {
     this.clear()
-    this._isPaused = false
     this.Status = TimerStatus.IDLE
     this._remainingCountdownMilliSecs = 0
   }
