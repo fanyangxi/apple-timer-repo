@@ -10,7 +10,7 @@ import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
 import { TimerService } from '@/services/timer-service'
-// import { Sleep } from '@/utils/common-util'
+import { NotificationService } from '@/services/notification-service'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -18,14 +18,17 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
   const timerServiceRef = useRef<TimerService>()
+  const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
   const preset: Preset = new Preset(3, 4, 2, 2, 2)
 
   useEffect(() => {
-    timerServiceRef.current = new TimerService(preset)
+    notificationServiceRef.current = new NotificationService()
 
-    timerServiceRef.current.OnTimerStarted = () => {
+    timerServiceRef.current = new TimerService(preset)
+    //
+    timerServiceRef.current.OnTimerStarted = async () => {
       setIsRunning(true)
     }
     timerServiceRef.current.OnTicked = async (
@@ -43,11 +46,27 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       )
     }
-    timerServiceRef.current.OnTimerCompleted = () => {
+    timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
+      notificationServiceRef.current?.playBell()
+    }
+    //
+    timerServiceRef.current.OnPaused = async (milliSecsLeft: number) => {
+      notificationServiceRef.current?.playBell()
+    }
+    timerServiceRef.current.OnResumed = async (milliSecsLeft: number) => {
+      notificationServiceRef.current?.playStart()
+    }
+    timerServiceRef.current.OnStopped = async (milliSecsLeft: number) => {
+      notificationServiceRef.current?.playBell()
+    }
+    //
+    timerServiceRef.current.OnPreparePhaseIsClosing = async () => {
+      notificationServiceRef.current?.play3SecsCountDown()
     }
 
     // only called once after first render
+    console.log('>>> HOME-SCREEN LOADED ======================>!')
     // eslint-disable-next-line
   }, [])
 

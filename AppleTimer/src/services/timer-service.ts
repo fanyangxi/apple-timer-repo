@@ -1,7 +1,7 @@
 import { Preset, TickedPreset } from '@/models/preset'
 import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
 import { getUpdatedPreset } from '@/utils/preset-util'
-import { NotificationService } from '@/services/notification-service'
+import { TimerPhase } from '@/models/timer-phase'
 
 export type PresetTickedEventHandler = (
   currentSet: number,
@@ -14,37 +14,86 @@ export type PresetTickedEventHandler = (
 export class TimerService {
   private readonly _preset: Preset
   private _countdownTimer?: CountdownTimer
-  private _notificationService?: NotificationService
 
-  public OnTimerStarted?: () => void
-  public OnTimerCompleted?: () => void
+  public OnTimerStarted?: () => Promise<void>
   public OnTicked?: PresetTickedEventHandler
-  public OnPaused?: () => void // Manually
-  public OnResumed?: () => void // Manually
-  public OnStopped?: () => void // Manually
-  public OnPreparePhaseClosing?: () => void
-  public OnWorkoutPhaseClosing?: () => void
-  public OnRestPhaseClosing?: () => void
+  public OnTimerCompleted?: () => Promise<void>
+  public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnPreparePhaseStarted?: () => Promise<void>
+  public OnPreparePhaseIsClosing?: () => Promise<void>
+  public OnWorkoutPhaseStarted?: () => Promise<void>
+  public OnWorkoutPhaseIsClosing?: () => Promise<void>
+  public OnRestPhaseStarted?: () => Promise<void>
+  public OnRestPhaseIsClosing?: () => Promise<void>
+
+  private PREPARE_PHASE_CLOSING_SECS = 3
+  private WORKOUT_PHASE_CLOSING_SECS = 3
+  private REST_PHASE_CLOSING_SECS = 3
 
   constructor(preset: Preset) {
     this._preset = preset
-    this._notificationService = new NotificationService()
   }
 
   runPreset = async () => {
     this._countdownTimer = new CountdownTimer(this._preset.TotalPresetDurationSecs())
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
-      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, getUpdatedPreset(this._preset, secsLeft))
-    }
-    this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {}
-    this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {
-      this._notificationService && this._notificationService?.playAudio()
-    }
-    this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {}
+      const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
+      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)
 
-    this.OnTimerStarted && this.OnTimerStarted()
+      if (tickedPreset.setCurrentPhase === TimerPhase.Prepare) {
+        // Started
+        if (tickedPreset.setPrepareRemainingSecs === this._preset.PrepareSecs) {
+          this.OnPreparePhaseStarted &&
+            (await this.OnPreparePhaseStarted().catch(e => this.handleError('PREPARE-PHASE-STARTED', e)))
+        }
+        // IsClosing
+        if (tickedPreset.setPrepareRemainingSecs <= this.PREPARE_PHASE_CLOSING_SECS) {
+          this.OnPreparePhaseIsClosing &&
+            (await this.OnPreparePhaseIsClosing().catch(e => this.handleError('PREPARE-PHASE-IS-CLOSING ', e)))
+        }
+      }
+
+      if (tickedPreset.setCurrentPhase === TimerPhase.Workout) {
+        // Started
+        if (tickedPreset.cycleWorkoutRemainingSecs === this._preset.WorkoutSecs) {
+          this.OnWorkoutPhaseStarted &&
+            (await this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e)))
+        }
+        // IsClosing
+        if (tickedPreset.cycleWorkoutRemainingSecs <= this.WORKOUT_PHASE_CLOSING_SECS) {
+          this.OnWorkoutPhaseIsClosing &&
+            (await this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e)))
+        }
+      }
+
+      if (tickedPreset.setCurrentPhase === TimerPhase.Prepare) {
+        // Started
+        if (tickedPreset.cycleRestRemainingSecs === this._preset.RestSecs) {
+          this.OnRestPhaseStarted &&
+            (await this.OnRestPhaseStarted().catch(e => this.handleError('REST-PHASE-STARTED', e)))
+        }
+        // IsClosing
+        if (tickedPreset.cycleRestRemainingSecs <= this.REST_PHASE_CLOSING_SECS) {
+          this.OnRestPhaseIsClosing &&
+            (await this.OnRestPhaseIsClosing().catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
+        }
+      }
+    }
+    this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {
+      this.OnPaused && (await this.OnPaused(milliSecsLeft).catch(e => this.handleError('PAUSED', e)))
+    }
+    this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {
+      this.OnResumed && (await this.OnResumed(milliSecsLeft).catch(e => this.handleError('RESUMED', e)))
+    }
+    this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
+      this.OnStopped && (await this.OnStopped(milliSecsLeft).catch(e => this.handleError('STOPPED', e)))
+    }
+
+    this.OnTimerStarted && (await this.OnTimerStarted().catch(e => this.handleError('TIMER-STARTED', e)))
     await this._countdownTimer.start()
-    this.OnTimerCompleted && this.OnTimerCompleted()
+    this.OnTimerCompleted && (await this.OnTimerCompleted().catch(e => this.handleError('TIMER-COMPLETED', e)))
   }
 
   pause = () => {
@@ -62,5 +111,10 @@ export class TimerService {
   stop = () => {
     this._countdownTimer && this._countdownTimer.stopAndReset()
     this._countdownTimer && this._countdownTimer.start()
+  }
+
+  // noinspection JSMethodCanBeStatic
+  private handleError(event: string, e: Error) {
+    console.log(`Event:${event} callback error: `, e)
   }
 }
