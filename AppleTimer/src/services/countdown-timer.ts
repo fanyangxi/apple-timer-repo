@@ -3,6 +3,7 @@ import { FULL_TIMESTAMP } from '@/utils/date-util'
 
 export enum TickingType {
   Started = 'Started',
+  Resumed = 'Resumed',
   Ticked = 'Ticked',
   Finished = 'Finished',
 }
@@ -18,17 +19,20 @@ export enum TimerStatus {
 export class CountdownTimer {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
-  private readonly _onTicked?: (type: TickingType, secsLeft: number) => Promise<void>
   private _remainingCountdownMilliSecs: number = 0
   private _timerId?: NodeJS.Timeout
   private _delayTimerId?: NodeJS.Timeout
   private _runStartedAt: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
+  public OnTicked?: (type: TickingType, secsLeft: number) => Promise<void>
+  public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
 
   constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => Promise<void>) {
     this._initialCountdownSecs = countdownSecs
-    this._onTicked = onTicked
+    this.OnTicked = onTicked
 
     if ((countdownSecs * 1000) % this.INTERVAL !== 0) {
       throw new Error(
@@ -43,7 +47,7 @@ export class CountdownTimer {
 
     this.clear()
     this.Status = TimerStatus.TICKING
-    await this.runSlices(this._initialCountdownSecs, 0)
+    await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
     console.log('lalal start')
   }
 
@@ -60,6 +64,8 @@ export class CountdownTimer {
     const before = this._remainingCountdownMilliSecs
     const timeLeft = this._remainingCountdownMilliSecs - (pausedAt - this._runStartedAt)
     this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
+    // Trigger Event:
+    this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('PAUSE', e))
     // Logs:
     console.log(
       `[Paused] RemainingCountdownMilliSecs: before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
@@ -76,13 +82,16 @@ export class CountdownTimer {
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.Status = TimerStatus.TICKING
-    await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
+    this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('RESUME', e))
+    await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
     console.log('lalal resume')
   }
 
   stopAndReset() {
     this.clear()
     this.Status = TimerStatus.IDLE
+    this.OnStopped &&
+      this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOP-AND-RESET', e))
     this._remainingCountdownMilliSecs = 0
   }
 
@@ -93,11 +102,11 @@ export class CountdownTimer {
     this._timerId = undefined
   }
 
-  private async runSlices(countdownSecs: number, beforeStartDelayMilliSecs?: number): Promise<void> {
+  private async runSlices(type: TickingType, countdownSecs: number, beforeStartDelayMilliSecs?: number): Promise<void> {
     return new Promise(resolve => {
       const extracted = () => {
         let counter = countdownSecs
-        this.triggerCallback(TickingType.Started, counter)
+        this.triggerCallback(type, counter)
 
         if (counter === 0) {
           this.stopAndReset()
@@ -128,6 +137,11 @@ export class CountdownTimer {
   private triggerCallback(type: TickingType, secsLeft: number) {
     console.log(`[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
-    this._onTicked && this._onTicked(type, secsLeft).catch(e => console.log('Error while executing _onTicked:', e))
+    this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleEventError('TICK', e))
+  }
+
+  // noinspection JSMethodCanBeStatic
+  private handleEventError(event: string, e: Error) {
+    console.log(`Event:${event} callback error: `, e)
   }
 }
