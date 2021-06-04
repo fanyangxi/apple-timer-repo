@@ -1,15 +1,15 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Button, Divider } from 'native-base'
-import timerService from '@/services/timer-service'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
+import { TimerService } from '@/services/timer-service'
 // import { Sleep } from '@/utils/common-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
@@ -17,50 +17,56 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
+  const timerServiceRef = useRef<TimerService>()
 
   const { Common } = useTheme()
   const preset: Preset = new Preset(3, 4, 2, 2, 2)
 
-  // useEffect(() => {}, [])
+  useEffect(() => {
+    timerServiceRef.current = new TimerService(preset)
+
+    timerServiceRef.current.OnTimerStarted = () => {
+      setIsRunning(true)
+    }
+    timerServiceRef.current.OnTicked = async (
+      currentSet: number,
+      currentCycle: number,
+      type: TickingType,
+      secsLeft: number,
+      tickedPreset: TickedPreset,
+    ) => {
+      setSecsLeftInCurrentPhase(secsLeft)
+      setStateTickedPreset(tickedPreset)
+      // await Sleep(5000)
+      console.log(
+        `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
+          `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
+      )
+    }
+    timerServiceRef.current.OnTimerCompleted = () => {
+      setIsRunning(false)
+    }
+
+    // only called once after first render
+    // eslint-disable-next-line
+  }, [])
+
   const onStartPressed = async () => {
-    await timerService.runPreset(
-      preset,
-      () => {
-        setIsRunning(true)
-      },
-      async (
-        currentSet: number,
-        currentCycle: number,
-        type: TickingType,
-        secsLeft: number,
-        tickedPreset: TickedPreset,
-      ) => {
-        setSecsLeftInCurrentPhase(secsLeft)
-        setStateTickedPreset(tickedPreset)
-        // await Sleep(5000)
-        console.log(
-          `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
-            `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
-        )
-      },
-      () => {
-        setIsRunning(false)
-      },
-    )
+    timerServiceRef.current && (await timerServiceRef.current.runPreset())
   }
 
   const onPausedPressed = () => {
     setIsPaused(true)
-    timerService.pause()
+    timerServiceRef.current && timerServiceRef.current.pause()
   }
 
   const onResumePressed = async () => {
     setIsPaused(false)
-    await timerService.resume()
+    timerServiceRef.current && (await timerServiceRef.current.resume())
   }
 
   const onStopPressed = () => {
-    timerService.stop()
+    timerServiceRef.current && timerServiceRef.current.stop()
   }
 
   return (
