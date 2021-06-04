@@ -45,6 +45,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
           `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       )
+      notificationServiceRef.current?.playBell()
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)

@@ -60,4 +60,13 @@ https://www.pond5.com/search?kw=female-voice-start&media=sfx#female-voice-start
 https://www.pond5.com/sound-effects/item/77773335-countdown-10-seconds-woman
 https://mixkit.co/free-sound-effects/countdown/
 https://www.zapsplat.com/sound-effect-category/bells/
+
+
+ambient
+https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616560-ambient
+soloAmbient
+https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616488-soloambient
+Playback
+https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616509-playback
+
 +
