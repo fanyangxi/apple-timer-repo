@@ -1,6 +1,7 @@
 import { Preset, TickedPreset } from '@/models/preset'
 import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
 import { getUpdatedPreset } from '@/utils/preset-util'
+import { NotificationService } from '@/services/notification-service'
 
 export type PresetTickedEventHandler = (
   currentSet: number,
@@ -13,30 +14,31 @@ export type PresetTickedEventHandler = (
 export class TimerService {
   private readonly _preset: Preset
   private _countdownTimer?: CountdownTimer
-
-  public OnTicked?: PresetTickedEventHandler
+  private _notificationService?: NotificationService
 
   public OnTimerStarted?: () => void
+  public OnTimerCompleted?: () => void
+  public OnTicked?: PresetTickedEventHandler
   public OnPaused?: () => void // Manually
   public OnResumed?: () => void // Manually
   public OnStopped?: () => void // Manually
-  public OnTimerCompleted?: () => void
   public OnPreparePhaseClosing?: () => void
   public OnWorkoutPhaseClosing?: () => void
   public OnRestPhaseClosing?: () => void
 
   constructor(preset: Preset) {
     this._preset = preset
+    this._notificationService = new NotificationService()
   }
 
   runPreset = async () => {
-    const countdownSecs = this._preset.TotalPresetDurationSecs()
-    this._countdownTimer = new CountdownTimer(countdownSecs, async (type: TickingType, secsLeft: number) => {
-      const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
-      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)
-
-      // TODO: ....
-    })
+    this._countdownTimer = new CountdownTimer(this._preset.TotalPresetDurationSecs())
+    this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
+      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, getUpdatedPreset(this._preset, secsLeft))
+    }
+    this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {}
+    this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {}
+    this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {}
 
     this.OnTimerStarted && this.OnTimerStarted()
     await this._countdownTimer.start()

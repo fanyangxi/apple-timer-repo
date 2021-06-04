@@ -53,4 +53,9 @@ https://npm.io/package/tiny-timer
 https://github.com/fanatid/elapsed-time
 
 https://npm.io/search/keyword:stopwatch
+
+The sounds:
+https://www.pond5.com/search?kw=counting-down-female-voice&media=sfx#3
+https://www.pond5.com/search?kw=female-voice-start&media=sfx#female-voice-start
+https://www.pond5.com/sound-effects/item/77773335-countdown-10-seconds-woman
 +

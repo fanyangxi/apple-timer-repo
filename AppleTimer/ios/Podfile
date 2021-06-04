@@ -14,6 +14,8 @@ target 'AppleTimer' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'AppleTimerTests' do
     inherit! :complete
     # Pods for testing
