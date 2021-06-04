@@ -58,4 +58,6 @@ The sounds:
 https://www.pond5.com/search?kw=counting-down-female-voice&media=sfx#3
 https://www.pond5.com/search?kw=female-voice-start&media=sfx#female-voice-start
 https://www.pond5.com/sound-effects/item/77773335-countdown-10-seconds-woman
+https://mixkit.co/free-sound-effects/countdown/
+https://www.zapsplat.com/sound-effect-category/bells/
 +

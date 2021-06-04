@@ -37,7 +37,9 @@ export class TimerService {
       this.OnTicked && this.OnTicked(0, 0, type, secsLeft, getUpdatedPreset(this._preset, secsLeft))
     }
     this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {}
-    this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {}
+    this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {
+      this._notificationService && this._notificationService?.playAudio()
+    }
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {}
 
     this.OnTimerStarted && this.OnTimerStarted()
