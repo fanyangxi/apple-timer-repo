@@ -49,7 +49,8 @@ export class TimerService {
             (await this.OnPreparePhaseStarted().catch(e => this.handleError('PREPARE-PHASE-STARTED', e)))
         }
         // IsClosing
-        if (tickedPreset.setPrepareRemainingSecs <= this.PREPARE_PHASE_CLOSING_SECS) {
+        const minClosingSecs = Math.min(this.PREPARE_PHASE_CLOSING_SECS, this._preset.PrepareSecs)
+        if (tickedPreset.setPrepareRemainingSecs === minClosingSecs) {
           this.OnPreparePhaseIsClosing &&
             (await this.OnPreparePhaseIsClosing().catch(e => this.handleError('PREPARE-PHASE-IS-CLOSING ', e)))
         }
@@ -62,7 +63,8 @@ export class TimerService {
             (await this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e)))
         }
         // IsClosing
-        if (tickedPreset.cycleWorkoutRemainingSecs <= this.WORKOUT_PHASE_CLOSING_SECS) {
+        const minClosingSecs = Math.min(this.WORKOUT_PHASE_CLOSING_SECS, this._preset.WorkoutSecs)
+        if (tickedPreset.cycleWorkoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing &&
             (await this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e)))
         }
@@ -75,7 +77,8 @@ export class TimerService {
             (await this.OnRestPhaseStarted().catch(e => this.handleError('REST-PHASE-STARTED', e)))
         }
         // IsClosing
-        if (tickedPreset.cycleRestRemainingSecs <= this.REST_PHASE_CLOSING_SECS) {
+        const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
+        if (tickedPreset.cycleRestRemainingSecs === minClosingSecs) {
           this.OnRestPhaseIsClosing &&
             (await this.OnRestPhaseIsClosing().catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
         }
