@@ -10,7 +10,7 @@ import { TickingType } from '@/services/countdown-timer'
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
 import { TimerService } from '@/services/timer-service'
-import { NotificationService } from '@/services/notification-service'
+import { NotificationService, Sounds } from '@/services/notification-service'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -45,25 +45,24 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
           `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       )
-      notificationServiceRef.current?.playBell()
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
-      notificationServiceRef.current?.playBell()
+      // notificationServiceRef.current?.playBell()
     }
     //
     timerServiceRef.current.OnPaused = async (milliSecsLeft: number) => {
-      notificationServiceRef.current?.playBell()
+      // notificationServiceRef.current?.playStart()
     }
     timerServiceRef.current.OnResumed = async (milliSecsLeft: number) => {
-      notificationServiceRef.current?.playStart()
+      notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerServiceRef.current.OnStopped = async (milliSecsLeft: number) => {
-      notificationServiceRef.current?.playBell()
+      // notificationServiceRef.current?.playBell()
     }
     //
     timerServiceRef.current.OnPreparePhaseIsClosing = async () => {
-      notificationServiceRef.current?.play3SecsCountDown()
+      // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start])
     }
 
     // only called once after first render

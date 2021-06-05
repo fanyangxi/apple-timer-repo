@@ -54,12 +54,38 @@ https://github.com/fanatid/elapsed-time
 
 https://npm.io/search/keyword:stopwatch
 
+react-native-sound - npm
+https://www.npmjs.com/package/react-native-sound
+
 The sounds:
 https://www.pond5.com/search?kw=counting-down-female-voice&media=sfx#3
 https://www.pond5.com/search?kw=female-voice-start&media=sfx#female-voice-start
 https://www.pond5.com/sound-effects/item/77773335-countdown-10-seconds-woman
 https://mixkit.co/free-sound-effects/countdown/
 https://www.zapsplat.com/sound-effect-category/bells/
+
+Free Voice Over Generator | Voicebooking
+> https://www.voicebooking.com/en/free-voice-over-generator
+Free Text to Speech Software (TTS) - by Wideo
+> https://wideo.co/text-to-speech/
+Voice Generator (Online & Free) 🗣️
+> https://voicegenerator.io/
+
+
+
+- Three
+- Two
+- One
+- Workout
+- Rest
+- * sets to go (EG.: 6 sets to go)
+- 1,2,3,4,5,6,7,8,9, - 49,
+- Timer paused
+- Timer resumed
+- Timer stopped
+- Timer completed
+- ** Repetition completed
+
 
 
 ambient
