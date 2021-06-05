@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
+import { logger } from '@/utils/logger'
 
 export enum TickingType {
   Started = 'Started',
@@ -42,13 +43,13 @@ export class CountdownTimer {
   }
 
   async start(): Promise<void> {
-    console.log(`[Started] With initial-countdown-secs:${this._initialCountdownSecs}`)
+    logger.info(`[Started] With initial-countdown-secs:${this._initialCountdownSecs}`)
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
     this.clear()
     this.Status = TimerStatus.TICKING
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
-    console.log('lalal start')
+    logger.info('lalal start')
   }
 
   pause() {
@@ -67,7 +68,7 @@ export class CountdownTimer {
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('PAUSE', e))
     // Logs:
-    console.log(
+    logger.info(
       `[Paused] RemainingCountdownMilliSecs: before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
         `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; Diff:${pausedAt - this._runStartedAt}`,
     )
@@ -78,13 +79,13 @@ export class CountdownTimer {
       return
     }
 
-    console.log(`[Resumed] With remainingCountdownMilliSecs:${this._remainingCountdownMilliSecs}`)
+    logger.info(`[Resumed] With remainingCountdownMilliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.Status = TimerStatus.TICKING
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
-    console.log('lalal resume')
+    logger.info('lalal resume')
   }
 
   stopAndReset() {
@@ -135,13 +136,13 @@ export class CountdownTimer {
   }
 
   private triggerCallback(type: TickingType, secsLeft: number) {
-    console.log(`[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
+    logger.info(`[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleEventError('TICK', e))
   }
 
   // noinspection JSMethodCanBeStatic
   private handleEventError(event: string, e: Error) {
-    console.log(`Event:${event} callback error: `, e)
+    logger.error(`Event:${event} callback error: `, e)
   }
 }

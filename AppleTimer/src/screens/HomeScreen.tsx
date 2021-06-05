@@ -11,6 +11,7 @@ import moment from 'moment'
 import { FULL_TIMESTAMP } from '@/utils/date-util'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
+import { logger } from '@/utils/logger'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -41,7 +42,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setSecsLeftInCurrentPhase(secsLeft)
       setStateTickedPreset(tickedPreset)
       // await Sleep(5000)
-      console.log(
+      logger.info(
         `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
           `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       )
@@ -66,7 +67,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
 
     // only called once after first render
-    console.log('>>> HOME-SCREEN LOADED ======================>!')
+    logger.info('>>> HOME-SCREEN LOADED ======================>!')
     // eslint-disable-next-line
   }, [])
 

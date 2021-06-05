@@ -2,6 +2,7 @@ import { Preset, TickedPreset } from '@/models/preset'
 import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
 import { getUpdatedPreset } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
+import { logger } from '@/utils/logger'
 
 export type PresetTickedEventHandler = (
   currentSet: number,
@@ -118,6 +119,6 @@ export class TimerService {
 
   // noinspection JSMethodCanBeStatic
   private handleError(event: string, e: Error) {
-    console.log(`Event:${event} callback error: `, e)
+    logger.info(`Event:${event} callback error: `, e)
   }
 }

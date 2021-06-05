@@ -1,4 +1,5 @@
 import Sound from 'react-native-sound'
 
-// Enable playback in silence mode
-Sound.setCategory('Ambient', true)
+// Decide to use 'Playback':
+// - Enable play-sound in silence mode (using the Ring/Silent switch).
+Sound.setCategory('Playback', true)

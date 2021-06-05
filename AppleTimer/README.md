@@ -47,31 +47,32 @@ start-workout-button:
 
 svgr --replace-attr-values "#fff=currentColor" icon.svg -d ./
 
+### Stopwatch/Timer references:
 https://stackoverflow.com/questions/21277900/how-can-i-pause-setinterval-functions
 https://github.com/mathiasvr/tiny-timer/blob/master/src/tiny-timer.ts
 https://npm.io/package/tiny-timer
 https://github.com/fanatid/elapsed-time
-
 https://npm.io/search/keyword:stopwatch
 
-react-native-sound - npm
+### react-native-sound - npm
 https://www.npmjs.com/package/react-native-sound
+// 'duration in seconds: ' + this._3SecsCountDownSound.getDuration()
+// 'number of channels: ' + this._3SecsCountDownSound.getNumberOfChannels()
 
-The sounds:
+### The sounds:
 https://www.pond5.com/search?kw=counting-down-female-voice&media=sfx#3
 https://www.pond5.com/search?kw=female-voice-start&media=sfx#female-voice-start
 https://www.pond5.com/sound-effects/item/77773335-countdown-10-seconds-woman
 https://mixkit.co/free-sound-effects/countdown/
 https://www.zapsplat.com/sound-effect-category/bells/
 
+### Text to voice:
 Free Voice Over Generator | Voicebooking
 > https://www.voicebooking.com/en/free-voice-over-generator
 Free Text to Speech Software (TTS) - by Wideo
 > https://wideo.co/text-to-speech/
 Voice Generator (Online & Free) 🗣️
 > https://voicegenerator.io/
-
-
 
 - Three
 - Two
