@@ -7,8 +7,6 @@ import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'
-import moment from 'moment'
-import { FULL_TIMESTAMP } from '@/utils/date-util'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
@@ -22,7 +20,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset(3, 4, 2, 2, 2)
+  const preset: Preset = new Preset(5, 5, 5, 2, 2)
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -49,21 +47,28 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
-      // notificationServiceRef.current?.playBell()
+      notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
     timerServiceRef.current.OnPaused = async (milliSecsLeft: number) => {
-      // notificationServiceRef.current?.playStart()
+      notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerServiceRef.current.OnResumed = async (milliSecsLeft: number) => {
+      notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerServiceRef.current.OnStopped = async (milliSecsLeft: number) => {
-      // notificationServiceRef.current?.playBell()
+      notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
     timerServiceRef.current.OnPreparePhaseIsClosing = async () => {
-      // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start])
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Workout])
+    }
+    timerServiceRef.current.OnWorkoutPhaseIsClosing = async () => {
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
+    }
+    timerServiceRef.current.OnRestPhaseIsClosing = async () => {
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Workout])
     }
 
     // only called once after first render

@@ -71,7 +71,7 @@ export class TimerService {
         }
       }
 
-      if (tickedPreset.setCurrentPhase === TimerPhase.Prepare) {
+      if (tickedPreset.setCurrentPhase === TimerPhase.Rest) {
         // Started
         if (tickedPreset.cycleRestRemainingSecs === this._preset.RestSecs) {
           this.OnRestPhaseStarted &&
