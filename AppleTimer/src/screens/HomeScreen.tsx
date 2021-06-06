@@ -76,13 +76,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onPausedPressed = () => {
-    let flag = false
-    setInterval(() => {
-      flag
-        ? timerServiceRef.current && timerServiceRef.current.pause()
-        : timerServiceRef.current && timerServiceRef.current.resume()
-      flag = !flag
-    }, 18)
+    setIsPaused(true)
+    timerServiceRef.current && timerServiceRef.current.pause()
   }
 
   const onResumePressed = async () => {
