@@ -32,13 +32,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
-      currentCycle: number,
+      currentRep: number,
       type: TickingType,
       secsLeft: number,
       tickedPreset: TickedPreset,
     ) => {
       // logger.info(
-      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
+      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)
@@ -142,7 +142,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           <Divider style={styles.contentDivider} />
           <View style={styles.summaryContent}>
             <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Cycles:</Text>
+              <Text style={styles.itemLabel}>Reps:</Text>
               <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
             </View>
             <View style={styles.totalTimeContainer}>
@@ -155,10 +155,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           <View style={styles.summaryContent}>
             <View style={styles.itemsContainer}>
               <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
-              <Text style={styles.itemLabel}>setCyclesRemainingCount:{stateTickedPreset?.setCyclesRemainingCount}</Text>
+              <Text style={styles.itemLabel}>setRepsRemainingCount:{stateTickedPreset?.setRepsRemainingCount}</Text>
               <Text style={styles.itemLabel}>setPrepareSecs:{stateTickedPreset?.setPrepareRemainingSecs}</Text>
-              <Text style={styles.itemLabel}>cycleWorkoutSecs:{stateTickedPreset?.cycleWorkoutRemainingSecs}</Text>
-              <Text style={styles.itemLabel}>cycleRestSecs:{stateTickedPreset?.cycleRestRemainingSecs}</Text>
+              <Text style={styles.itemLabel}>repWorkoutSecs:{stateTickedPreset?.repWorkoutRemainingSecs}</Text>
+              <Text style={styles.itemLabel}>repRestSecs:{stateTickedPreset?.repRestRemainingSecs}</Text>
             </View>
             <View style={styles.itemsContainer}>
               <Text style={styles.itemLabel}>Total: {secsLeftInCurrentPhase}</Text>

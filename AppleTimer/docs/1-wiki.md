@@ -4,7 +4,7 @@ Preset:
 - prepare: in Sec
 - work: in Sec
 - rest: in Sec
-- cycles count: int,
+- reps count: int,
 - sets-divider: in Sec
 - sets-count:
 

@@ -6,7 +6,7 @@ import { logger } from '@/utils/logger'
 
 export type PresetTickedEventHandler = (
   currentSet: number,
-  currentCycle: number,
+  currentRep: number,
   type: TickingType,
   secsLeft: number,
   tickedPreset: TickedPreset,
@@ -43,11 +43,11 @@ export class TimerService {
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
       const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)
-      // Current cycle is closing, & current set is the last one in repetition:
+      // Current rep is closing, & it's the last one in current set:
       const isRepetitionCompleted = [
-        tickedPreset.setCyclesRemainingCount === 1,
+        tickedPreset.setRepsRemainingCount === 1,
         tickedPreset.setPrepareRemainingSecs === 0,
-        tickedPreset.cycleWorkoutRemainingSecs === 0,
+        tickedPreset.repWorkoutRemainingSecs === 0,
       ].every(item => item)
 
       if (tickedPreset.setCurrentPhase === TimerPhase.Prepare) {
@@ -66,13 +66,13 @@ export class TimerService {
 
       if (tickedPreset.setCurrentPhase === TimerPhase.Workout) {
         // Started
-        if (tickedPreset.cycleWorkoutRemainingSecs === this._preset.WorkoutSecs) {
+        if (tickedPreset.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
           this.OnWorkoutPhaseStarted &&
             (await this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e)))
         }
         // IsClosing
         const minClosingSecs = Math.min(this.WORKOUT_PHASE_CLOSING_SECS, this._preset.WorkoutSecs)
-        if (tickedPreset.cycleWorkoutRemainingSecs === minClosingSecs) {
+        if (tickedPreset.repWorkoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing &&
             (await this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e)))
         }
@@ -80,13 +80,13 @@ export class TimerService {
 
       if (tickedPreset.setCurrentPhase === TimerPhase.Rest) {
         // Started
-        if (tickedPreset.cycleRestRemainingSecs === this._preset.RestSecs) {
+        if (tickedPreset.repRestRemainingSecs === this._preset.RestSecs) {
           this.OnRestPhaseStarted &&
             (await this.OnRestPhaseStarted().catch(e => this.handleError('REST-PHASE-STARTED', e)))
         }
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
-        if (tickedPreset.cycleRestRemainingSecs === minClosingSecs) {
+        if (tickedPreset.repRestRemainingSecs === minClosingSecs) {
           isRepetitionCompleted
             ? this.OnRepetitionCompleted &&
               (await this.OnRepetitionCompleted().catch(e => this.handleError('REPETITION-COMPLETED', e)))

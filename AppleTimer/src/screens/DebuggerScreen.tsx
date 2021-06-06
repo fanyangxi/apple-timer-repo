@@ -26,13 +26,13 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     }
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
-      currentCycle: number,
+      currentRep: number,
       type: TickingType,
       secsLeft: number,
       tickedPreset: TickedPreset,
     ) => {
       // logger.info(
-      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
+      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)

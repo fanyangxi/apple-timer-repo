@@ -9,7 +9,7 @@ describe('timer-service', () => {
     const timerService = new TimerService(presetMock)
     timerService.OnTicked = (
       currentSet: number,
-      currentCycle: number,
+      currentRep: number,
       type: TickingType,
       secsLeft: number,
       tickedPreset: TickedPreset,

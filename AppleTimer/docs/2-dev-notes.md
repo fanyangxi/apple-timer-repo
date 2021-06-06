@@ -17,28 +17,28 @@
 export class TickedPreset {
   // In Preset:
   public SetsRemainingCount: number
-  // In Current-Set: setCyclesRemainingCount
-  public SetCyclesRemainingCount: number
+  // In Current-Set: setRepsRemainingCount
+  public setRepsRemainingCount: number
   public SetCurrentPhase: TimerPhase | undefined
   public SetPrepareRemainingSecs: number
-  // In Current-Cycle:
-  public CycleWorkoutRemainingSecs: number
-  public CycleRestRemainingSecs: number
+  // In Current-Rep:
+  public RepWorkoutRemainingSecs: number
+  public RepRestRemainingSecs: number
 
   constructor(
     setsRemainingCount: number,
-    setCyclesRemainingCount: number,
+    setRepsRemainingCount: number,
     setCurrentPhase: TimerPhase | undefined,
     setPrepareRemainingSecs: number,
-    cycleWorkoutRemainingSecs: number,
-    cycleRestRemainingSecs: number,
+    repWorkoutRemainingSecs: number,
+    repRestRemainingSecs: number,
   ) {
     this.SetsRemainingCount = setsRemainingCount
-    this.SetCyclesRemainingCount = setCyclesRemainingCount
+    this.SetRepsRemainingCount = setRepsRemainingCount
     this.SetCurrentPhase = setCurrentPhase
     this.SetPrepareRemainingSecs = setPrepareRemainingSecs
-    this.CycleWorkoutRemainingSecs = cycleWorkoutRemainingSecs
-    this.CycleRestRemainingSecs = cycleRestRemainingSecs
+    this.RepWorkoutRemainingSecs = repWorkoutRemainingSecs
+    this.RepRestRemainingSecs = repRestRemainingSecs
   }
 }
 ```
