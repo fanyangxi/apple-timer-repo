@@ -32,7 +32,7 @@ export class NotificationService {
   }
 
   playSounds(sounds: string[]) {
-    logger.info('>>> Playing sounds:', sounds)
+    // logger.info('>>> Playing sounds:', sounds)
     // 1.Stop all other sounds first
     this._soundsMap.forEach((value: Sound) => {
       value.stop()
@@ -43,8 +43,7 @@ export class NotificationService {
       .reduce(
         (acc, cur) =>
           acc.then(() => {
-            logger.debug('>>> Playing1:', cur)
-            logger.debug('>>> Playing2:', this._soundsMap.get(cur))
+            // logger.debug(`>>> Playing: ${cur}`, this._soundsMap.get(cur))
             return new Promise(resolve => this._soundsMap.get(cur)?.play(success => resolve()))
           }),
         Promise.resolve(),

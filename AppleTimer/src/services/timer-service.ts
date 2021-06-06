@@ -114,7 +114,7 @@ export class TimerService {
 
   stop = () => {
     this._countdownTimer && this._countdownTimer.stopAndReset()
-    this._countdownTimer && this._countdownTimer.start()
+    // this._countdownTimer && this._countdownTimer.start()
   }
 
   // noinspection JSMethodCanBeStatic

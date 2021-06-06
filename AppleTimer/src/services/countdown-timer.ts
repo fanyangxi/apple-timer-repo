@@ -1,5 +1,3 @@
-import moment from 'moment'
-import { FULL_TIMESTAMP } from '@/utils/date-util'
 import { logger } from '@/utils/logger'
 
 export enum TickingType {
@@ -57,29 +55,31 @@ export class CountdownTimer {
       return
     }
 
-    // 1.Pause:
-    this.clear()
+    // 1.Get the paused time, right before the clear.
+    const pausedAt = new Date().getTime()
+    setTimeout(() => this.clear(), 0)
     this.Status = TimerStatus.PAUSED
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
-    const pausedAt = new Date().getTime()
     const before = this._remainingCountdownMilliSecs
-    const timeLeft = this._remainingCountdownMilliSecs - (pausedAt - this._runStartedAt)
+    const timeLeft = before - (pausedAt - this._runStartedAt)
     this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('PAUSE', e))
     // Logs:
     logger.info(
-      `[Paused] RemainingCountdownMilliSecs: before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
-        `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; Diff:${pausedAt - this._runStartedAt}`,
+      '[Paused] Remaining MilliSecs:' +
+        `before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
+        `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; ` +
+        `Diff:${pausedAt - this._runStartedAt}`,
     )
   }
 
-  async resume() {
+  async resume(): Promise<void> {
     if (this.Status !== TimerStatus.PAUSED) {
       return
     }
 
-    logger.info(`[Resumed] With remainingCountdownMilliSecs:${this._remainingCountdownMilliSecs}`)
+    logger.info(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.Status = TimerStatus.TICKING
@@ -107,7 +107,7 @@ export class CountdownTimer {
     return new Promise(resolve => {
       const extracted = () => {
         let counter = countdownSecs
-        this.triggerCallback(type, counter)
+        this.triggerCallback(type, counter, beforeStartDelayMilliSecs)
 
         if (counter === 0) {
           this.stopAndReset()
@@ -128,17 +128,18 @@ export class CountdownTimer {
         }, this.INTERVAL)
       }
 
+      this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0)
       this._runStartedAt = new Date().getTime()
-      beforeStartDelayMilliSecs
-        ? (this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0))
-        : extracted.call(this)
     })
   }
 
-  private triggerCallback(type: TickingType, secsLeft: number) {
-    logger.info(`[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] Trigger-callback-at ${type}`)
+  private triggerCallback(type: TickingType, secsLeft: number, beforeStartDelayMilliSecs?: number) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleEventError('TICK', e))
+    logger.info(
+      `[(${secsLeft} secs)] Trigger-callback-at ${type}` +
+        `${beforeStartDelayMilliSecs ? `, beforeStartDelay:${beforeStartDelayMilliSecs}` : ''}`,
+    )
   }
 
   // noinspection JSMethodCanBeStatic

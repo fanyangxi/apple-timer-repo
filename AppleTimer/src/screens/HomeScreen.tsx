@@ -39,13 +39,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       secsLeft: number,
       tickedPreset: TickedPreset,
     ) => {
+      // logger.info(
+      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
+      //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
+      // )
+      // await Sleep(5000)
       setSecsLeftInCurrentPhase(secsLeft)
       setStateTickedPreset(tickedPreset)
-      // await Sleep(5000)
-      logger.info(
-        `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentCycle},` +
-          `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
-      )
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
@@ -56,7 +56,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       // notificationServiceRef.current?.playStart()
     }
     timerServiceRef.current.OnResumed = async (milliSecsLeft: number) => {
-      notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
+      // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerServiceRef.current.OnStopped = async (milliSecsLeft: number) => {
       // notificationServiceRef.current?.playBell()
@@ -76,8 +76,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onPausedPressed = () => {
-    setIsPaused(true)
-    timerServiceRef.current && timerServiceRef.current.pause()
+    let flag = false
+    setInterval(() => {
+      flag
+        ? timerServiceRef.current && timerServiceRef.current.pause()
+        : timerServiceRef.current && timerServiceRef.current.resume()
+      flag = !flag
+    }, 18)
   }
 
   const onResumePressed = async () => {
