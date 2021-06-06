@@ -70,8 +70,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnRestPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Workout])
     }
-    timerServiceRef.current.OnRepetitionCompleted = async () => {
-      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.RepetitionCompleted])
+    timerServiceRef.current.OnSetCompleted = async () => {
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
 
     // only called once after first render

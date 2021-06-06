@@ -28,7 +28,7 @@ export class TimerService {
   public OnWorkoutPhaseIsClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
   public OnRestPhaseIsClosing?: () => Promise<void>
-  public OnRepetitionCompleted?: () => Promise<void>
+  public OnSetCompleted?: () => Promise<void>
 
   private PREPARE_PHASE_CLOSING_SECS = 3
   private WORKOUT_PHASE_CLOSING_SECS = 3
@@ -43,8 +43,8 @@ export class TimerService {
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
       const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)
-      // Current rep is closing, & it's the last one in current set:
-      const isRepetitionCompleted = [
+      // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
+      const isSetCompleted = [
         tickedPreset.setRepsRemainingCount === 1,
         tickedPreset.setPrepareRemainingSecs === 0,
         tickedPreset.repWorkoutRemainingSecs === 0,
@@ -87,9 +87,8 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
         if (tickedPreset.repRestRemainingSecs === minClosingSecs) {
-          isRepetitionCompleted
-            ? this.OnRepetitionCompleted &&
-              (await this.OnRepetitionCompleted().catch(e => this.handleError('REPETITION-COMPLETED', e)))
+          isSetCompleted
+            ? this.OnSetCompleted && (await this.OnSetCompleted().catch(e => this.handleError('SET-COMPLETED', e)))
             : this.OnRestPhaseIsClosing &&
               (await this.OnRestPhaseIsClosing().catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
         }
