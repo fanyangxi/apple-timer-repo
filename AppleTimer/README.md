@@ -65,13 +65,13 @@ Free Text to Speech Software (TTS) - by Wideo
 - > Three. Two. One.
 - > Workout
 - > Rest
-- * sets to go (EG.: 6 sets to go)
 - > 1,2,3,4,5,6,7,8,9, - 50,
+- > repetitions to go (EG.: 6 sets to go)
 - > Timer paused
 - > Timer resumed
 - > Timer stopped
 - > Timer completed
-- ** Repetition completed
+- > Set completed
 
 
 

@@ -6,7 +6,6 @@ import { logger } from '@/utils/logger'
 // - ** Repetition completed
 // Notes:: Value of the enum members cannot be duplicated.
 export enum Sounds {
-  _3_secs_countdown = '3_secs_countdown.mp3',
   _bell = 'mixkit_cartoon_door_melodic_bell_110.wav',
   _start = 'start.mp3',
   // 9 misc:
@@ -17,8 +16,8 @@ export enum Sounds {
   TimerResumed = 'timer_resumed.mp3',
   TimerStopped = 'timer_stopped.mp3',
   TimerCompleted = 'timer_completed.mp3',
-  SetsToGo = 'sets_to_go.mp3',
-  RepetitionCompleted = 'repetition_completed.mp3',
+  RepetitionsToGo = 'repetitions_to_go.mp3',
+  SetCompleted = 'set_completed.mp3',
   // Num(s): 1-50
   Num1 = 'num_1.mp3',
   Num2 = 'num_2.mp3',
