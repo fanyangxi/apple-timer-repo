@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
-import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
+import { Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/components/DarkAnd'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'

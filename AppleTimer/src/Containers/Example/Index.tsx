@@ -1,72 +1,52 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native' // ActivityIndicator
 import { Brand } from '@/components'
 import { useTheme } from '@/theme'
-import FetchOne from '@/store/User/FetchOne'
-import ChangeTheme from '@/store/Theme/ChangeTheme'
+// import FetchOne from '@/store/User/FetchOne'
+// import ChangeTheme from '@/store/Theme/ChangeTheme'
 import { useTranslation } from 'react-i18next'
-import { UserState } from '@/store/User'
+// import { UserState } from '@/store/User'
 import { ThemeState } from '@/store/Theme'
 
 const IndexExampleContainer = () => {
   const { t } = useTranslation()
   const { Common, Fonts, Gutters, Layout } = useTheme()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
-  const user = useSelector((state: { user: UserState }) => state.user.item)
-  const fetchOneUserLoading = useSelector(
-    (state: { user: UserState }) => state.user.fetchOne.loading,
-  )
-  const fetchOneUserError = useSelector(
-    (state: { user: UserState }) => state.user.fetchOne.error,
-  )
+  // const user = useSelector((state: { user: UserState }) => state.user.item)
+  // const fetchOneUserLoading = useSelector((state: { user: UserState }) => state.user.fetchOne.loading)
+  // const fetchOneUserError = useSelector((state: { user: UserState }) => state.user.fetchOne.error)
 
   const [userId, setUserId] = useState('1')
 
   const fetch = (id: string) => {
     setUserId(id)
-    dispatch(FetchOne.action(id))
+    // dispatch(FetchOne.action(id))
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const changeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
-    dispatch(ChangeTheme.action({ theme, darkMode }))
+    // dispatch(ChangeTheme.action({ theme, darkMode }))
   }
 
   return (
     <View style={[Layout.fill, Layout.colCenter, Gutters.smallHPadding]}>
       <View style={[[Layout.colCenter, Gutters.smallHPadding]]}>
         <Brand />
-        {fetchOneUserLoading && <ActivityIndicator />}
-        {fetchOneUserError ? (
-          <Text style={Fonts.textRegular}>{fetchOneUserError.message}</Text>
-        ) : (
-          <Text style={Fonts.textRegular}>
-            {t('example.helloUser', { name: user.name })}
-          </Text>
-        )}
+        {/*{fetchOneUserLoading && <ActivityIndicator />}*/}
+        {/*{fetchOneUserError ? (*/}
+        {/*  <Text style={Fonts.textRegular}>{fetchOneUserError.message}</Text>*/}
+        {/*) : (*/}
+        {/*  <Text style={Fonts.textRegular}>{t('example.helloUser', { name: user.name })}</Text>*/}
+        {/*)}*/}
       </View>
       <View
-        style={[
-          Layout.row,
-          Layout.rowHCenter,
-          Gutters.smallHPadding,
-          Gutters.largeVMargin,
-          Common.backgroundPrimary,
-        ]}
+        style={[Layout.row, Layout.rowHCenter, Gutters.smallHPadding, Gutters.largeVMargin, Common.backgroundPrimary]}
       >
-        <Text style={[Layout.fill, Fonts.textCenter, Fonts.textSmall]}>
-          {t('example.labels.userId')}
-        </Text>
+        <Text style={[Layout.fill, Fonts.textCenter, Fonts.textSmall]}>{t('example.labels.userId')}</Text>
         <TextInput
           onChangeText={text => fetch(text)}
-          editable={!fetchOneUserLoading}
+          // editable={!fetchOneUserLoading}
           keyboardType={'number-pad'}
           maxLength={1}
           value={userId}

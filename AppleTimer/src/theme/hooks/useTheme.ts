@@ -1,5 +1,5 @@
-import { useColorScheme } from 'react-native'
-import { useSelector } from 'react-redux'
+// import { useColorScheme } from 'react-native'
+// import { useSelector } from 'react-red*x'
 import { DarkTheme, DefaultTheme } from '@react-navigation/native'
 import Fonts from '@/theme/Fonts'
 import Gutters from '@/theme/Gutters'
@@ -7,38 +7,26 @@ import Images from '@/theme/Images'
 import Layout from '@/theme/Layout'
 import Common from '@/theme/Common'
 import * as DefaultVariables from '@/theme/Variables'
-import themes from '@/theme/themes'
-import { ThemeState } from '@/store/Theme'
-import {
-  Theme,
-  ThemeCommon,
-  ThemeNavigationColors,
-  ThemeNavigationTheme,
-  ThemeVariables,
-} from '@/theme/theme.type'
+// import themes from '@/theme/themes'
+// import { ThemeState } from '@/store/Theme'
+import { Theme, ThemeCommon, ThemeNavigationColors, ThemeNavigationTheme, ThemeVariables } from '@/theme/theme.type'
 
 export default function () {
   // Get the scheme device
-  const colorScheme = useColorScheme()
+  // const colorScheme = useColorScheme()
 
   // Get current theme from the store
-  const currentTheme = useSelector(
-    (state: { theme: ThemeState }) => state.theme.theme || 'default',
-  )
-  const isDark = useSelector(
-    (state: { theme: ThemeState }) => state.theme.darkMode,
-  )
-  const darkMode = isDark === null ? colorScheme === 'dark' : isDark
+  // const currentTheme = useSelector((state: { theme: ThemeState }) => state.theme.theme || 'default')
+  // const isDark = useSelector((state: { theme: ThemeState }) => state.theme.darkMode)
+  // const darkMode = isDark === null ? colorScheme === 'dark' : isDark
   //Select the right theme light theme ({} if not exist)
-  const {
-    Variables: themeConfigVars = {} as Partial<ThemeVariables>,
-    ...themeConfig
-  } = themes[currentTheme] || {}
+  // const { Variables: themeConfigVars = {} as Partial<ThemeVariables>, ...themeConfig } = themes[currentTheme] || {}
+  const { Variables: themeConfigVars = {} as Partial<ThemeVariables>, ...themeConfig } = {}
 
-  const {
-    Variables: darkThemeConfigVars = {} as Partial<ThemeVariables>,
-    ...darkThemeConfig
-  } = darkMode ? themes[`${currentTheme}_dark`] || {} : {}
+  // const { Variables: darkThemeConfigVars = {} as Partial<ThemeVariables>, ...darkThemeConfig } = darkMode
+  //   ? themes[`${currentTheme}_dark`] || {}
+  //   : {}
+  const { Variables: darkThemeConfigVars = {} as Partial<ThemeVariables>, ...darkThemeConfig } = {}
 
   const themeVariables: ThemeVariables = mergeVariables(
     DefaultVariables as ThemeVariables,
@@ -64,7 +52,7 @@ export default function () {
 
   // Merge and return the current Theme
   return buildTheme(
-    darkMode,
+    false, // darkMode,
     baseTheme,
     formatTheme(themeVariables, themeConfig || {}),
     formatTheme(themeVariables, darkThemeConfig || {}),
@@ -78,10 +66,7 @@ export default function () {
  * @param theme
  * @return {{}|{[p: string]: *}}
  */
-const formatTheme = (
-  variables: ThemeVariables,
-  theme: Partial<Theme>,
-): Partial<Theme> => {
+const formatTheme = (variables: ThemeVariables, theme: Partial<Theme>): Partial<Theme> => {
   return Object.entries(theme).reduce((acc, [name, generate]) => {
     return {
       ...acc,
@@ -94,7 +79,9 @@ const formatTheme = (
  * Merge all variables for building the theme
  * baseTheme <- currentTheme <- currentDarkTheme
  *
- * @param variables : {MetricsSizes?: {small: number, large: number, tiny: number, regular: number}, NavigationColors?: {primary: string}, FontSize?: {small: number, large: number, regular: number}, Colors?: {white: string, success: string, text: string, error: string, transparent: string, primary: string}} variables from @Theme/Variables
+ * @param variables : {MetricsSizes?: {small: number, large: number, tiny: number, regular: number}, NavigationColors?:
+ * {primary: string}, FontSize?: {small: number, large: number, regular: number}, Colors?: {white: string,
+ * success: string, text: string, error: string, transparent: string, primary: string}} variables from @Theme/Variables
  * @param themeConfig : currentTheme form @Theme/themes
  * @param darkThemeConfig : currentDarkTheme from @Theme/themes
  * @return {{}|{[p: string]: *}}
@@ -133,10 +120,7 @@ const buildTheme = (
   return {
     ...mergeTheme(baseTheme, themeConfig, darkThemeConfig),
     darkMode,
-    NavigationTheme: mergeNavigationTheme(
-      darkMode ? DarkTheme : DefaultTheme,
-      baseTheme.NavigationColors,
-    ),
+    NavigationTheme: mergeNavigationTheme(darkMode ? DarkTheme : DefaultTheme, baseTheme.NavigationColors),
   }
 }
 
@@ -148,11 +132,7 @@ const buildTheme = (
  * @param darkTheme
  * @return {{[p: string]: *}}
  */
-const mergeTheme = (
-  baseTheme: Theme,
-  theme: Partial<Theme>,
-  darkTheme: Partial<Theme>,
-): Theme =>
+const mergeTheme = (baseTheme: Theme, theme: Partial<Theme>, darkTheme: Partial<Theme>): Theme =>
   Object.entries(baseTheme).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -171,10 +151,7 @@ const mergeTheme = (
  * @param overrideColors
  * @return {{colors}}
  */
-const mergeNavigationTheme = (
-  reactNavigationTheme: ThemeNavigationTheme,
-  overrideColors: ThemeNavigationColors,
-) => ({
+const mergeNavigationTheme = (reactNavigationTheme: ThemeNavigationTheme, overrideColors: ThemeNavigationColors) => ({
   ...reactNavigationTheme,
   colors: {
     ...reactNavigationTheme.colors,
