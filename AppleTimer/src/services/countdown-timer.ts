@@ -47,7 +47,7 @@ export class CountdownTimer {
     this.clear()
     this.Status = TimerStatus.TICKING
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
-    logger.info('lalal start')
+    logger.info('Started')
   }
 
   pause() {
@@ -85,7 +85,7 @@ export class CountdownTimer {
     this.Status = TimerStatus.TICKING
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
-    logger.info('lalal resume')
+    logger.info('Resumed')
   }
 
   stopAndReset() {
