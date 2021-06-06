@@ -90,8 +90,9 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current && (await timerServiceRef.current.resume())
   }
 
-  const onStopPressed = () => {
+  const onStopPressed = async () => {
     timerServiceRef.current && timerServiceRef.current.stop()
+    timerServiceRef.current && (await timerServiceRef.current.runPreset())
   }
 
   return (
