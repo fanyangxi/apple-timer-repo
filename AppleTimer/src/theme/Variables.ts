@@ -5,19 +5,15 @@
  * That allows to change them more easily later on.
  */
 
-import {
-  ThemeColors,
-  ThemeFontSize,
-  ThemeMetricsSizes,
-  ThemeNavigationColors,
-} from '@/theme/theme.type'
+import { ThemeFontSize, ThemeMetricsSizes, ThemeNavigationColors } from '@/theme/theme.type'
 import { TextStyle } from 'react-native'
 
 /**
  * Colors
  */
-export const Colors: ThemeColors = {
+export const Colors = {
   // Example colors:
+  headerBackground: '#28282A',
   transparent: 'rgba(0,0,0,0)',
   inputBackground: '#FFFFFF',
   white: '#ffffff',
