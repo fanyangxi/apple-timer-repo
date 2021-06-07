@@ -23,11 +23,11 @@ export class TimerService {
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPreparePhaseStarted?: () => Promise<void>
-  public OnPreparePhaseIsClosing?: () => Promise<void>
+  public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
   public OnWorkoutPhaseIsClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
-  public OnRestPhaseIsClosing?: () => Promise<void>
+  public OnRestPhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
   public OnSetCompleted?: () => Promise<void>
 
   private PREPARE_PHASE_CLOSING_SECS = 3
@@ -60,7 +60,9 @@ export class TimerService {
         const minClosingSecs = Math.min(this.PREPARE_PHASE_CLOSING_SECS, this._preset.PrepareSecs)
         if (tickedPreset.setPrepareRemainingSecs === minClosingSecs) {
           this.OnPreparePhaseIsClosing &&
-            (await this.OnPreparePhaseIsClosing().catch(e => this.handleError('PREPARE-PHASE-IS-CLOSING ', e)))
+            (await this.OnPreparePhaseIsClosing(tickedPreset.setRepsRemainingCount).catch(e =>
+              this.handleError('PREPARE-PHASE-IS-CLOSING ', e),
+            ))
         }
       }
 
@@ -87,10 +89,12 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
         if (tickedPreset.repRestRemainingSecs === minClosingSecs) {
+          // Since we're still in current Rep, so we do '-1' here.
+          const setRepsLeft = tickedPreset.setRepsRemainingCount - 1
           isSetCompleted
             ? this.OnSetCompleted && (await this.OnSetCompleted().catch(e => this.handleError('SET-COMPLETED', e)))
             : this.OnRestPhaseIsClosing &&
-              (await this.OnRestPhaseIsClosing().catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
+              (await this.OnRestPhaseIsClosing(setRepsLeft).catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
         }
       }
     }

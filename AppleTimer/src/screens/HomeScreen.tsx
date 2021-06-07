@@ -29,7 +29,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { navigate } = useNavigation()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset(5, 5, 5, 2, 2)
+  const preset: Preset = new Preset(5, 7, 5, 2, 2)
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -70,14 +70,24 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
-    timerServiceRef.current.OnPreparePhaseIsClosing = async () => {
-      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Workout])
+    timerServiceRef.current.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
+      notificationServiceRef.current?.playSounds([
+        Sounds.ThreeTwoOne,
+        `num_${setRepsRemainingCount}.mp3`,
+        Sounds.RepetitionsToGo,
+        Sounds.Workout,
+      ])
     }
     timerServiceRef.current.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
-    timerServiceRef.current.OnRestPhaseIsClosing = async () => {
-      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Workout])
+    timerServiceRef.current.OnRestPhaseIsClosing = async (setRepsRemainingCount: number) => {
+      notificationServiceRef.current?.playSounds([
+        Sounds.ThreeTwoOne,
+        `num_${setRepsRemainingCount}.mp3`,
+        Sounds.RepetitionsToGo,
+        Sounds.Workout,
+      ])
     }
     timerServiceRef.current.OnSetCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
