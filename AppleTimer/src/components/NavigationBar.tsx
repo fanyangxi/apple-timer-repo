@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from '
 import { DefaultProps } from '@/common/props'
 import { useNavigation } from '@react-navigation/native'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
-import BackArrow from '@/components/BackArrow'
+import BackArrow from '@/assets/icons/BackArrow'
 
 const BackButton: React.FC<{
   onPress?: () => void
