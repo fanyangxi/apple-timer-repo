@@ -1,5 +1,5 @@
 export const assets = {
   images: {
-    settings: require('./images2/settings.png'),
+    settings: require('./images/settings.png'),
   },
 }
