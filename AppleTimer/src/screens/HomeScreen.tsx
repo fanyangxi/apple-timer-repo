@@ -3,7 +3,7 @@ import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
-import { Button, Divider } from 'native-base'
+import { Actionsheet, Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
@@ -16,12 +16,14 @@ import { assets } from '@/assets'
 import { ImageButton } from '@/components/button/ImageButton'
 import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
+import { DeviceHeight } from '@/common/device'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
   const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
+  const [isActionsheetOpen, setIsActionsheetOpen] = useState<boolean>()
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
@@ -125,7 +127,14 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>*/}
             {/*  <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>*/}
             {/*</TouchableOpacity>*/}
-            <LinkButton theme={LinkButtonTheme.Normal} text={'Change-Preset'} textColor={'white'} onPress={() => {}} />
+            <LinkButton
+              theme={LinkButtonTheme.Normal}
+              text={'Change-Preset'}
+              textColor={'white'}
+              onPress={() => {
+                setIsActionsheetOpen(true)
+              }}
+            />
           </View>
           <Divider style={styles.summaryDivider} />
           <View style={styles.summaryContent}>
@@ -212,6 +221,22 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           )}
         </View>
       </View>
+      <Actionsheet isOpen={isActionsheetOpen} onClose={() => {}} disableOverlay>
+        <View style={styles.actionsheetOverlay}>
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>
+            <Text style={Fonts.textRegular}>{'Close'}</Text>
+          </TouchableOpacity>
+        </View>
+        {/*<ActionsheetContent>*/}
+        {/*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*/}
+        {/*  /!*<ActionsheetItem>Option 1</ActionsheetItem>*!/*/}
+        {/*  /!*<ActionsheetItem>Option 2</ActionsheetItem>*!/*/}
+        {/*  /!*<ActionsheetItem>Option 3</ActionsheetItem>*!/*/}
+        {/*</ActionsheetContent>*/}
+        {/*<ActionsheetFooter>*/}
+        {/*  <ActionsheetItem onPress={onClose}>Cancel</ActionsheetItem>*/}
+        {/*</ActionsheetFooter>*/}
+      </Actionsheet>
     </ScreenContainer>
   )
 }
@@ -293,4 +318,8 @@ const styles = StyleSheet.create({
   start: {},
   pause: {},
   stop: {},
+  actionsheetOverlay: {
+    height: DeviceHeight * 0.7,
+    backgroundColor: 'lightgrey', // '#202021',
+  },
 })
