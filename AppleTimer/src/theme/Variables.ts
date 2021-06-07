@@ -136,3 +136,9 @@ export const Fonts = {
     fontWeight: 'bold',
   } as TextStyle,
 }
+
+export const defaultShadow = {
+  elevation: 1,
+  shadowOffset: { width: 0.1, height: 0.1 },
+  shadowOpacity: 0.08,
+}

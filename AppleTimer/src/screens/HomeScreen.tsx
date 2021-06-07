@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
-import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
+import { Colors, FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
@@ -11,6 +11,8 @@ import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
 import ScreenContainer from '@/components/ScreenContainer'
 import SvgComponent from '@/components/DarkAnd'
+import { NavigationBar } from '@/components/NavigationBar'
+import { assets } from '@/assets'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -101,6 +103,17 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer backgroundComponent={() => <SvgComponent />}>
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
+      <NavigationBar
+        title={'Apple Timer'}
+        showBackButton={false}
+        actionButton={{
+          onPress: () => {},
+          icon: assets.images.settings,
+          testID: 'settingsLink',
+        }}
+      />
+
       <View style={styles.rootContainer}>
         {/* @summary-section: */}
         <View style={styles.summarySection}>

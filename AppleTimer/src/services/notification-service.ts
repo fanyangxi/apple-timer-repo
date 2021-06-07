@@ -95,7 +95,7 @@ export class NotificationService {
           acc.then(() => {
             // logger.debug(`>>> Playing: ${cur}`, this._soundsMap.get(cur))
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            return new Promise(resolve => this._soundsMap.get(cur)?.play(success => resolve()))
+            return new Promise(resolve => this._soundsMap.get(cur + 'x')?.play(success => resolve()))
           }),
         Promise.resolve(),
       )

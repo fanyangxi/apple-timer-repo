@@ -43,7 +43,7 @@ const ApplicationNavigator = () => {
     <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
       <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
       <Stack.Navigator headerMode={'none'}>
-        <Stack.Screen name="Home2" component={HomeScreen} />
+        <Stack.Screen name="Home2" component={HomeScreen} options={{ title: 'Awesome app' }} />
         <Stack.Screen name="Debugger" component={DebuggerScreen} />
         {/*<Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
         {/*{isApplicationLoaded && MainNavigator != null && (*/}
