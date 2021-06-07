@@ -102,7 +102,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   return (
-    <ScreenContainer backgroundComponent={() => <SvgComponent />}>
+    <ScreenContainer
+      backgroundComponent={() => <SvgComponent />}
+      topInsetBackgroundColor={Colors.primary}
+      bottomInsetBackgroundColor={Colors.transparent}
+    >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
       <NavigationBar
         title={'Apple Timer'}
