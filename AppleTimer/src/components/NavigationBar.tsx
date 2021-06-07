@@ -2,8 +2,6 @@ import React, { ReactElement } from 'react'
 import {
   Image,
   ImageSourcePropType,
-  Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TextStyle,
@@ -16,7 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 // import { HEADER_HEIGHT, STATUS_BAR_HEIGHT } from './Device'
 // import { ColorType, defaultColor, defaultShadow, FontWeight } from '../../src/constants/theme'
 // import { useNavigation } from 'react-navigation-hooks'
-import { Colors, defaultShadow, Fonts, Spacings } from '@/theme/Variables'
+import { Colors, Fonts, Spacings } from '@/theme/Variables'
 import BackArrow from '@/components/BackArrow'
 
 export interface BarItemProps extends DefaultProps {
@@ -56,14 +54,12 @@ const ActionButton: React.FC<{
 
 // const STATUS_BAR_HEIGHT = Platform.select({ ios: 23, android: StatusBar.currentHeight || 0, default: 25 })
 const NAVIGATION_BAR_HEIGHT = 44
-const barItemWidth = 50
 
 export interface NavigationBarProps extends DefaultProps {
   style?: ViewStyle
   backgroundColor?: string
   //
   title: string
-  titleColor?: string
   showBackButton: boolean
   backButtonAction?: () => void
   hideShadow?: boolean
@@ -75,21 +71,30 @@ export const NavigationBar: React.FC<NavigationBarProps> = props => {
     styles.rootContainer,
     {
       height: NAVIGATION_BAR_HEIGHT,
-      backgroundColor: props.backgroundColor || Colors.primary,
+      backgroundColor: props.backgroundColor || Colors.mineShaft,
     },
-    props.hideShadow ? {} : defaultShadow,
+    props.hideShadow
+      ? {}
+      : {
+          shadowColor: '#000',
+          shadowOffset: { width: 1, height: 2 },
+          shadowOpacity: 0.6,
+          shadowRadius: 32,
+          elevation: 4,
+        },
     props.style,
   ]
-  // const titleColor = props.titleColor ? props.titleColor : Colors.text
 
   return (
-    <View style={mergedRootContainerStyle}>
-      <View style={styles.body}>
-        <Text style={styles.title}>{props.title}</Text>
-      </View>
-      <View style={styles.left}>{props.showBackButton ? <BackButton onPress={props.backButtonAction} /> : null}</View>
-      <View style={styles.right}>
-        {props.actionButton && <ActionButton onPress={props.actionButton.onPress} icon={props.actionButton.icon} />}
+    <View style={{ overflow: 'hidden', paddingBottom: 4 }}>
+      <View style={mergedRootContainerStyle}>
+        <View style={styles.body}>
+          <Text style={styles.title}>{props.title}</Text>
+        </View>
+        <View style={styles.left}>{props.showBackButton ? <BackButton onPress={props.backButtonAction} /> : null}</View>
+        <View style={styles.right}>
+          {props.actionButton && <ActionButton onPress={props.actionButton.onPress} icon={props.actionButton.icon} />}
+        </View>
       </View>
     </View>
   )
@@ -137,7 +142,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: Colors.text,
+    color: Colors.lightGray,
     ...Fonts.titleNormal,
   } as TextStyle,
 })

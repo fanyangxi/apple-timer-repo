@@ -104,7 +104,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   return (
     <ScreenContainer
       backgroundComponent={() => <SvgComponent />}
-      topInsetBackgroundColor={Colors.primary}
+      topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
