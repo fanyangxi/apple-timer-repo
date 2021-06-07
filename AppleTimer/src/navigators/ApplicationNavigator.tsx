@@ -1,16 +1,16 @@
 import React from 'react'
-// import { createStackNavigator } from '@react-navigation/stack'
-// import { IndexStartupContainer } from '@/Containers'
+import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { navigationRef } from '@/navigators/Root'
-import { SafeAreaView, StatusBar } from 'react-native'
 import { useTheme } from '@/theme'
 import { HomeScreen } from '@/screens/HomeScreen'
 import { DebuggerScreen } from '@/screens/DebuggerScreen'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import { IndexStartupContainer } from '@/Containers'
 // import { StartupState } from '@/store/Startup'
 
-// const Stack = createStackNavigator()
+const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
 // let MainNavigator: FunctionComponent | null
@@ -39,29 +39,28 @@ const ApplicationNavigator = () => {
   //   },
   //   [],
   // )
-
   return (
-    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
-      <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
-        <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
-        {/*<Stack.Navigator headerMode={'none'}>*/}
-        {/*  <Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
-        {/*  /!*{isApplicationLoaded && MainNavigator != null && (*!/*/}
-        {/*  /!*  <Stack.Screen*!/*/}
-        {/*  /!*    name="Main"*!/*/}
-        {/*  /!*    component={MainNavigator}*!/*/}
-        {/*  /!*    options={{*!/*/}
-        {/*  /!*      animationEnabled: false,*!/*/}
-        {/*  /!*    }}*!/*/}
-        {/*  /!*  />*!/*/}
-        {/*  /!*)}*!/*/}
-        {/*</Stack.Navigator>*/}
-        <Tab.Navigator>
-          <Tab.Screen name="Home2" component={HomeScreen} />
-          <Tab.Screen name="Debugger" component={DebuggerScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
+      <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
+      <Stack.Navigator headerMode={'none'}>
+        <Stack.Screen name="Home2" component={HomeScreen} />
+        <Stack.Screen name="Debugger" component={DebuggerScreen} />
+        {/*<Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
+        {/*{isApplicationLoaded && MainNavigator != null && (*/}
+        {/*  <Stack.Screen*/}
+        {/*    name="Main"*/}
+        {/*    component={MainNavigator}*/}
+        {/*    options={{*/}
+        {/*      animationEnabled: false,*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*)}*/}
+      </Stack.Navigator>
+      {/*<Tab.Navigator>*/}
+      {/*  <Tab.Screen name="Home2" component={HomeScreen} />*/}
+      {/*  <Tab.Screen name="Debugger" component={DebuggerScreen} />*/}
+      {/*</Tab.Navigator>*/}
+    </NavigationContainer>
   )
 }
 
