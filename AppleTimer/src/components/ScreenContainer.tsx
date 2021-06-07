@@ -18,7 +18,9 @@ const ScreenContainer: React.FC<Props> = ({ backgroundComponent, children, style
     <View style={styles.screenRoot}>
       {backgroundComponent && <View style={styles.background}>{backgroundComponent()}</View>}
       <View style={[styles.top, { height: insets.top }]} />
-      <View style={[styles.content, style, backgroundStyle]}>{children}</View>
+      <View style={[styles.content, { marginLeft: insets.left, marginRight: insets.right }, style, backgroundStyle]}>
+        {children}
+      </View>
       <View style={[styles.bottom, { height: insets.bottom }]} />
     </View>
   )
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: 'grey',
+    // backgroundColor: 'grey',
   },
   background: {
     position: 'absolute',
@@ -40,12 +42,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   top: {
-    // flex: 1,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
   bottom: {
-    // flex: 1,
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
   },
 })
 
