@@ -10,7 +10,7 @@ import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
 
-export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
+export const SettingsScreen: React.FC<{}> = (): ReactElement => {
   const [isRunning, setIsRunning] = useState<boolean>()
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
@@ -65,7 +65,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       bottomInsetBackgroundColor={Colors.transparent}
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
-      <NavigationBar title={'Debugger'} showBackButton={true} />
+      <NavigationBar title={'Settings'} showBackButton={true} />
       <View style={styles.rootContainer}>
         {/* @action-section: */}
         <View style={styles.actionSection}>

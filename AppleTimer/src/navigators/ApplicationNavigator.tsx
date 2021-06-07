@@ -7,6 +7,7 @@ import { navigationRef } from '@/navigators/Root'
 import { useTheme } from '@/theme'
 import { HomeScreen } from '@/screens/HomeScreen'
 import { DebuggerScreen } from '@/screens/DebuggerScreen'
+import { SettingsScreen } from '@/screens/SettingsScreen'
 // import { IndexStartupContainer } from '@/Containers'
 // import { StartupState } from '@/store/Startup'
 
@@ -43,7 +44,8 @@ const ApplicationNavigator = () => {
     <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
       <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
       <Stack.Navigator headerMode={'none'}>
-        <Stack.Screen name="Home2" component={HomeScreen} options={{ title: 'Awesome app' }} />
+        <Stack.Screen name="Home2" component={HomeScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Debugger" component={DebuggerScreen} />
         {/*<Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
         {/*{isApplicationLoaded && MainNavigator != null && (*/}

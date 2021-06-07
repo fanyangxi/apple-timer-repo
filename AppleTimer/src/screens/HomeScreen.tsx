@@ -13,6 +13,9 @@ import ScreenContainer from '@/components/ScreenContainer'
 import SvgComponent from '@/components/DarkAnd'
 import { NavigationBar } from '@/components/NavigationBar'
 import { assets } from '@/assets'
+import { ImageButton } from '@/components/button/ImageButton'
+import { useNavigation } from '@react-navigation/native'
+import { Screens } from '@/common/constants'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -21,6 +24,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [isPaused, setIsPaused] = useState<boolean>()
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
+  const { navigate } = useNavigation()
 
   const { Common } = useTheme()
   const preset: Preset = new Preset(5, 5, 5, 2, 2)
@@ -111,11 +115,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       <NavigationBar
         title={'Apple Timer'}
         showBackButton={false}
-        actionButton={{
-          onPress: () => {},
-          icon: assets.images.settings,
-          testID: 'settingsLink',
-        }}
+        right={<ImageButton icon={assets.images.settings} onPress={() => navigate(Screens.Settings)} />}
       />
 
       <View style={styles.rootContainer}>
