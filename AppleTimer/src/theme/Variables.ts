@@ -5,7 +5,7 @@
  * That allows to change them more easily later on.
  */
 
-import { ThemeFontSize, ThemeMetricsSizes, ThemeNavigationColors } from '@/theme/theme.type'
+import { ThemeMetricsSizes, ThemeNavigationColors } from '@/theme/theme.type'
 import { TextStyle } from 'react-native'
 
 /**
@@ -27,14 +27,14 @@ export const NavigationColors: Partial<ThemeNavigationColors> = {
   primary: Colors.primary,
 }
 
-/**
- * FontSize
- */
-export const FontSize: ThemeFontSize = {
-  small: 16,
-  regular: 20,
-  large: 40,
-}
+// /**
+//  * FontSize
+//  */
+// export const FontSize = {
+//   small: 16,
+//   regular: 20,
+//   large: 40,
+// }
 
 /**
  * Metrics Sizes
@@ -71,6 +71,7 @@ export const FontSizes = {
   f12: 12,
   f14: 14,
   f16: 16,
+  f18: 18,
   f20: 20,
   f30: 30,
   f40: 40,
@@ -128,11 +129,17 @@ export const Fonts = {
     fontWeight: 'normal',
   } as TextStyle,
   titleSmall: {
-    fontSize: FontSize.small * 2,
+    fontSize: FontSizes.f16 * 2,
     fontWeight: 'bold',
   } as TextStyle,
   titleRegular: {
-    fontSize: FontSize.regular * 2,
+    fontSize: FontSizes.f20 * 2,
+    fontWeight: 'bold',
+  } as TextStyle,
+  //
+  titleNormal: {
+    fontSize: FontSizes.f18,
+    fontStyle: 'normal',
     fontWeight: 'bold',
   } as TextStyle,
 }

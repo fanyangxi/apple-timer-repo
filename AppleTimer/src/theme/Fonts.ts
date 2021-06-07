@@ -3,38 +3,39 @@
  */
 import { StyleSheet } from 'react-native'
 import { ThemeVariables, ThemeFonts } from '@/theme/theme.type'
+import {FontSizes} from "@/theme/Variables";
 
 /**
  *
  * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}
  * @return {*}
  */
-export default function ({ FontSize, Colors }: ThemeVariables): ThemeFonts {
+export default function ({ Colors }: ThemeVariables): ThemeFonts {
   return StyleSheet.create({
     textSmall: {
-      fontSize: FontSize.small,
+      fontSize: FontSizes.f16,
       color: Colors.text,
     },
     textRegular: {
-      fontSize: FontSize.regular,
+      fontSize: FontSizes.f20,
       color: Colors.text,
     },
     textLarge: {
-      fontSize: FontSize.large,
+      fontSize: FontSizes.f40,
       color: Colors.text,
     },
     titleSmall: {
-      fontSize: FontSize.small * 2,
+      fontSize: FontSizes.f16 * 2,
       fontWeight: 'bold',
       color: Colors.text,
     },
     titleRegular: {
-      fontSize: FontSize.regular * 2,
+      fontSize: FontSizes.f20 * 2,
       fontWeight: 'bold',
       color: Colors.text,
     },
     titleLarge: {
-      fontSize: FontSize.large * 2,
+      fontSize: FontSizes.f40 * 2,
       fontWeight: 'bold',
       color: Colors.text,
     },

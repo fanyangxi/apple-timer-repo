@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -15,7 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 // import { HEADER_HEIGHT, STATUS_BAR_HEIGHT } from './Device'
 // import { ColorType, defaultColor, defaultShadow, FontWeight } from '../../src/constants/theme'
 // import { useNavigation } from 'react-navigation-hooks'
-import { Colors, defaultShadow } from '@/theme/Variables'
+import { Colors, defaultShadow, Fonts, Spacings } from '@/theme/Variables'
 import BackArrow from '@/components/BackArrow'
 
 export interface BarItemProps extends DefaultProps {
@@ -23,23 +24,10 @@ export interface BarItemProps extends DefaultProps {
   onPress: () => void
 }
 
-export interface NavigationBarProps extends DefaultProps {
-  style?: ViewStyle
-  backgroundColor?: string
-  title: string
-  titleColor?: string
-  titleTestID?: string
-  showBackButton: boolean
-  backButtonAction?: () => void
-  backButtonTestID?: string
-  hideShadow?: boolean
-  actionButton?: BarItemProps
-}
-
 const BackButton: React.FC<{
   onPress?: () => void
   testID?: string
-}> = ({ onPress, testID }): ReactElement => {
+}> = ({ onPress }): ReactElement => {
   const { goBack } = useNavigation()
   return (
     <TouchableOpacity
@@ -48,7 +36,6 @@ const BackButton: React.FC<{
         goBack()
         onPress && onPress()
       }}
-      testID={testID || 'back-button'}
     >
       <BackArrow />
     </TouchableOpacity>
@@ -59,23 +46,35 @@ const ActionButton: React.FC<{
   onPress: () => void
   icon: ImageSourcePropType
   testID?: string
-}> = ({ onPress, icon, testID }): ReactElement => {
+}> = ({ onPress, icon }): ReactElement => {
   return (
-    <TouchableOpacity style={styles.barItem} onPress={onPress} testID={testID || 'action-button'}>
+    <TouchableOpacity style={styles.barItem} onPress={onPress}>
       <Image source={icon} />
     </TouchableOpacity>
   )
 }
 
-export const STATUS_BAR_HEIGHT = Platform.select({ ios: 23, android: StatusBar.currentHeight || 0, default: 25 })
-export const HEADER_HEIGHT = 44
+// const STATUS_BAR_HEIGHT = Platform.select({ ios: 23, android: StatusBar.currentHeight || 0, default: 25 })
+const NAVIGATION_BAR_HEIGHT = 44
+const barItemWidth = 50
+
+export interface NavigationBarProps extends DefaultProps {
+  style?: ViewStyle
+  backgroundColor?: string
+  //
+  title: string
+  titleColor?: string
+  showBackButton: boolean
+  backButtonAction?: () => void
+  hideShadow?: boolean
+  actionButton?: BarItemProps
+}
 
 export const NavigationBar: React.FC<NavigationBarProps> = props => {
-  const headerStyle = [
-    styles.header,
+  const mergedRootContainerStyle = [
+    styles.rootContainer,
     {
-      height: STATUS_BAR_HEIGHT + HEADER_HEIGHT,
-      paddingTop: STATUS_BAR_HEIGHT,
+      height: NAVIGATION_BAR_HEIGHT,
       backgroundColor: props.backgroundColor || Colors.primary,
     },
     props.hideShadow ? {} : defaultShadow,
@@ -84,47 +83,61 @@ export const NavigationBar: React.FC<NavigationBarProps> = props => {
   // const titleColor = props.titleColor ? props.titleColor : Colors.text
 
   return (
-    <View style={headerStyle}>
-      <View style={styles.left}>
-        {props.showBackButton ? <BackButton onPress={props.backButtonAction} testID={props.backButtonTestID} /> : null}
+    <View style={mergedRootContainerStyle}>
+      <View style={styles.body}>
+        <Text style={styles.title}>{props.title}</Text>
       </View>
-      <Text style={styles.title}>{props.title}</Text>
+      <View style={styles.left}>{props.showBackButton ? <BackButton onPress={props.backButtonAction} /> : null}</View>
       <View style={styles.right}>
-        {props.actionButton && (
-          <ActionButton
-            onPress={props.actionButton.onPress}
-            icon={props.actionButton.icon}
-            testID={'props.actionButton.testID'}
-          />
-        )}
+        {props.actionButton && <ActionButton onPress={props.actionButton.onPress} icon={props.actionButton.icon} />}
       </View>
     </View>
   )
 }
 
-const barItemWidth = 50
 const styles = StyleSheet.create({
-  header: {
-    height: HEADER_HEIGHT,
+  rootContainer: {
+    height: NAVIGATION_BAR_HEIGHT,
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
     zIndex: 999,
   },
-  title: {
+  body: {
     flex: 1,
-    textAlign: 'center',
-    color: Colors.text,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'lightblue',
   },
   left: {
-    width: barItemWidth,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacings.s_8,
+    position: 'absolute',
+    height: '100%',
+    left: 0,
+    // backgroundColor: 'yellow',
   },
   right: {
-    width: barItemWidth,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacings.s_8,
+    position: 'absolute',
+    height: '100%',
+    right: 0,
+    // backgroundColor: 'yellow',
   },
   barItem: {
-    width: barItemWidth,
-    height: HEADER_HEIGHT,
-    alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
+  title: {
+    textAlign: 'center',
+    color: Colors.text,
+    ...Fonts.titleNormal,
+  } as TextStyle,
 })
