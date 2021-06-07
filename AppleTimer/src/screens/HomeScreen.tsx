@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
-import SvgComponent from '@/components/DarkAnd'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
@@ -10,6 +9,8 @@ import { TickingType } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
+import ScreenContainer from '@/components/ScreenContainer'
+import SvgComponent from '@/components/DarkAnd'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -99,8 +100,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   return (
-    <React.Fragment>
-      <SvgComponent style={styles.background} />
+    <ScreenContainer backgroundComponent={() => <SvgComponent />}>
       <View style={styles.rootContainer}>
         {/* @summary-section: */}
         <View style={styles.summarySection}>
@@ -195,7 +195,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           )}
         </View>
       </View>
-    </React.Fragment>
+    </ScreenContainer>
   )
 }
 
@@ -276,8 +276,4 @@ const styles = StyleSheet.create({
   start: {},
   pause: {},
   stop: {},
-  background: {
-    backgroundColor: 'lightgreen', // '#202021',
-    position: 'absolute',
-  },
 })

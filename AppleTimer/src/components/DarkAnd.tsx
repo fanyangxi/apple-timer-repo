@@ -1,23 +1,9 @@
 import * as React from 'react'
-import Svg, {
-  ClipPath,
-  Defs,
-  G,
-  Path,
-  Pattern,
-  RadialGradient,
-  Stop,
-} from 'react-native-svg'
+import Svg, { ClipPath, Defs, G, Path, Pattern, RadialGradient, Stop } from 'react-native-svg'
 
 function SvgComponent(props: any) {
   return (
-    <Svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 1066.667 1066.667"
-      preserveAspectRatio="xMidYMid slice"
-      {...props}
-    >
+    <Svg width="100%" height="100%" viewBox="0 0 1066.667 1066.667" preserveAspectRatio="xMidYMid slice" {...props}>
       <Defs>
         <ClipPath id="DarkAnd_svg__b">
           <Path d="M0 800h800V0H0z" />
@@ -154,15 +140,8 @@ function SvgComponent(props: any) {
           />
         </Pattern>
       </Defs>
-      <Path
-        d="M0 0h800v800H0z"
-        fill="url(#DarkAnd_svg__a)"
-        transform="matrix(1.33333 0 0 -1.33333 0 1066.667)"
-      />
-      <G
-        clipPath="url(#DarkAnd_svg__b)"
-        transform="matrix(1.33333 0 0 -1.33333 0 1066.667)"
-      >
+      <Path d="M0 0h800v800H0z" fill="url(#DarkAnd_svg__a)" transform="matrix(1.33333 0 0 -1.33333 0 1066.667)" />
+      <G clipPath="url(#DarkAnd_svg__b)" transform="matrix(1.33333 0 0 -1.33333 0 1066.667)">
         <G clipPath="url(#DarkAnd_svg__c)" opacity={0.5}>
           <Path d="M800-.326H0V800h800z" fill="url(#DarkAnd_svg__d)" />
         </G>

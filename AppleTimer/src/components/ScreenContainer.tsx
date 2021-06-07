@@ -9,41 +9,38 @@ export interface DefaultProps {
   layout?: StyleProp<FlexStyle>
 }
 
-export enum BackgroundType {
-  light = 'light',
-  dark = 'dark',
-}
-
 export interface Props extends DefaultProps {
-  backgroundType?: BackgroundType
+  backgroundComponent?: () => React.ReactElement
   style?: StyleProp<ViewStyle>
 }
 
-const ScreenContainer: React.FC<Props> = props => {
-  let backgroundStyle: StyleProp<ViewStyle> = {}
-  if (props.backgroundType && props.backgroundType === BackgroundType.light) {
-    backgroundStyle = { backgroundColor: Colors.text }
-  }
+const ScreenContainer: React.FC<Props> = ({ backgroundComponent, children, style }) => {
+  const backgroundStyle: StyleProp<ViewStyle> = backgroundComponent ? undefined : { backgroundColor: Colors.text }
   return (
-    <SafeAreaView style={[styles.screen, props.style, backgroundStyle]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
-      {props.children}
-    </SafeAreaView>
+    <View style={styles.screenRoot}>
+      {backgroundComponent && <View style={styles.background}>{backgroundComponent()}</View>}
+      <SafeAreaView style={[styles.content, style, backgroundStyle]}>
+        <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
+        {children}
+      </SafeAreaView>
+    </View>
   )
 }
 
-export const ScreenContent: React.FC<Props> = props => (
-  <View style={[styles.content, props.style]}>{props.children}</View>
-)
-
 const styles = StyleSheet.create({
-  screen: {
+  screenRoot: {
     flex: 1,
-    backgroundColor: Colors.primary,
   },
   content: {
     flex: 1,
-    paddingHorizontal: Colors.primary,
+    zIndex: 2,
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
   },
 })
 
