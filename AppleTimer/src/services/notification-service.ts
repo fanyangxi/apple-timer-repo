@@ -83,6 +83,7 @@ export class NotificationService {
 
   playSounds(sounds: string[]) {
     // logger.info('>>> Playing sounds:', sounds)
+
     // 1.Stop all other sounds first
     this._soundsMap.forEach((value: Sound) => {
       value.stop()
@@ -95,7 +96,7 @@ export class NotificationService {
           acc.then(() => {
             // logger.debug(`>>> Playing: ${cur}`, this._soundsMap.get(cur))
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            return new Promise(resolve => this._soundsMap.get(cur + 'x')?.play(success => resolve()))
+            return new Promise(resolve => this._soundsMap.get(cur)?.play(success => resolve()))
           }),
         Promise.resolve(),
       )

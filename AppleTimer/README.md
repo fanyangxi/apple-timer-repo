@@ -1,6 +1,13 @@
 # apple-timer-repo
 Yet another timer (Apple Timer)
 
+
+### [Dev-Notes] Maintain the Sound files:
+Sound files are duplicated under below 2 paths, so whenever make changes to the sound files, we need to update the files under below 2 paths.  Reference: https://github.com/zmxv/react-native-sound:
+- AppleTimer/src/assets/sounds (For iOS)
+- AppleTimer/android/app/src/main/res/raw (For Android)
+
+
 ### Home Screen:
 
 //// Top-Bar Section:
