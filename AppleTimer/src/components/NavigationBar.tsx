@@ -57,9 +57,9 @@ export const NavigationBar: React.FC<NavigationBarProps> = props => {
       ? {}
       : {
           shadowColor: '#000',
-          shadowOffset: { width: 1, height: 2 },
+          shadowOffset: { width: 0.1, height: 2 },
           shadowOpacity: 0.6,
-          shadowRadius: 32,
+          shadowRadius: 2,
           elevation: 4,
         },
     props.style,
