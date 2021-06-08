@@ -73,13 +73,26 @@ Free Text to Speech Software (TTS) - by Wideo
 - > Timer completed
 - > Set completed
 
-
-
 ambient
 https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616560-ambient
 soloAmbient
 https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616488-soloambient
 Playback
 https://developer.apple.com/documentation/avfaudio/avaudiosession/category/1616509-playback
+
+
+### react-native-neomorph-shadows
+https://www.npmjs.com/package/react-native-neomorph-shadows
+https://github.com/tokkozhin/react-native-neomorph-shadows
+UI References:
+https://www.uplabs.com/search?q=Neumorphism
+https://www.pinterest.com/pin/817614507338049274/visual-search/?x=24&y=10&w=530&h=356&cropSource=6
+
+
+### APP Icon:
+https://www.iconfinder.com/search/?q=timer+icon
+App Icon Generator
+https://appicon.co/
+
 
 +
