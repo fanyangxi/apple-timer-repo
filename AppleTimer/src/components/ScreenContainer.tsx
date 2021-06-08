@@ -19,12 +19,14 @@ const ScreenContainer: React.FC<Props> = ({
   bottomInsetBackgroundColor,
 }) => {
   const insets = useSafeAreaInsets()
-  const backgroundStyle: StyleProp<ViewStyle> = backgroundComponent ? undefined : { backgroundColor: Colors.text }
+  const backgroundStyle: StyleProp<ViewStyle> = backgroundComponent
+    ? undefined
+    : { backgroundColor: Colors.lineDarkest }
   return (
     <View style={styles.screenRoot}>
       {backgroundComponent && <View style={styles.background}>{backgroundComponent()}</View>}
       <View style={[styles.top, { height: insets.top, backgroundColor: topInsetBackgroundColor }]} />
-      <View style={[styles.content, { marginLeft: insets.left, marginRight: insets.right }, style, backgroundStyle]}>
+      <View style={[styles.content, { marginLeft: insets.left, marginRight: insets.right }, backgroundStyle, style]}>
         {children}
       </View>
       <View style={[styles.bottom, { height: insets.bottom, backgroundColor: bottomInsetBackgroundColor }]} />

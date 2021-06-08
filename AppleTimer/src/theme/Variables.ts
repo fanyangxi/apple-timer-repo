@@ -84,10 +84,13 @@ export const Spacings = {
   s_40: 40,
   s_48: 48,
 }
-
-export const Radiuses = {
+// Radius
+export const RadiusSizes = {
   r4: 4,
+  r6: 6,
   r8: 8,
+  r12: 12,
+  r16: 16,
 }
 
 export const FontSizes = {

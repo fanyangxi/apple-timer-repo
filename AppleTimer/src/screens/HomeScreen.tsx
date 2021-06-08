@@ -1,7 +1,7 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { LayoutChangeEvent, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
-import { Colors, FontColors, Fonts, Radiuses, Spacings } from '@/theme/Variables'
+import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Actionsheet, Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
@@ -16,7 +16,8 @@ import { assets } from '@/assets'
 import { ImageButton } from '@/components/button/ImageButton'
 import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
-import { DeviceHeight } from '@/common/device'
+import { DeviceScreen } from '@/common/device'
+import { Neomorph } from 'react-native-neomorph-shadows'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -24,6 +25,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
   const [isActionsheetOpen, setIsActionsheetOpen] = useState<boolean>()
+
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
@@ -119,7 +121,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer
-      backgroundComponent={() => <SvgComponent />}
+      // backgroundComponent={() => <SvgComponent />}
+      style={{ backgroundColor: '#232328' }}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
@@ -132,31 +135,47 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
       <View style={styles.rootContainer}>
         {/* @summary-section: */}
-        <View style={styles.summarySection}>
-          <View style={styles.title}>
-            {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>*/}
-            {/*  <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>*/}
-            {/*</TouchableOpacity>*/}
-            <LinkButton
-              theme={LinkButtonTheme.Normal}
-              text={'Change-Preset'}
-              textColor={'white'}
-              onPress={() => {
-                setIsActionsheetOpen(true)
-              }}
-            />
-          </View>
-          <Divider style={styles.summaryDivider} />
-          <View style={styles.summaryContent}>
-            <View style={styles.timeRemainingContainer}>
-              <Text style={styles.itemValue}>{'07:20'}</Text>
-              <Text style={styles.itemLabel}>Time remaining</Text>
+        <View style={styles.row}>
+          <Neomorph
+            inner={false} // <- enable shadow inside of neomorph
+            swapShadows // <- change zIndex of each shadow color
+            style={{
+              shadowRadius: RadiusSizes.r8,
+              borderRadius: RadiusSizes.r12,
+              backgroundColor: '#232324',
+              width: DeviceScreen.width - Spacings.s_48,
+              height: 180,
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <View style={styles.summarySection}>
+              <View style={styles.title}>
+                {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>*/}
+                {/*  <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>*/}
+                {/*</TouchableOpacity>*/}
+                <LinkButton
+                  theme={LinkButtonTheme.Normal}
+                  text={'Change-Preset'}
+                  textColor={'white'}
+                  onPress={() => {
+                    setIsActionsheetOpen(true)
+                  }}
+                />
+              </View>
+              <Divider style={styles.summaryDivider} />
+              <View style={styles.summaryContent}>
+                <View style={styles.timeRemainingContainer}>
+                  <Text style={styles.itemValue}>{'07:20'}</Text>
+                  <Text style={styles.itemLabel}>Time remaining</Text>
+                </View>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemValue}>{'07:20'}</Text>
+                  <Text style={styles.itemLabel}>Total time</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemValue}>{'07:20'}</Text>
-              <Text style={styles.itemLabel}>Total time</Text>
-            </View>
-          </View>
+          </Neomorph>
         </View>
 
         {/* @details-section: */}
@@ -231,7 +250,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           )}
         </View>
       </View>
-      <Actionsheet isOpen={isActionsheetOpen} onClose={() => {}} disableOverlay>
+      <Actionsheet isOpen={isActionsheetOpen} onClose={() => setIsActionsheetOpen(false)} disableOverlay={true}>
         <View style={styles.actionsheetOverlay}>
           <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>
             <Text style={Fonts.textRegular}>{'Close'}</Text>
@@ -260,15 +279,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.s_8,
     paddingVertical: Spacings.s_16,
   },
+  row: {
+    marginTop: 50,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   // @summary-section:
   summarySection: {
     flexDirection: 'column',
-    paddingHorizontal: Spacings.s_8,
-    paddingVertical: Spacings.s_8,
+    paddingHorizontal: Spacings.s_16,
+    paddingVertical: Spacings.s_16,
     // alignItems: 'center',
     // justifyContent: 'center',
-    backgroundColor: '#202021', // '#202021',
-    borderRadius: Radiuses.r4,
+    // backgroundColor: '#202021', // '#202021',
+    borderRadius: RadiusSizes.r4,
   },
   summaryContent: {
     flexDirection: 'row',
@@ -329,7 +353,7 @@ const styles = StyleSheet.create({
   pause: {},
   stop: {},
   actionsheetOverlay: {
-    height: DeviceHeight * 0.7,
+    height: DeviceScreen.height * 0.7,
     backgroundColor: 'lightgrey', // '#202021',
   },
 })
