@@ -133,20 +133,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         right={<ImageButton icon={assets.images.settings} onPress={() => navigate(Screens.Settings)} />}
       />
 
+      {/* @summary-section: */}
       <View style={styles.rootContainer}>
-        {/* @summary-section: */}
         <View style={styles.row}>
           <Neomorph
             inner={false} // <- enable shadow inside of neomorph
             swapShadows // <- change zIndex of each shadow color
             style={{
-              shadowRadius: RadiusSizes.r8,
-              borderRadius: RadiusSizes.r12,
-              backgroundColor: '#232324',
+              ...styles.neomorphContainer,
               width: DeviceScreen.width - Spacings.s_48,
-              height: 180,
-              flexDirection: 'column',
-              justifyContent: 'center',
+              height: 145,
             }}
           >
             <View style={styles.summarySection}>
@@ -179,47 +175,59 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         </View>
 
         {/* @details-section: */}
-        <View style={styles.detailsSection}>
-          <View style={styles.summaryContent}>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Rest:</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
+        <View style={styles.row}>
+          <Neomorph
+            inner={false} // <- enable shadow inside of neomorph
+            swapShadows // <- change zIndex of each shadow color
+            style={{
+              ...styles.neomorphContainer,
+              width: DeviceScreen.width - Spacings.s_48,
+              height: 245,
+            }}
+          >
+            <View style={styles.detailsSection}>
+              <View style={styles.summaryContent}>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemLabel}>Rest:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
+                </View>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemLabel}>Prepare:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
+                </View>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemLabel}>Workout:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
+                </View>
+              </View>
+              <Divider style={styles.contentDivider} />
+              <View style={styles.summaryContent}>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemLabel}>Reps:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
+                </View>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemLabel}>Sets:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
+                </View>
+              </View>
+              {/* current phase info */}
+              <Divider style={styles.contentDivider} />
+              <View style={styles.summaryContent}>
+                <View style={styles.itemsContainer}>
+                  <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
+                  <Text style={styles.itemLabel}>setRepsRemainingCount:{stateTickedPreset?.setRepsRemainingCount}</Text>
+                  <Text style={styles.itemLabel}>setPrepareSecs:{stateTickedPreset?.setPrepareRemainingSecs}</Text>
+                  <Text style={styles.itemLabel}>repWorkoutSecs:{stateTickedPreset?.repWorkoutRemainingSecs}</Text>
+                  <Text style={styles.itemLabel}>repRestSecs:{stateTickedPreset?.repRestRemainingSecs}</Text>
+                </View>
+                <View style={styles.itemsContainer}>
+                  <Text style={styles.itemLabel}>Total: {secsLeftInCurrentPhase}</Text>
+                  <Text style={styles.itemLabel}>setCurrentPhase: {stateTickedPreset?.setCurrentPhase}</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Prepare:</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
-            </View>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Workout:</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
-            </View>
-          </View>
-          <Divider style={styles.contentDivider} />
-          <View style={styles.summaryContent}>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Reps:</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
-            </View>
-            <View style={styles.totalTimeContainer}>
-              <Text style={styles.itemLabel}>Sets:</Text>
-              <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
-            </View>
-          </View>
-          {/* current phase info */}
-          <Divider style={styles.contentDivider} />
-          <View style={styles.summaryContent}>
-            <View style={styles.itemsContainer}>
-              <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
-              <Text style={styles.itemLabel}>setRepsRemainingCount:{stateTickedPreset?.setRepsRemainingCount}</Text>
-              <Text style={styles.itemLabel}>setPrepareSecs:{stateTickedPreset?.setPrepareRemainingSecs}</Text>
-              <Text style={styles.itemLabel}>repWorkoutSecs:{stateTickedPreset?.repWorkoutRemainingSecs}</Text>
-              <Text style={styles.itemLabel}>repRestSecs:{stateTickedPreset?.repRestRemainingSecs}</Text>
-            </View>
-            <View style={styles.itemsContainer}>
-              <Text style={styles.itemLabel}>Total: {secsLeftInCurrentPhase}</Text>
-              <Text style={styles.itemLabel}>setCurrentPhase: {stateTickedPreset?.setCurrentPhase}</Text>
-            </View>
-          </View>
+          </Neomorph>
         </View>
 
         {/* @action-section: */}
@@ -280,9 +288,17 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.s_16,
   },
   row: {
-    marginTop: 50,
+    // marginTop: 50,
+    // backgroundColor: 'lightgrey',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  neomorphContainer: {
+    shadowRadius: RadiusSizes.r8,
+    borderRadius: RadiusSizes.r12,
+    backgroundColor: '#232324',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   // @summary-section:
   summarySection: {
@@ -325,10 +341,10 @@ const styles = StyleSheet.create({
   // @details-section:
   detailsSection: {
     flexDirection: 'column',
-    paddingHorizontal: Spacings.s_8,
-    paddingVertical: Spacings.s_4,
+    paddingHorizontal: Spacings.s_16,
+    paddingVertical: Spacings.s_16,
     borderRadius: 2,
-    backgroundColor: '#202021', // '#202021',
+    // backgroundColor: '#202021', // '#202021',
   },
   contentDivider: {
     marginVertical: Spacings.s_16,
@@ -346,8 +362,8 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.s_4,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'lightgreen', // '#202021',
     borderRadius: 2,
+    // backgroundColor: 'lightgreen', // '#202021',
   },
   start: {},
   pause: {},
