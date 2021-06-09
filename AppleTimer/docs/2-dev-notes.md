@@ -44,4 +44,55 @@ export class TickedPreset {
   }
 }
 ```
+
+```
+{/*<ActionSheet*/}
+{/*  // @ts-ignore*/}
+{/*  ref={actionSheetRef}*/}
+{/*  // initialOffsetFromBottom={0.6}*/}
+{/*  statusBarTranslucent*/}
+{/*  bounceOnOpen={true}*/}
+{/*  bounciness={4}*/}
+{/*  gestureEnabled={true}*/}
+{/*  defaultOverlayOpacity={0.7}*/}
+{/*  onOpen={() => {}}*/}
+{/*  onPositionChanged={() => {}}*/}
+{/*  onClose={() => {}}*/}
+{/*>*/}
+{/*  <ScrollView style={styles.actionsheetOverlay}>*/}
+{/*    <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>*/}
+{/*    <PresetList*/}
+{/*      presets={cachedPresets}*/}
+{/*      onSelectionChanged={preset => {*/}
+{/*        navigate(Screens.PresetsManagement, { current: preset })*/}
+{/*      }}*/}
+{/*    />*/}
+{/*  </ScrollView>*/}
+{/*</ActionSheet>*/}
+
+{/*<Actionsheet*/}
+{/*  isOpen={isActionsheetOpen}*/}
+{/*  onClose={() => setIsActionsheetOpen(false)}*/}
+{/*  disableOverlay={false}*/}
+{/*  shadow={8}*/}
+{/*>*/}
+{/*  <View style={styles.actionsheetOverlay}>*/}
+{/*    <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>*/}
+{/*      <Text style={Fonts.textRegular}>{'Close'}</Text>*/}
+{/*    </TouchableOpacity>*/}
+{/*    <PresetList presets={cachedPresets} />*/}
+{/*  </View>*/}
+{/*  /!*<ActionsheetContent>*!/*/}
+{/*  /!*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*!/*/}
+{/*  /!*  /!*<ActionsheetItem>Option 1</ActionsheetItem>*!/*!/*/}
+{/*  /!*  /!*<ActionsheetItem>Option 2</ActionsheetItem>*!/*!/*/}
+{/*  /!*  /!*<ActionsheetItem>Option 3</ActionsheetItem>*!/*!/*/}
+{/*  /!*</ActionsheetContent>*!/*/}
+{/*  /!*<ActionsheetFooter>*!/*/}
+{/*  /!*  <ActionsheetItem onPress={onClose}>Cancel</ActionsheetItem>*!/*/}
+{/*  /!*</ActionsheetFooter>*!/*/}
+{/*</Actionsheet>*/}
+```
+
+
 +

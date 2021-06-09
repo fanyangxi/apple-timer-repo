@@ -38,10 +38,6 @@ const styles = StyleSheet.create({
   screenRoot: {
     flex: 1,
   },
-  content: {
-    flex: 1,
-    // backgroundColor: 'grey',
-  },
   background: {
     position: 'absolute',
     left: 0,
@@ -51,6 +47,10 @@ const styles = StyleSheet.create({
   },
   top: {
     // backgroundColor: 'red',
+  },
+  content: {
+    flex: 1,
+    // backgroundColor: 'grey',
   },
   bottom: {
     // backgroundColor: 'blue',

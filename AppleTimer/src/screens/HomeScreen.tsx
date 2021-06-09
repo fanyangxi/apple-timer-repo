@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
-import { PresetList } from '@/screens/components/PresetsList'
+import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
@@ -138,7 +138,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             flex: 1,
             width: undefined,
             height: undefined,
-            backgroundColor: 'red',
           }}
         />
       )}
@@ -283,60 +282,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       </View>
 
       <Modalize ref={modalizeRef} adjustToContentHeight={true}>
-        <PresetList
+        <PresetSelectionPopup
           presets={cachedPresets}
-          onSelectionChanged={preset => {
-            navigate(Screens.PresetDetail, { current: preset.Name })
-          }}
+          onSelectionChanged={preset => navigate(Screens.PresetDetail, { current: preset.Name })}
+          onAddClicked={() => navigate(Screens.PresetDetail, { current: preset.Name })}
         />
       </Modalize>
-
-      {/*<ActionSheet*/}
-      {/*  // @ts-ignore*/}
-      {/*  ref={actionSheetRef}*/}
-      {/*  // initialOffsetFromBottom={0.6}*/}
-      {/*  statusBarTranslucent*/}
-      {/*  bounceOnOpen={true}*/}
-      {/*  bounciness={4}*/}
-      {/*  gestureEnabled={true}*/}
-      {/*  defaultOverlayOpacity={0.7}*/}
-      {/*  onOpen={() => {}}*/}
-      {/*  onPositionChanged={() => {}}*/}
-      {/*  onClose={() => {}}*/}
-      {/*>*/}
-      {/*  <ScrollView style={styles.actionsheetOverlay}>*/}
-      {/*    <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>*/}
-      {/*    <PresetList*/}
-      {/*      presets={cachedPresets}*/}
-      {/*      onSelectionChanged={preset => {*/}
-      {/*        navigate(Screens.PresetsManagement, { current: preset })*/}
-      {/*      }}*/}
-      {/*    />*/}
-      {/*  </ScrollView>*/}
-      {/*</ActionSheet>*/}
-
-      {/*<Actionsheet*/}
-      {/*  isOpen={isActionsheetOpen}*/}
-      {/*  onClose={() => setIsActionsheetOpen(false)}*/}
-      {/*  disableOverlay={false}*/}
-      {/*  shadow={8}*/}
-      {/*>*/}
-      {/*  <View style={styles.actionsheetOverlay}>*/}
-      {/*    <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>*/}
-      {/*      <Text style={Fonts.textRegular}>{'Close'}</Text>*/}
-      {/*    </TouchableOpacity>*/}
-      {/*    <PresetList presets={cachedPresets} />*/}
-      {/*  </View>*/}
-      {/*  /!*<ActionsheetContent>*!/*/}
-      {/*  /!*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*!/*/}
-      {/*  /!*  /!*<ActionsheetItem>Option 1</ActionsheetItem>*!/*!/*/}
-      {/*  /!*  /!*<ActionsheetItem>Option 2</ActionsheetItem>*!/*!/*/}
-      {/*  /!*  /!*<ActionsheetItem>Option 3</ActionsheetItem>*!/*!/*/}
-      {/*  /!*</ActionsheetContent>*!/*/}
-      {/*  /!*<ActionsheetFooter>*!/*/}
-      {/*  /!*  <ActionsheetItem onPress={onClose}>Cancel</ActionsheetItem>*!/*/}
-      {/*  /!*</ActionsheetFooter>*!/*/}
-      {/*</Actionsheet>*/}
     </ScreenContainer>
   )
 }

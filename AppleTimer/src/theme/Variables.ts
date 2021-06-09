@@ -146,7 +146,7 @@ export const Fonts = {
     // lineHeight?: number;
   } as TextStyle,
   textRegular: {
-    fontSize: FontSizes.f20,
+    fontSize: FontSizes.f16,
     fontStyle: 'normal',
     fontWeight: 'normal',
   } as TextStyle,
