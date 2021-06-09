@@ -16,7 +16,7 @@ export const SettingsScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset(3, 4, 2, 2, 2)
+  const preset: Preset = new Preset('', 3, 4, 2, 2, 2)
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()

@@ -3,7 +3,7 @@ import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'
 
 describe('timer-service', () => {
-  const presetMock: Preset = new Preset(3, 4, 2, 2, 2)
+  const presetMock: Preset = new Preset('', 3, 4, 2, 2, 2)
 
   it('renders correctly', () => {
     const timerService = new TimerService(presetMock)

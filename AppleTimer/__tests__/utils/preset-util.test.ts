@@ -4,7 +4,7 @@ import { TimerPhase } from '@/models/timer-phase'
 import { getUpdatedPreset } from '@/utils/preset-util'
 
 describe('getUpdatedPreset', () => {
-  const presetMock: Preset = new Preset(3, 4, 2, 2, 2)
+  const presetMock: Preset = new Preset('', 3, 4, 2, 2, 2)
 
   it.each`
     remainingSecs | expected

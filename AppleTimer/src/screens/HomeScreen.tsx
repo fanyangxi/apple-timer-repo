@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
+import { PresetList } from '@/screens/components/PresetsList'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -31,7 +32,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { navigate } = useNavigation()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset(5, 7, 5, 2, 2)
+  const preset: Preset = new Preset('', 5, 7, 5, 2, 2)
+  const cachedPresets = [
+    new Preset('My Preset A', 5, 7, 5, 2, 2),
+    new Preset('Exercise', 5, 7, 5, 2, 2),
+    new Preset('Calm', 5, 7, 5, 2, 2),
+    new Preset('lana', 5, 7, 5, 2, 2),
+    new Preset('cnduei', 5, 7, 5, 2, 2),
+    new Preset('asdf', 5, 7, 5, 2, 2),
+    new Preset('y34hefgs', 5, 7, 5, 2, 2),
+  ]
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -269,11 +279,17 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           )}
         </View>
       </View>
-      <Actionsheet isOpen={isActionsheetOpen} onClose={() => setIsActionsheetOpen(false)} disableOverlay={true}>
+      <Actionsheet
+        isOpen={isActionsheetOpen}
+        onClose={() => setIsActionsheetOpen(false)}
+        disableOverlay={false}
+        shadow={8}
+      >
         <View style={styles.actionsheetOverlay}>
           <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>
             <Text style={Fonts.textRegular}>{'Close'}</Text>
           </TouchableOpacity>
+          <PresetList presets={cachedPresets} />
         </View>
         {/*<ActionsheetContent>*/}
         {/*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*/}
