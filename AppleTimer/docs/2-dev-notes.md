@@ -11,6 +11,8 @@
 
 
 
+### Action sheet bottom popup:
+https://www.npmjs.com/package/react-native-modalize
 
 
 ```

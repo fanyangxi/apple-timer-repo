@@ -29,8 +29,6 @@ export class Preset {
     this.SetsCount = setsCount
   }
 
-  public Key = () => this.Name.toLowerCase()
-
   public TotalPresetDurationSecs = () =>
     (this.PrepareSecs + (this.WorkoutSecs + this.RestSecs) * this.RepsCount) * this.SetsCount
 }

@@ -282,16 +282,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         </View>
       </View>
 
-      <Modalize adjustToContentHeight={true}  ref={modalizeRef}>
-        {/*<View style={styles.actionsheetOverlay}>*/}
-        <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>
+      <Modalize ref={modalizeRef} adjustToContentHeight={true}>
         <PresetList
           presets={cachedPresets}
           onSelectionChanged={preset => {
-            navigate(Screens.PresetDetail, { current: preset })
+            navigate(Screens.PresetDetail, { current: preset.Name })
           }}
         />
-        {/*</View>*/}
       </Modalize>
 
       {/*<ActionSheet*/}
@@ -442,9 +439,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-  },
-  actionsheetOverlay: {
-    height: DeviceScreen.height * 0.7,
-    backgroundColor: 'lightgrey', // '#202021',
   },
 })
