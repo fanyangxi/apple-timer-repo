@@ -18,10 +18,12 @@ import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
+import { DataService } from '@/services/data-service'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
   const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
+  const [activePreset, setActivePreset] = useState<Preset>()
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
 
@@ -31,8 +33,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset('', 5, 7, 5, 2, 2)
   const cachedPresets = [
+    new Preset('Default', 5, 7, 5, 2, 2),
     new Preset('My Preset A', 5, 7, 5, 2, 2),
     new Preset('Exercise', 5, 7, 5, 2, 2),
     new Preset('Calm', 5, 7, 5, 2, 2),
@@ -43,9 +45,15 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   ]
 
   useEffect(() => {
-    notificationServiceRef.current = new NotificationService()
+    if (!activePreset) {
+      return
+    }
 
-    timerServiceRef.current = new TimerService(preset)
+    const cachedPreset = DataService.getActivePreset()
+    setActivePreset(cachedPreset)
+
+    notificationServiceRef.current = new NotificationService()
+    timerServiceRef.current = new TimerService(cachedPreset)
     //
     timerServiceRef.current.OnTimerStarted = async () => {
       setIsRunning(true)
@@ -171,7 +179,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                 {/*</TouchableOpacity>*/}
                 <LinkButton
                   theme={LinkButtonTheme.Normal}
-                  text={'Change-Preset'}
+                  text={`Change-Preset: ${activePreset?.Name}`}
                   textColor={'white'}
                   onPress={() => {
                     // setIsActionsheetOpen(true)
@@ -284,8 +292,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       <Modalize ref={modalizeRef} adjustToContentHeight={true}>
         <PresetSelectionPopup
           presets={cachedPresets}
-          onSelectionChanged={preset => navigate(Screens.PresetDetail, { current: preset.Name })}
-          onAddClicked={() => navigate(Screens.PresetDetail, { current: preset.Name })}
+          onSelectionChanged={selectedPreset => {
+            setActivePreset(selectedPreset)
+            modalizeRef.current?.close()
+          }}
+          onAddClicked={() => navigate(Screens.PresetDetail, { current: activePreset?.Name })}
         />
       </Modalize>
     </ScreenContainer>
