@@ -1,16 +1,14 @@
-import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Image, LayoutChangeEvent, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
-import { Actionsheet, Button, Divider } from 'native-base'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TickingType } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
 import ScreenContainer from '@/components/ScreenContainer'
-import SvgComponent from '@/assets/icons/DarkAnd'
 import { NavigationBar } from '@/components/NavigationBar'
 import { assets } from '@/assets'
 import { ImageButton } from '@/components/button/ImageButton'
@@ -18,7 +16,6 @@ import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
-import { PresetList } from '@/screens/components/PresetsList'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -180,7 +177,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   }}
                 />
               </View>
-              <Divider style={styles.summaryDivider} />
+              {/*<Divider style={styles.summaryDivider} />*/}
               <View style={styles.summaryContent}>
                 <View style={styles.timeRemainingContainer}>
                   <Text style={styles.itemValue}>{'07:20'}</Text>
@@ -221,7 +218,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
                 </View>
               </View>
-              <Divider style={styles.contentDivider} />
+              {/*<Divider style={styles.contentDivider} />*/}
               <View style={styles.summaryContent}>
                 <View style={styles.totalTimeContainer}>
                   <Text style={styles.itemLabel}>Reps:</Text>
@@ -233,7 +230,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                 </View>
               </View>
               {/* current phase info */}
-              <Divider style={styles.contentDivider} />
+              {/*<Divider style={styles.contentDivider} />*/}
               <View style={styles.summaryContent}>
                 <View style={styles.itemsContainer}>
                   <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
@@ -275,32 +272,32 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               </View>
             </React.Fragment>
           ) : (
-            <Button onPress={() => onStartPressed()}>PRIMARY</Button>
+            <LinkButton theme={LinkButtonTheme.Normal} text={'PRIMARY'} onPress={onStartPressed} />
           )}
         </View>
       </View>
-      <Actionsheet
-        isOpen={isActionsheetOpen}
-        onClose={() => setIsActionsheetOpen(false)}
-        disableOverlay={false}
-        shadow={8}
-      >
-        <View style={styles.actionsheetOverlay}>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>
-            <Text style={Fonts.textRegular}>{'Close'}</Text>
-          </TouchableOpacity>
-          <PresetList presets={cachedPresets} />
-        </View>
-        {/*<ActionsheetContent>*/}
-        {/*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*/}
-        {/*  /!*<ActionsheetItem>Option 1</ActionsheetItem>*!/*/}
-        {/*  /!*<ActionsheetItem>Option 2</ActionsheetItem>*!/*/}
-        {/*  /!*<ActionsheetItem>Option 3</ActionsheetItem>*!/*/}
-        {/*</ActionsheetContent>*/}
-        {/*<ActionsheetFooter>*/}
-        {/*  <ActionsheetItem onPress={onClose}>Cancel</ActionsheetItem>*/}
-        {/*</ActionsheetFooter>*/}
-      </Actionsheet>
+      {/*<Actionsheet*/}
+      {/*  isOpen={isActionsheetOpen}*/}
+      {/*  onClose={() => setIsActionsheetOpen(false)}*/}
+      {/*  disableOverlay={false}*/}
+      {/*  shadow={8}*/}
+      {/*>*/}
+      {/*  <View style={styles.actionsheetOverlay}>*/}
+      {/*    <TouchableOpacity style={[Common.button.rounded]} onPress={() => setIsActionsheetOpen(false)}>*/}
+      {/*      <Text style={Fonts.textRegular}>{'Close'}</Text>*/}
+      {/*    </TouchableOpacity>*/}
+      {/*    <PresetList presets={cachedPresets} />*/}
+      {/*  </View>*/}
+      {/*  /!*<ActionsheetContent>*!/*/}
+      {/*  /!*  /!*<ActionsheetHeader>Header</ActionsheetHeader>*!/*!/*/}
+      {/*  /!*  /!*<ActionsheetItem>Option 1</ActionsheetItem>*!/*!/*/}
+      {/*  /!*  /!*<ActionsheetItem>Option 2</ActionsheetItem>*!/*!/*/}
+      {/*  /!*  /!*<ActionsheetItem>Option 3</ActionsheetItem>*!/*!/*/}
+      {/*  /!*</ActionsheetContent>*!/*/}
+      {/*  /!*<ActionsheetFooter>*!/*/}
+      {/*  /!*  <ActionsheetItem onPress={onClose}>Cancel</ActionsheetItem>*!/*/}
+      {/*  /!*</ActionsheetFooter>*!/*/}
+      {/*</Actionsheet>*/}
     </ScreenContainer>
   )
 }
