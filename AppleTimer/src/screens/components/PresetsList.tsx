@@ -11,12 +11,12 @@ export interface PresetListProps {
 
 export const PresetList: React.FC<PresetListProps> = ({ presets, current, onSelectionChanged }) => {
   const renderItem = (preset: Preset) => (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={() => onSelectionChanged && onSelectionChanged(preset)}>
       <Text style={Fonts.textRegular}>Name: {preset.Name}</Text>
       <Text style={Fonts.textRegular}>PrepareSecs: {preset.PrepareSecs}</Text>
       <Text style={Fonts.textRegular}>WorkoutSecs: {preset.WorkoutSecs}</Text>
       <Text style={Fonts.textRegular}>RestSecs: {preset.RestSecs}</Text>
-    </View>
+    </TouchableOpacity>
   )
   return (
     <View style={styles.rootContainer}>

@@ -8,6 +8,8 @@ import { useTheme } from '@/theme'
 import { HomeScreen } from '@/screens/HomeScreen'
 import { DebuggerScreen } from '@/screens/DebuggerScreen'
 import { SettingsScreen } from '@/screens/SettingsScreen'
+import { PresetDetailScreen } from '@/screens/PresetDetailScreen'
+import { Screens } from '@/common/constants'
 // import { IndexStartupContainer } from '@/Containers'
 // import { StartupState } from '@/store/Startup'
 
@@ -44,9 +46,10 @@ const ApplicationNavigator = () => {
     <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
       <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
       <Stack.Navigator headerMode={'none'}>
-        <Stack.Screen name="Home2" component={HomeScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Debugger" component={DebuggerScreen} />
+        <Stack.Screen name={Screens.Home} component={HomeScreen} />
+        <Stack.Screen name={Screens.Settings} component={SettingsScreen} />
+        <Stack.Screen name={Screens.Debugger} component={DebuggerScreen} />
+        <Stack.Screen name={Screens.PresetDetail} component={PresetDetailScreen} />
         {/*<Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
         {/*{isApplicationLoaded && MainNavigator != null && (*/}
         {/*  <Stack.Screen*/}

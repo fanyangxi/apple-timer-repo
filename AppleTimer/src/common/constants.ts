@@ -4,6 +4,8 @@ export enum StorageKeys {
 }
 
 export const Screens = {
+  Home: 'Home2',
   Debugger: 'Debugger',
   Settings: 'Settings',
+  PresetDetail: 'PresetDetail',
 }

@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
@@ -16,17 +16,19 @@ import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
+import { PresetList } from '@/screens/components/PresetsList'
+import { Modalize } from 'react-native-modalize'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
   const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
   const [isRunning, setIsRunning] = useState<boolean>()
   const [isPaused, setIsPaused] = useState<boolean>()
-  const [isActionsheetOpen, setIsActionsheetOpen] = useState<boolean>()
 
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
+  const modalizeRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
   const preset: Preset = new Preset('', 5, 7, 5, 2, 2)
@@ -173,7 +175,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   text={'Change-Preset'}
                   textColor={'white'}
                   onPress={() => {
-                    setIsActionsheetOpen(true)
+                    // setIsActionsheetOpen(true)
+                    // @ts-ignore
+                    // actionSheetRef.current?.show()
+                    modalizeRef.current.open()
                   }}
                 />
               </View>
@@ -276,6 +281,43 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           )}
         </View>
       </View>
+
+      <Modalize adjustToContentHeight={true}  ref={modalizeRef}>
+        {/*<View style={styles.actionsheetOverlay}>*/}
+        <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>
+        <PresetList
+          presets={cachedPresets}
+          onSelectionChanged={preset => {
+            navigate(Screens.PresetDetail, { current: preset })
+          }}
+        />
+        {/*</View>*/}
+      </Modalize>
+
+      {/*<ActionSheet*/}
+      {/*  // @ts-ignore*/}
+      {/*  ref={actionSheetRef}*/}
+      {/*  // initialOffsetFromBottom={0.6}*/}
+      {/*  statusBarTranslucent*/}
+      {/*  bounceOnOpen={true}*/}
+      {/*  bounciness={4}*/}
+      {/*  gestureEnabled={true}*/}
+      {/*  defaultOverlayOpacity={0.7}*/}
+      {/*  onOpen={() => {}}*/}
+      {/*  onPositionChanged={() => {}}*/}
+      {/*  onClose={() => {}}*/}
+      {/*>*/}
+      {/*  <ScrollView style={styles.actionsheetOverlay}>*/}
+      {/*    <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>*/}
+      {/*    <PresetList*/}
+      {/*      presets={cachedPresets}*/}
+      {/*      onSelectionChanged={preset => {*/}
+      {/*        navigate(Screens.PresetsManagement, { current: preset })*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  </ScrollView>*/}
+      {/*</ActionSheet>*/}
+
       {/*<Actionsheet*/}
       {/*  isOpen={isActionsheetOpen}*/}
       {/*  onClose={() => setIsActionsheetOpen(false)}*/}
@@ -395,6 +437,12 @@ const styles = StyleSheet.create({
   start: {},
   pause: {},
   stop: {},
+  actionsheetContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
   actionsheetOverlay: {
     height: DeviceScreen.height * 0.7,
     backgroundColor: 'lightgrey', // '#202021',
