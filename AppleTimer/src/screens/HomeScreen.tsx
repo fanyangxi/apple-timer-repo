@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { LayoutChangeEvent, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, LayoutChangeEvent, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
@@ -122,11 +122,22 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   return (
     <ScreenContainer
       // backgroundComponent={() => <SvgComponent />}
-      style={{ backgroundColor: '#232328' }}
+      backgroundComponent={() => (
+        <Image
+          source={assets.images.darkBackground}
+          style={{
+            flex: 1,
+            width: undefined,
+            height: undefined,
+            backgroundColor: 'red',
+          }}
+        />
+      )}
+      // style={{ backgroundColor: '#434343' }}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar
         title={'Apple Timer'}
         showBackButton={false}
@@ -294,9 +305,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   neomorphContainer: {
-    shadowRadius: RadiusSizes.r8,
-    borderRadius: RadiusSizes.r12,
-    backgroundColor: '#232324',
+    // shadowColor: 'red',
+    // shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 16,
+    backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
     flexDirection: 'column',
     justifyContent: 'center',
   },
