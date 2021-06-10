@@ -35,8 +35,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const { Common } = useTheme()
   const cachedPresets = [
     new Preset('Default', 5, 7, 5, 2, 2),
-    new Preset('My Preset A', 5, 7, 5, 2, 2),
-    new Preset('Exercise', 5, 7, 5, 2, 2),
+    new Preset('My Preset A', 5, 7, 5, 1, 1),
+    new Preset('Exercise', 5, 17, 5, 1, 1),
     new Preset('Calm', 5, 7, 5, 2, 2),
     new Preset('lana', 5, 7, 5, 2, 2),
     new Preset('cnduei', 5, 7, 5, 2, 2),
@@ -45,15 +45,20 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   ]
 
   useEffect(() => {
-    if (!activePreset) {
-      return
-    }
-
     const cachedPreset = DataService.getActivePreset()
+    console.log(cachedPreset)
     setActivePreset(cachedPreset)
 
     notificationServiceRef.current = new NotificationService()
-    timerServiceRef.current = new TimerService(cachedPreset)
+    initTimerServiceInstance(cachedPreset)
+
+    // only called once after first render
+    logger.info('>>> HOME-SCREEN LOADED ======================>!')
+    // eslint-disable-next-line
+  }, [])
+
+  const initTimerServiceInstance = (thePreset: Preset) => {
+    timerServiceRef.current = new TimerService(thePreset)
     //
     timerServiceRef.current.OnTimerStarted = async () => {
       setIsRunning(true)
@@ -111,11 +116,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnSetCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
-
-    // only called once after first render
-    logger.info('>>> HOME-SCREEN LOADED ======================>!')
-    // eslint-disable-next-line
-  }, [])
+  }
 
   const onStartPressed = async () => {
     timerServiceRef.current && (await timerServiceRef.current.runPreset())
@@ -196,7 +197,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   <Text style={styles.itemLabel}>Time remaining</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemValue}>{'07:20'}</Text>
+                  <Text style={styles.itemValue}>{activePreset?.TotalPresetDurationSecs()}</Text>
                   <Text style={styles.itemLabel}>Total time</Text>
                 </View>
               </View>
@@ -294,6 +295,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           presets={cachedPresets}
           onSelectionChanged={selectedPreset => {
             setActivePreset(selectedPreset)
+            initTimerServiceInstance(selectedPreset)
             modalizeRef.current?.close()
           }}
           onAddClicked={() => navigate(Screens.PresetDetail, { current: activePreset?.Name })}

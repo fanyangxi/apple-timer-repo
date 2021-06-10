@@ -77,6 +77,9 @@ export const PresetSelectionPopup: React.FC<PresetListProps> = ({
 const styles = StyleSheet.create({
   rootContainer: {
     height: DeviceScreen.height * 0.6,
+    backgroundColor: '#4E4E4E',
+    borderTopLeftRadius: RadiusSizes.r12,
+    borderTopRightRadius: RadiusSizes.r12,
     // backgroundColor: Colors.primary,
   },
   row: {
