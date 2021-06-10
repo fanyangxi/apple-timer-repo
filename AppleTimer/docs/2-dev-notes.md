@@ -13,6 +13,12 @@
 
 ### Action sheet bottom popup:
 https://www.npmjs.com/package/react-native-modalize
+https://github.com/jeremybarbet/react-native-modalize
+
+These 2 also looks ok:
+https://www.npmjs.com/package/react-native-scroll-bottom-sheet
+https://www.npmjs.com/package/@gorhom/bottom-sheet
+
 
 
 ```

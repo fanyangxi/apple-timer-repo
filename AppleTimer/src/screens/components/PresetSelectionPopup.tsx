@@ -58,14 +58,14 @@ export const PresetSelectionPopup: React.FC<PresetListProps> = ({
           }}
         />
       </View>
-      <View style={styles.actionButtons}>
+      <View style={styles.actionButtonsBar}>
         <Text>Your Presets</Text>
         <Button title={'ADD'} onPress={() => onAddClicked && onAddClicked()} />
       </View>
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.itemsScroll}>
         {/*{presets && presets.map(preset => renderItem(preset))}*/}
         <ElementList
-          style={styles.itemsContainer}
+          style={styles.itemsContent}
           itemSeparatorComponent={<View style={styles.itemsSeparator} />}
           items={presets && presets.map(preset => renderItem(preset))}
         />
@@ -77,23 +77,23 @@ export const PresetSelectionPopup: React.FC<PresetListProps> = ({
 const styles = StyleSheet.create({
   rootContainer: {
     height: DeviceScreen.height * 0.6,
-    backgroundColor: '#4E4E4E',
     borderTopLeftRadius: RadiusSizes.r12,
     borderTopRightRadius: RadiusSizes.r12,
-    // backgroundColor: Colors.primary,
+    backgroundColor: '#4E4E4E',
   },
   row: {
     // marginTop: 50,
     // backgroundColor: 'lightgrey',
     flexDirection: 'column',
     alignItems: 'center',
+    paddingVertical: Spacings.s_4,
   },
   neomorphContainer: {
     // shadowColor: 'red',
     // shadowOffset: { width: 6, height: 6 },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
-    borderRadius: 16,
+    shadowRadius: 2,
+    borderRadius: 8,
     backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
     flexDirection: 'column',
     justifyContent: 'center',
@@ -105,24 +105,26 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  actionButtons: {
+  actionButtonsBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 12,
     paddingHorizontal: Spacings.s_8,
+    // backgroundColor: 'yellow',
   },
-  content: {
+  itemsScroll: {
     paddingVertical: Spacings.s_8,
   },
-  itemsContainer: {
-    flex: 1,
+  itemsContent: {
+    // flex: 1,
+    // backgroundColor: 'lightgreen',
     // paddingTop: defaultSpacing(SpacingType.Base),
     // paddingHorizontal: defaultSpacing(SpacingType.Medium),
-    // paddingBottom: defaultSpacing(SpacingType.ExtraLarge)
+    paddingBottom: Spacings.s_24,
   },
   itemsSeparator: {
-    height: Spacings.s_12,
+    height: Spacings.s_8,
   },
   listContent: {
     // backgroundColor: 'yellow',
