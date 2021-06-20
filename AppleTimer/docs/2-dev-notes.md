@@ -19,6 +19,58 @@ These 2 also looks ok:
 https://www.npmjs.com/package/react-native-scroll-bottom-sheet
 https://www.npmjs.com/package/@gorhom/bottom-sheet
 
+### scroll/wheel picker:
+https://www.npmjs.com/package/react-native-dynamically-selected-picker ++++
+https://www.npmjs.com/package/react-native-wheel-scroll-picker +++
+    > Issue: scroll too fast
+https://www.npmjs.com/package/react-native-picker-scrollview
+https://www.npmjs.com/package/react-native-segmented-picker ++
+https://www.npmjs.com/package/react-native-picker
+https://github.com/keiya01/react-simple-wheel-picker (?)
+
+https://www.npmjs.com/package/react-native-wheel-scrollview-picker
+    > Issue: the sample doesn't seem to work
+https://www.npmjs.com/package/react-native-wheely ++++
+    > Looks good
+    > Issue: on trigger event when scroll over items,
+    > Issue: triggered onChange event multiple times after selection changed
+https://www.npmjs.com/package/react-native-segmented-picker
+    > Issue: Contains a popup by default
+    > Issue: top grey-out and bottom grey-out is not working on android
+https://www.npmjs.com/package/@gregfrench/react-native-wheel-picker
+    > Issue: it's not very smooth while scrolling
+    > Issue: RNCPicker not found, on iOS
+https://www.npmjs.com/package/react-native-wheely-simple-picker
+    > Issue: scroll speed to fast
+https://www.npmjs.com/package/react-native-wheel-picker-android
+    > Issue: the ui on android and iOS are very.too different
+https://www.npmjs.com/package/react-native-wheel-pick
+    > Issue: the ui on android and iOS are very.too different
+
+
+### Enable haptic Feedback on react-native:
+react-native-haptic-feedback
+https://www.npmjs.com/package/react-native-haptic-feedback
+https://stackoverflow.com/questions/43760502/enable-haptic-feedback-on-react-native-touchable-view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```

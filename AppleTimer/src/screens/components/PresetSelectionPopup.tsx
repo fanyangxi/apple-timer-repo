@@ -7,14 +7,14 @@ import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { ElementList } from '@/components/ElementList'
 
-export interface PresetListProps {
+export interface PresetSelectionPopupProps {
   presets: Preset[]
   current?: Preset
   onSelectionChanged?: (selected: Preset) => void
   onAddClicked?: () => void
 }
 
-export const PresetSelectionPopup: React.FC<PresetListProps> = ({
+export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   presets,
   current,
   onSelectionChanged,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   itemsScroll: {
-    paddingVertical: Spacings.s_8,
+    marginVertical: Spacings.s_8,
   },
   itemsContent: {
     // flex: 1,

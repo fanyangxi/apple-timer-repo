@@ -19,6 +19,8 @@ import { Neomorph } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
+import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
+import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -31,6 +33,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
+  const timePickerRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
   const cachedPresets = [
@@ -51,6 +54,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
     notificationServiceRef.current = new NotificationService()
     initTimerServiceInstance(cachedPreset)
+
+    timePickerRef.current?.open()
 
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
@@ -301,6 +306,9 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           onAddClicked={() => navigate(Screens.PresetDetail, { current: activePreset?.Name })}
         />
       </Modalize>
+
+      {/*<BottomDurationPickerPopup popupRef={timePickerRef} />*/}
+      <BottomNumberPickerPopup popupRef={timePickerRef} />
     </ScreenContainer>
   )
 }
