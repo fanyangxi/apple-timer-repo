@@ -38,7 +38,7 @@ export const BottomDurationPickerPopup: React.FC<BottomPickerPopupProps> = ({ po
     'rgba( 166, 166, 166, 1 )',
   ]
   return (
-    <Modalize ref={popupRef} adjustToContentHeight={true} panGestureEnabled={true}>
+    <Modalize ref={popupRef} adjustToContentHeight={true} panGestureEnabled={true} modalStyle={{ zIndex: 999 }}>
       <View style={[styles.rootContainer, { height: height || DEFAULT_PICKER_HEIGHT }]}>
         <View style={styles.actionButtonsBar}>
           <Text>Your Presets</Text>
