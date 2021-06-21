@@ -12,6 +12,7 @@ import { DEFAULT_PRESET } from '@/common/constants'
 import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
+import { useTheme } from '@/theme'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const route = useRoute()
@@ -20,6 +21,8 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const presetName: string = route.params?.current
   const durationPickerRef = useRef<Modalize>(null)
   const numberPickerRef = useRef<Modalize>(null)
+
+  const { Common } = useTheme()
 
   useEffect(() => {
     // eslint-disable-next-line
@@ -139,8 +142,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </View>
         </View>
         <View style={styles.actionsSection}>
-          <Button title={'Save'} onPress={() => {}} />
-          <Button title={'Cancel'} onPress={() => {}} />
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
+            <Text style={Fonts.textRegular}>{'Save'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
+            <Text style={Fonts.textRegular}>{'Cancel'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScreenContainer>
