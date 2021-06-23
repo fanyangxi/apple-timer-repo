@@ -1,8 +1,9 @@
+import _ from 'lodash'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Button, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import ScreenContainer from '@/components/ScreenContainer'
 import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
@@ -13,12 +14,29 @@ import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
 import { useTheme } from '@/theme'
+import SvgBrowser from '@/assets/icons/Browser'
+
+const ModifyTitleButton: React.FC<{
+  onPress?: () => void
+  testID?: string
+}> = ({ onPress }): ReactElement => {
+  const { goBack } = useNavigation()
+  return (
+    <TouchableOpacity
+      style={[styles.barItem, styles.modifyTitleButton]}
+      onPress={() => {
+        onPress && onPress()
+      }}
+    >
+      <SvgBrowser color={Colors.white} />
+    </TouchableOpacity>
+  )
+}
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const route = useRoute()
+  const presetName: string = _.get(route.params, 'current', undefined)
   const [current, setCurrent] = useState<Preset>(DEFAULT_PRESET)
-  // @ts-ignore
-  const presetName: string = route.params?.current
   const durationPickerRef = useRef<Modalize>(null)
   const numberPickerRef = useRef<Modalize>(null)
 
@@ -43,14 +61,17 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar title={'Preset Detail'} showBackButton={true} />
       <BottomDurationPickerPopup popupRef={durationPickerRef} />
       <BottomNumberPickerPopup popupRef={numberPickerRef} />
       <View style={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
-            <Text style={[Fonts.textSmall, FontColors.white]}>{current.Name}</Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{current.Name}</Text>
+              {ModifyTitleButton({})}
+            </View>
           </View>
           <TouchableOpacity
             style={styles.barItem}
@@ -221,5 +242,20 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: 'lightgreen', // '#202021',
     position: 'absolute',
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // backgroundColor: 'lightblue', // '#202021',
+  },
+  title: {
+    ...Fonts.textCaption30,
+    ...FontColors.white,
+    marginRight: Spacings.s_12,
+  },
+  modifyTitleButton: {
+    width: 24,
+    height: 24,
+    // backgroundColor: 'lightgreen', // '#202021',
   },
 })
