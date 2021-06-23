@@ -18,7 +18,6 @@ export interface BottomDurationPickerPopupProps {
   popupRef: React.RefObject<Modalize>
   duration?: number
   height?: number
-  current?: Preset
   onValueChanged?: (newDuration: number) => void
 }
 

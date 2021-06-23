@@ -37,8 +37,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const route = useRoute()
   const presetName: string = _.get(route.params, 'current', undefined)
   const [current, setCurrent] = useState<Preset>(DEFAULT_PRESET)
-  const durationPickerRef = useRef<Modalize>(null)
-  const numberPickerRef = useRef<Modalize>(null)
+  const prepareSecsDurationPickerRef = useRef<Modalize>(null)
+  const workoutSecsDurationPickerRef = useRef<Modalize>(null)
+  const restSecsDurationPickerRef = useRef<Modalize>(null)
+  const repsPickerRef = useRef<Modalize>(null)
+  const setsPickerRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
 
@@ -56,13 +59,6 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar title={'Preset Detail'} showBackButton={true} />
-      <BottomDurationPickerPopup
-        popupRef={durationPickerRef}
-        onValueChanged={newDuration => {
-          console.log(`>>>: newDuration:${newDuration}`)
-        }}
-      />
-      <BottomNumberPickerPopup popupRef={numberPickerRef} />
       <View style={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
@@ -74,7 +70,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           <TouchableOpacity
             style={styles.barItem}
             onPress={() => {
-              durationPickerRef.current?.open()
+              prepareSecsDurationPickerRef.current?.open()
             }}
           >
             <Neomorph
@@ -92,7 +88,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               </View>
             </Neomorph>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.barItem} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.barItem}
+            onPress={() => {
+              workoutSecsDurationPickerRef.current?.open()
+            }}
+          >
             <Neomorph
               inner={false} // <- enable shadow inside of neomorph
               swapShadows // <- change zIndex of each shadow color
@@ -108,7 +109,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               </View>
             </Neomorph>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.barItem} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.barItem}
+            onPress={() => {
+              restSecsDurationPickerRef.current?.open()
+            }}
+          >
             <Neomorph
               inner={false}
               swapShadows
@@ -126,7 +132,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </TouchableOpacity>
           {/*//*/}
           <View style={styles.countsContainer}>
-            <TouchableOpacity style={styles.barItem} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.barItem}
+              onPress={() => {
+                setsPickerRef.current?.open()
+              }}
+            >
               <Neomorph
                 inner={false}
                 swapShadows
@@ -142,7 +153,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
                 </View>
               </Neomorph>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.barItem} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.barItem}
+              onPress={() => {
+                repsPickerRef.current?.open()
+              }}
+            >
               <Neomorph
                 inner={false}
                 swapShadows
@@ -169,6 +185,44 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </TouchableOpacity>
         </View>
       </View>
+      <BottomDurationPickerPopup
+        popupRef={prepareSecsDurationPickerRef}
+        duration={current.PrepareSecs}
+        onValueChanged={newDuration => {
+          console.log(`>>>: newDuration:${newDuration}`)
+          setCurrent({ ...current, PrepareSecs: newDuration })
+        }}
+      />
+      <BottomDurationPickerPopup
+        popupRef={workoutSecsDurationPickerRef}
+        duration={current.WorkoutSecs}
+        onValueChanged={newDuration => {
+          console.log(`>>>: newDuration:${newDuration}`)
+          setCurrent({ ...current, WorkoutSecs: newDuration })
+        }}
+      />
+      <BottomDurationPickerPopup
+        popupRef={restSecsDurationPickerRef}
+        duration={current.RestSecs}
+        onValueChanged={newDuration => {
+          console.log(`>>>: newDuration:${newDuration}`)
+          setCurrent({ ...current, RestSecs: newDuration })
+        }}
+      />
+      <BottomNumberPickerPopup
+        popupRef={repsPickerRef}
+        value={current.RepsCount}
+        onValueChanged={newValue => {
+          setCurrent({ ...current, RepsCount: newValue })
+        }}
+      />
+      <BottomNumberPickerPopup
+        popupRef={setsPickerRef}
+        value={current.SetsCount}
+        onValueChanged={newValue => {
+          setCurrent({ ...current, SetsCount: newValue })
+        }}
+      />
     </ScreenContainer>
   )
 }

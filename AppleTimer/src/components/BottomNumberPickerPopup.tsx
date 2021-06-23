@@ -1,7 +1,6 @@
-import { Button, Platform, StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { Colors, RadiusSizes, Spacings } from '@/theme/Variables'
-import React from 'react'
-import { Preset } from '@/models/preset'
+import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { HAPTIC_FEEDBACK_OPTIONS, ScrollEventArgs } from '@/common/constants'
@@ -14,13 +13,19 @@ const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
 
 export interface BottomPickerPopupProps {
   popupRef: React.RefObject<Modalize>
+  value?: number
   height?: number
-  current?: Preset
-  onSelectionChanged?: (selected: Preset) => void
-  onAddClicked?: () => void
+  onValueChanged?: (newValue: number) => void
 }
 
-export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({ popupRef, height, onAddClicked }) => {
+export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
+  popupRef,
+  value,
+  height,
+  onValueChanged,
+}) => {
+  const [localValue, setLocalValue] = useState<number>(0)
+
   const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
@@ -35,21 +40,32 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({ popu
     'rgba( 166, 166, 166, 1 )',
   ]
   return (
-    <Modalize ref={popupRef} adjustToContentHeight={true} panGestureEnabled={true}>
+    <Modalize
+      ref={popupRef}
+      adjustToContentHeight={true}
+      panGestureEnabled={true}
+      onOpen={() => {
+        setLocalValue(value || 0)
+      }}
+      onClose={() => {
+        console.log(`>>> local: h${localValue}`)
+        onValueChanged && onValueChanged(localValue)
+      }}
+    >
       <View style={[styles.rootContainer, { height: height || DEFAULT_PICKER_HEIGHT }]}>
         <View style={styles.actionButtonsBar}>
-          <Text>Your Presets</Text>
-          <Button title={'ADD'} onPress={() => onAddClicked && onAddClicked()} />
+          <Text>Select a number:</Text>
         </View>
         <View style={styles.content}>
           <View style={styles.pickerColumn}>
             <Text style={styles.pickerColumnTitle}>Hours</Text>
             <DynamicallySelectedPicker
               items={numbersSourceItems}
-              initialSelectedIndex={3}
+              initialSelectedIndex={localValue}
               transparentItemRows={3}
               onScroll={({ index, item }: ScrollEventArgs) => {
                 console.log(`OnScroll: ${index}, ${JSON.stringify(item)}`)
+                setLocalValue(parseInt(item.value, 10))
                 ReactNativeHapticFeedback.trigger(
                   Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
                   HAPTIC_FEEDBACK_OPTIONS,
