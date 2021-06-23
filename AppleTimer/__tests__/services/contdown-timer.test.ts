@@ -3,7 +3,7 @@ import { CountdownTimer } from '@/services/countdown-timer'
 import { logger } from '@/utils/logger'
 
 describe('countdown-timer', () => {
-  const _presetMock: Preset = new Preset('', 3, 4, 2, 1, 1)
+  const _presetMock: Preset = new Preset('', 'name', 3, 4, 2, 1, 1)
   let _countdownTimer: CountdownTimer
   let loggerInfoSpy: jest.SpyInstance
 

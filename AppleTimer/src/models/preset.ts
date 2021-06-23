@@ -1,6 +1,8 @@
 import { TimerPhase } from '@/models/timer-phase'
 
 export class Preset {
+  public Id: string
+  //
   public Name: string
   // The sets count of the preset.
   public SetsCount: number
@@ -12,21 +14,27 @@ export class Preset {
   public WorkoutSecs: number
   // Phase: rest duration of the Rep.
   public RestSecs: number
+  //
+  public IsActive: boolean
 
   constructor(
+    id: string = '',
     name: string,
     prepareSecs: number,
     workoutSecs: number,
     restSecs: number,
     repsCount: number,
     setsCount: number,
+    isActive: boolean = false,
   ) {
+    this.Id = id
     this.Name = name
     this.PrepareSecs = prepareSecs
     this.WorkoutSecs = workoutSecs
     this.RestSecs = restSecs
     this.RepsCount = repsCount
     this.SetsCount = setsCount
+    this.IsActive = isActive
   }
 
   public TotalPresetDurationSecs = () =>

@@ -12,7 +12,7 @@ export const Screens = {
   PresetDetail: 'PresetDetail',
 }
 
-export const DEFAULT_PRESET = new Preset('Tabata', 5, 30, 15, 6, 1)
+export const DEFAULT_PRESET = new Preset('', 'Tabata', 5, 30, 15, 6, 1)
 
 export const HAPTIC_FEEDBACK_OPTIONS = { enableVibrateFallback: true, ignoreAndroidSystemSettings: true }
 

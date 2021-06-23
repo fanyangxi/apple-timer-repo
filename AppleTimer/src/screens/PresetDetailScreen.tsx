@@ -33,6 +33,7 @@ const ModifyTitleButton: React.FC<{
 }
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
+  const { goBack } = useNavigation()
   const route = useRoute()
   const presetName: string = _.get(route.params, 'current', undefined)
   const [current, setCurrent] = useState<Preset>(DEFAULT_PRESET)
@@ -184,7 +185,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
             <Text style={Fonts.textRegular}>{'Save'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => goBack()}>
             <Text style={Fonts.textRegular}>{'Cancel'}</Text>
           </TouchableOpacity>
         </View>
@@ -195,12 +196,14 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         onValueChanged={newDuration => {
           setCurrent(
             new Preset(
+              current.Id,
               current.Name,
               newDuration,
               current.WorkoutSecs,
               current.RestSecs,
               current.RepsCount,
               current.SetsCount,
+              current.IsActive,
             ),
           )
         }}
@@ -211,12 +214,14 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         onValueChanged={newDuration => {
           setCurrent(
             new Preset(
+              current.Id,
               current.Name,
               current.PrepareSecs,
               newDuration,
               current.RestSecs,
               current.RepsCount,
               current.SetsCount,
+              current.IsActive,
             ),
           )
         }}
@@ -227,12 +232,14 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         onValueChanged={newDuration => {
           setCurrent(
             new Preset(
+              current.Id,
               current.Name,
               current.PrepareSecs,
               current.WorkoutSecs,
               newDuration,
               current.RepsCount,
               current.SetsCount,
+              current.IsActive,
             ),
           )
         }}
@@ -243,12 +250,14 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         onValueChanged={newValue => {
           setCurrent(
             new Preset(
+              current.Id,
               current.Name,
               current.PrepareSecs,
               current.WorkoutSecs,
               current.RestSecs,
               newValue,
               current.SetsCount,
+              current.IsActive,
             ),
           )
         }}
@@ -259,12 +268,14 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         onValueChanged={newValue => {
           setCurrent(
             new Preset(
+              current.Id,
               current.Name,
               current.PrepareSecs,
               current.WorkoutSecs,
               current.RestSecs,
               current.RepsCount,
               newValue,
+              current.IsActive,
             ),
           )
         }}

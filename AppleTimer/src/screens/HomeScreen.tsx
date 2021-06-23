@@ -35,24 +35,24 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   const { Common } = useTheme()
   const cachedPresets = [
-    new Preset('Default', 5, 7, 5, 2, 2),
-    new Preset('My Preset A', 5, 7, 5, 1, 1),
-    new Preset('Exercise', 5, 17, 5, 1, 1),
-    new Preset('Calm', 5, 7, 5, 2, 2),
-    new Preset('lana', 5, 7, 5, 2, 2),
-    new Preset('cnduei', 5, 7, 5, 2, 2),
-    new Preset('asdf', 5, 7, 5, 2, 2),
-    new Preset('y34hefgs', 5, 7, 5, 2, 2),
+    new Preset('', 'Default', 5, 7, 5, 2, 2),
+    new Preset('', 'My Preset A', 5, 7, 5, 1, 1),
+    new Preset('', 'Exercise', 5, 17, 5, 1, 1),
+    new Preset('', 'Calm', 5, 7, 5, 2, 2),
+    new Preset('', 'lana', 5, 7, 5, 2, 2),
+    new Preset('', 'cnduei', 5, 7, 5, 2, 2),
+    new Preset('', 'asdf', 5, 7, 5, 2, 2),
+    new Preset('', 'y34hefgs', 5, 7, 5, 2, 2),
   ]
 
   useEffect(() => {
-    const cachedPreset = DataService.getActivePreset()
-    console.log(cachedPreset)
-    setActivePreset(cachedPreset)
+    DataService.getActivePreset().then(cachedPreset => {
+      console.log(cachedPreset)
+      setActivePreset(cachedPreset)
 
-    notificationServiceRef.current = new NotificationService()
-    initTimerServiceInstance(cachedPreset)
-
+      notificationServiceRef.current = new NotificationService()
+      initTimerServiceInstance(cachedPreset)
+    })
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
     // eslint-disable-next-line
