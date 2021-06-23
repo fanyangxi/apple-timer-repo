@@ -49,14 +49,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   return (
     <ScreenContainer
       backgroundComponent={() => (
-        <Image
-          source={assets.images.darkBackground}
-          style={{
-            flex: 1,
-            width: undefined,
-            height: undefined,
-          }}
-        />
+        <Image source={assets.images.darkBackground} style={{ flex: 1, width: undefined, height: undefined }} />
       )}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}

@@ -140,16 +140,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer
-      // backgroundComponent={() => <SvgComponent />}
       backgroundComponent={() => (
-        <Image
-          source={assets.images.darkBackground}
-          style={{
-            flex: 1,
-            width: undefined,
-            height: undefined,
-          }}
-        />
+        <Image source={assets.images.darkBackground} style={{ flex: 1, width: undefined, height: undefined }} />
       )}
       // style={{ backgroundColor: '#434343' }}
       topInsetBackgroundColor={Colors.mineShaft}
