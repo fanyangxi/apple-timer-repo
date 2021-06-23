@@ -18,7 +18,7 @@ const BackButton: React.FC<{
         onPress && onPress()
       }}
     >
-      <BackArrow />
+      <BackArrow color={Colors.white} />
     </TouchableOpacity>
   )
 }
