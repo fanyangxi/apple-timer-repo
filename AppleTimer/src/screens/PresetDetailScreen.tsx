@@ -56,7 +56,12 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar title={'Preset Detail'} showBackButton={true} />
-      <BottomDurationPickerPopup popupRef={durationPickerRef} />
+      <BottomDurationPickerPopup
+        popupRef={durationPickerRef}
+        onValueChanged={newDuration => {
+          console.log(`>>>: newDuration:${newDuration}`)
+        }}
+      />
       <BottomNumberPickerPopup popupRef={numberPickerRef} />
       <View style={styles.rootContainer}>
         <View style={styles.form}>
