@@ -20,7 +20,6 @@ const ModifyTitleButton: React.FC<{
   onPress?: () => void
   testID?: string
 }> = ({ onPress }): ReactElement => {
-  const { goBack } = useNavigation()
   return (
     <TouchableOpacity
       style={[styles.barItem, styles.modifyTitleButton]}
@@ -48,6 +47,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   useEffect(() => {
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    console.log(`>>> TotalPresetDurationSecs:: ${JSON.stringify(current)}, ${current.TotalPresetDurationSecs()}`)
+    // eslint-disable-next-line
+  }, [current])
 
   return (
     <ScreenContainer
@@ -189,38 +193,80 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         popupRef={prepareSecsDurationPickerRef}
         duration={current.PrepareSecs}
         onValueChanged={newDuration => {
-          console.log(`>>>: newDuration:${newDuration}`)
-          setCurrent({ ...current, PrepareSecs: newDuration })
+          setCurrent(
+            new Preset(
+              current.Name,
+              newDuration,
+              current.WorkoutSecs,
+              current.RestSecs,
+              current.RepsCount,
+              current.SetsCount,
+            ),
+          )
         }}
       />
       <BottomDurationPickerPopup
         popupRef={workoutSecsDurationPickerRef}
         duration={current.WorkoutSecs}
         onValueChanged={newDuration => {
-          console.log(`>>>: newDuration:${newDuration}`)
-          setCurrent({ ...current, WorkoutSecs: newDuration })
+          setCurrent(
+            new Preset(
+              current.Name,
+              current.PrepareSecs,
+              newDuration,
+              current.RestSecs,
+              current.RepsCount,
+              current.SetsCount,
+            ),
+          )
         }}
       />
       <BottomDurationPickerPopup
         popupRef={restSecsDurationPickerRef}
         duration={current.RestSecs}
         onValueChanged={newDuration => {
-          console.log(`>>>: newDuration:${newDuration}`)
-          setCurrent({ ...current, RestSecs: newDuration })
+          setCurrent(
+            new Preset(
+              current.Name,
+              current.PrepareSecs,
+              current.WorkoutSecs,
+              newDuration,
+              current.RepsCount,
+              current.SetsCount,
+            ),
+          )
         }}
       />
       <BottomNumberPickerPopup
         popupRef={repsPickerRef}
         value={current.RepsCount}
         onValueChanged={newValue => {
-          setCurrent({ ...current, RepsCount: newValue })
+          setCurrent(
+            new Preset(
+              current.Name,
+              current.PrepareSecs,
+              current.WorkoutSecs,
+              current.RestSecs,
+              newValue,
+              current.SetsCount,
+            ),
+          )
         }}
       />
       <BottomNumberPickerPopup
         popupRef={setsPickerRef}
         value={current.SetsCount}
         onValueChanged={newValue => {
-          setCurrent({ ...current, SetsCount: newValue })
+          setCurrent(
+            new Preset(
+              current.Name,
+              current.PrepareSecs,
+              current.WorkoutSecs,
+              current.RestSecs,
+              current.RepsCount,
+              newValue,
+            ),
+          )
         }}
       />
     </ScreenContainer>
