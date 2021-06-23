@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "type-check": "tsc --build plugins/typescript/template/tsconfig.json",
-    "convert-svg": "npx @svgr/cli --native -d ./ DarkAnd.svg"
+    "convert-svg": "npx @svgr/cli -d ./src/assets/svg-components ./src/assets/raw-svgs --native --template svg-component-template.js --index-template svg-index-template.js --ext tsx"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.14.1",
