@@ -291,7 +291,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             initTimerServiceInstance(selectedPreset)
             modalizeRef.current?.close()
           }}
-          onAddClicked={() => navigate(Screens.PresetDetail, { current: activePreset?.Name })}
+          onEditItemClicked={targetPreset => {
+            navigate(Screens.PresetDetail, { current: targetPreset })
+          }}
+          onAddClicked={() => navigate(Screens.PresetDetail, { current: undefined })}
         />
       </Modalize>
     </ScreenContainer>

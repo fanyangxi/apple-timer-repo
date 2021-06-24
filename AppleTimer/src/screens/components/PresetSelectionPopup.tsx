@@ -11,6 +11,7 @@ export interface PresetSelectionPopupProps {
   presets: Preset[]
   current?: Preset
   onSelectionChanged?: (selected: Preset) => void
+  onEditItemClicked?: (selected: Preset) => void
   onAddClicked?: () => void
 }
 
@@ -18,6 +19,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   presets,
   current,
   onSelectionChanged,
+  onEditItemClicked,
   onAddClicked,
 }) => {
   const renderItem = (preset: Preset) => (
@@ -31,16 +33,25 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           height: 90,
         }}
       >
-        <TouchableOpacity
-          key={preset.Name}
-          style={styles.card}
-          onPress={() => onSelectionChanged && onSelectionChanged(preset)}
-        >
-          <Text style={Fonts.textRegular}>Name: {preset.Name}</Text>
-          <Text style={Fonts.textRegular}>PrepareSecs: {preset.PrepareSecs}</Text>
-          <Text style={[Fonts.textRegular, FontColors.white]}>WorkoutSecs: {preset.WorkoutSecs}</Text>
-          <Text style={Fonts.textRegular}>RestSecs: {preset.RestSecs}</Text>
-        </TouchableOpacity>
+        <View style={styles.rowContent}>
+          <TouchableOpacity
+            key={preset.Name}
+            style={styles.card}
+            onPress={() => onSelectionChanged && onSelectionChanged(preset)}
+          >
+            <Text style={Fonts.textRegular}>Name: {preset.Name}</Text>
+            <Text style={Fonts.textRegular}>PrepareSecs: {preset.PrepareSecs}</Text>
+            <Text style={[Fonts.textRegular, FontColors.white]}>WorkoutSecs: {preset.WorkoutSecs}</Text>
+            <Text style={Fonts.textRegular}>RestSecs: {preset.RestSecs}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            key={`${preset.Name}-editor-container`}
+            style={styles.actionButton}
+            onPress={() => onEditItemClicked && onEditItemClicked(preset)}
+          >
+            <Text style={Fonts.textRegular}>Edit</Text>
+          </TouchableOpacity>
+        </View>
       </Neomorph>
     </View>
   )
@@ -129,9 +140,21 @@ const styles = StyleSheet.create({
   listContent: {
     // backgroundColor: 'yellow',
   },
+  rowContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   card: {
+    flex: 1,
     paddingHorizontal: Spacings.s_12,
+    marginRight: Spacings.s_8,
     // backgroundColor: '#434343',
+  },
+  actionButton: {
+    width: 64,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'yellow',
   },
   separator: {
     height: 4,
