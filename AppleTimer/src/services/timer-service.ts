@@ -1,6 +1,6 @@
 import { Preset, TickedPreset } from '@/models/preset'
 import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
-import { getUpdatedPreset } from '@/utils/preset-util'
+import { getTotalPresetDurationSecs, getUpdatedPreset } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
 import { logger } from '@/utils/logger'
 
@@ -39,7 +39,7 @@ export class TimerService {
   }
 
   runPreset = async () => {
-    this._countdownTimer = new CountdownTimer(this._preset.TotalPresetDurationSecs())
+    this._countdownTimer = new CountdownTimer(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
       const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)

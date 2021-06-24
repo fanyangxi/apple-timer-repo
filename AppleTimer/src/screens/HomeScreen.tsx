@@ -20,6 +20,7 @@ import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
 import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
+import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -181,7 +182,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   <Text style={styles.itemLabel}>Time remaining</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemValue}>{activePreset?.TotalPresetDurationSecs()}</Text>
+                  <Text style={styles.itemValue}>{activePreset && getTotalPresetDurationSecs(activePreset)}</Text>
                   <Text style={styles.itemLabel}>Total time</Text>
                 </View>
               </View>

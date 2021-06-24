@@ -36,9 +36,6 @@ export class Preset {
     this.SetsCount = setsCount
     this.IsActive = isActive
   }
-
-  public TotalPresetDurationSecs = () =>
-    (this.PrepareSecs + (this.WorkoutSecs + this.RestSecs) * this.RepsCount) * this.SetsCount
 }
 
 export interface TickedPreset {

@@ -16,6 +16,7 @@ import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
+import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -43,7 +44,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   }, [])
 
   useEffect(() => {
-    console.log(`>>> TotalPresetDurationSecs:: ${JSON.stringify(current)}, ${current.TotalPresetDurationSecs()}`)
+    console.log(`>>> Current:: ${JSON.stringify(current)}, Total-secs:${getTotalPresetDurationSecs(current)}`)
     // eslint-disable-next-line
   }, [current])
 

@@ -13,11 +13,11 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
     }
   }
 
-  const elapsedSecs = originalPreset.TotalPresetDurationSecs() - remainingPresetDurationSecs
+  const elapsedSecs = getTotalPresetDurationSecs(originalPreset) - remainingPresetDurationSecs
   if (elapsedSecs < 0) {
     throw new Error(
       `Invalid remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
-        `should be less/equal than: ${originalPreset.TotalPresetDurationSecs()}`,
+        `should be less/equal than: ${getTotalPresetDurationSecs(originalPreset)}`,
     )
   }
 
@@ -74,6 +74,10 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
 
   throw new Error(
     `Failed to get TickedPreset from remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
-      `for preset with total: ${originalPreset.TotalPresetDurationSecs()}`,
+      `for preset with total: ${getTotalPresetDurationSecs(originalPreset)}`,
   )
+}
+
+export const getTotalPresetDurationSecs = (item: Preset): number => {
+  return (item.PrepareSecs + (item.WorkoutSecs + item.RestSecs) * item.RepsCount) * item.SetsCount
 }

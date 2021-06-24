@@ -1,6 +1,7 @@
 import { Preset } from '@/models/preset'
 import { CountdownTimer } from '@/services/countdown-timer'
 import { logger } from '@/utils/logger'
+import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 
 describe('countdown-timer', () => {
   const _presetMock: Preset = new Preset('', 'name', 3, 4, 2, 1, 1)
@@ -8,7 +9,7 @@ describe('countdown-timer', () => {
   let loggerInfoSpy: jest.SpyInstance
 
   beforeEach(() => {
-    _countdownTimer = new CountdownTimer(_presetMock.TotalPresetDurationSecs())
+    _countdownTimer = new CountdownTimer(getTotalPresetDurationSecs(_presetMock))
     loggerInfoSpy = jest.spyOn(logger, 'info')
   })
 
