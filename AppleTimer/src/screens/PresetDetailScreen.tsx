@@ -15,6 +15,7 @@ import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
 import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
+import { DataService } from '@/services/data-service'
 
 const ModifyTitleButton: React.FC<{
   onPress?: () => void
@@ -35,7 +36,7 @@ const ModifyTitleButton: React.FC<{
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
-  const presetName: string = _.get(route.params, 'current', undefined)
+  const thePreset: Preset = _.get(route.params, 'current', undefined)
   const [current, setCurrent] = useState<Preset>(DEFAULT_PRESET)
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
@@ -46,6 +47,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { Common } = useTheme()
 
   useEffect(() => {
+    console.log('>>>> PresetDetailScreen loaded')
     // eslint-disable-next-line
   }, [])
 
@@ -182,7 +184,15 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </View>
         </View>
         <View style={styles.actionsSection}>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>
+          <TouchableOpacity
+            style={[Common.button.rounded]}
+            onPress={() => {
+              const isCreatingNew = thePreset === undefined
+              isCreatingNew
+                ? DataService.createPreset(current).then(() => {})
+                : DataService.updatePreset(current).then(() => {})
+            }}
+          >
             <Text style={Fonts.textRegular}>{'Save'}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[Common.button.rounded]} onPress={() => goBack()}>
