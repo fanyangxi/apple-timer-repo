@@ -66,7 +66,7 @@ const updatePreset = async (model: Preset): Promise<void> => {
 
   // checking:
   const items = await _getPresetEntities()
-  const isNameExistAlready = items.filter(item => item.name === entity.name).length > 0
+  const isNameExistAlready = items.filter(item => item.id !== model.Id && item.name === entity.name).length > 0
   if (isNameExistAlready) {
     throw new Error(`Name:(${entity.name}) already exists`)
   }
@@ -124,11 +124,11 @@ const _toEntity = (model: Preset): PresetEntity => {
   return {
     id: model.Id,
     name: model.Name,
-    setsCount: model.SetsCount,
-    repsCount: model.RepsCount,
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
+    repsCount: model.RepsCount,
+    setsCount: model.SetsCount,
     isActive: model.IsActive,
   } as PresetEntity
 }
@@ -137,11 +137,11 @@ const _toModel = (entity: PresetEntity): Preset => {
   return new Preset(
     entity.id,
     entity.name,
-    entity.setsCount,
-    entity.repsCount,
     entity.prepareSecs,
     entity.workoutSecs,
     entity.restSecs,
+    entity.repsCount,
+    entity.setsCount,
     entity.isActive,
   )
 }
