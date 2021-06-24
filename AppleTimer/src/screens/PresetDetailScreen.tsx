@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -15,32 +15,20 @@ import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopu
 import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
-
-const ModifyTitleButton: React.FC<{
-  onPress?: () => void
-  testID?: string
-}> = ({ onPress }): ReactElement => {
-  return (
-    <TouchableOpacity
-      style={[styles.barItem, styles.modifyTitleButton]}
-      onPress={() => {
-        onPress && onPress()
-      }}
-    >
-      <SvgBrowser color={Colors.white} />
-    </TouchableOpacity>
-  )
-}
+import SvgFinish from '@/assets/icons/Finish'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
   const thePreset: Preset = _.get(route.params, 'current', undefined)
   const isCreatingNewMode = thePreset === undefined
+  const currentPreset = isCreatingNewMode
+    ? new Preset('NEW-ID-PLACE-HOLDER', 'New Workout 4', 1, 1, 1, 1, 1)
+    : thePreset
 
-  const [current, setCurrent] = useState<Preset>(
-    isCreatingNewMode ? new Preset('NEW-ID-PLACE-HOLDER', 'New Workout 4', 1, 1, 1, 1, 1) : thePreset,
-  )
+  const [newTitle, setNewTitle] = useState<string>(currentPreset.Name)
+  const [isModifyingTitle, setIsModifyingTitle] = useState<boolean>(false)
+  const [current, setCurrent] = useState<Preset>(currentPreset)
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
   const restSecsDurationPickerRef = useRef<Modalize>(null)
@@ -73,8 +61,48 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         <View style={styles.form}>
           <View style={styles.row}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>{current.Name}</Text>
-              {ModifyTitleButton({})}
+              {isModifyingTitle ? (
+                <>
+                  <TextInput
+                    onChangeText={text => setNewTitle(text)}
+                    // editable={!fetchOneUserLoading}
+                    keyboardType={'default'}
+                    maxLength={24}
+                    defaultValue={current.Name}
+                    style={styles.titleInput} // [Layout.fill, Common.textInput]
+                  />
+                  <TouchableOpacity
+                    style={[styles.barItem, styles.modifyTitleButton]}
+                    onPress={() => {
+                      setIsModifyingTitle(false)
+                      setCurrent(
+                        new Preset(
+                          current.Id,
+                          newTitle,
+                          current.PrepareSecs,
+                          current.WorkoutSecs,
+                          current.RestSecs,
+                          current.RepsCount,
+                          current.SetsCount,
+                          current.IsActive,
+                        ),
+                      )
+                    }}
+                  >
+                    <SvgFinish color={Colors.white} />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.title}>{current.Name}</Text>
+                  <TouchableOpacity
+                    style={[styles.barItem, styles.modifyTitleButton]}
+                    onPress={() => setIsModifyingTitle(true)}
+                  >
+                    <SvgBrowser color={Colors.white} />
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           </View>
           <TouchableOpacity
@@ -374,6 +402,17 @@ const styles = StyleSheet.create({
     ...Fonts.textCaption30,
     ...FontColors.white,
     marginRight: Spacings.s_12,
+  },
+  titleInput: {
+    width: 120,
+    borderWidth: 1,
+    borderColor: Colors.text,
+    backgroundColor: Colors.inputBackground,
+    color: Colors.text,
+    minHeight: 50,
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 10,
   },
   modifyTitleButton: {
     width: 24,
