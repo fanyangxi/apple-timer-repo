@@ -8,6 +8,7 @@ import { Neomorph } from 'react-native-neomorph-shadows'
 import { ElementList } from '@/components/ElementList'
 import { DataService } from '@/services/data-service'
 import { useFocusEffect } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -78,10 +79,19 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             key={`${preset.Name}-delete-container`}
             style={styles.actionButton}
             onPress={() => {
-              DataService.deletePreset(preset.Id).then(() => {
-                console.log(`Delete preset:${preset.Id} completed`)
-                reloadItems()
-              })
+              DataService.deletePreset(preset.Id)
+                .then(() => {
+                  console.log(`Delete preset:${preset.Id} completed`)
+                  reloadItems()
+                })
+                .catch(e => {
+                  Toast.show({
+                    type: 'error',
+                    position: 'top',
+                    text1: 'Delete preset failed:',
+                    text2: `Detail: ${e}`,
+                  })
+                })
               onDeleteItemClicked && onDeleteItemClicked(preset)
             }}
           >

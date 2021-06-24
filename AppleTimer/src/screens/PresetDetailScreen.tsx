@@ -224,15 +224,24 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               isCreatingNewMode
                 ? DataService.createPreset(current)
                     .then(() => goBack())
-                    .catch(() => {
+                    .catch((e) => {
                       Toast.show({
                         type: 'error',
                         position: 'top',
-                        text1: 'Hello',
-                        text2: 'This is some something 👋',
+                        text1: 'Create preset failed:',
+                        text2: `Detail: ${e}`,
                       })
                     })
-                : DataService.updatePreset(current).then(() => goBack())
+                : DataService.updatePreset(current)
+                    .then(() => goBack())
+                    .catch(e => {
+                      Toast.show({
+                        type: 'error',
+                        position: 'top',
+                        text1: 'Update preset failed:',
+                        text2: `Detail: ${e}`,
+                      })
+                    })
             }}
           >
             <Text style={Fonts.textRegular}>{'Save'}</Text>
