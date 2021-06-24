@@ -56,6 +56,7 @@ const createPreset = async (model: Preset): Promise<void> => {
   // saving/create:
   const results = [...items, entity]
   console.log('Create:', results)
+  _validateEntities(results)
   await AsyncStorageUtils.setObject(DATA_TABLE_KEY, results)
 }
 
@@ -77,6 +78,24 @@ const updatePreset = async (model: Preset): Promise<void> => {
   // saving/update:
   const results = items.map(item => (item.id === entity.id ? entity : item))
   console.log('Update:', results)
+  _validateEntities(results)
+  await AsyncStorageUtils.setObject(DATA_TABLE_KEY, results)
+}
+
+const deletePreset = async (presetId: string): Promise<void> => {
+  const entity = await _getPresetEntityById(presetId)
+  if (!entity) {
+    throw new Error(`Target preset:id:${presetId} cannot be found`)
+  }
+
+  if (entity.isActive) {
+    throw new Error(`Active preset:id:${presetId} does not allowed to be deleted`)
+  }
+
+  // Only keep target item as `Active`:
+  const items = await _getPresetEntities()
+  const results = items.filter(item => item.id !== presetId)
+  _validateEntities(results)
   await AsyncStorageUtils.setObject(DATA_TABLE_KEY, results)
 }
 
@@ -127,6 +146,15 @@ const _toModel = (entity: PresetEntity): Preset => {
   )
 }
 
+const _validateEntities = (entities: PresetEntity[]): void => {
+  if (_.uniqBy(entities, 'id').length !== entities.length) {
+    throw new Error(`Duplicate id found in entities: ${JSON.stringify(entities)}`)
+  }
+  if (_.uniqBy(entities, 'name').length !== entities.length) {
+    throw new Error(`Duplicate name found in entities: ${JSON.stringify(entities)}`)
+  }
+}
+
 const _getPresetEntities = async (): Promise<PresetEntity[]> => {
   const items = await AsyncStorageUtils.getObject<PresetEntity[]>(DATA_TABLE_KEY)
   if (!items) {
@@ -143,4 +171,4 @@ const _getPresetEntityById = async (id: string): Promise<PresetEntity | undefine
   return items.filter(item => item.id === id)[0]
 }
 
-export const DataService = { getActivePreset, getPresets, createPreset, updatePreset, setActivePreset }
+export const DataService = { getActivePreset, getPresets, createPreset, updatePreset, deletePreset, setActivePreset }

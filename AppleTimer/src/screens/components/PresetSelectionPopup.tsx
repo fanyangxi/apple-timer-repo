@@ -13,6 +13,7 @@ export interface PresetSelectionPopupProps {
   current?: Preset
   onSelectionChanged?: (selected: Preset) => void
   onEditItemClicked?: (selected: Preset) => void
+  onDeleteItemClicked?: (selected: Preset) => void
   onAddClicked?: () => void
 }
 
@@ -20,6 +21,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   current,
   onSelectionChanged,
   onEditItemClicked,
+  onDeleteItemClicked,
   onAddClicked,
 }) => {
   const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
@@ -31,13 +33,17 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
 
   useFocusEffect(
     React.useCallback(() => {
-      DataService.getPresets().then(items => {
-        console.log('Cached-preset:', items)
-        setCachedPresets(items)
-      })
+      reloadItems()
       console.log('>>>> Preset selection-popup Focused')
     }, []),
   )
+
+  const reloadItems = () => {
+    DataService.getPresets().then(items => {
+      console.log('Cached-preset:', items)
+      setCachedPresets(items)
+    })
+  }
 
   const renderItem = (preset: Preset) => (
     <View style={styles.row}>
@@ -62,11 +68,24 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             <Text style={Fonts.textRegular}>RestSecs: {preset.RestSecs}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            key={`${preset.Name}-editor-container`}
+            key={`${preset.Name}-edit-container`}
             style={styles.actionButton}
             onPress={() => onEditItemClicked && onEditItemClicked(preset)}
           >
             <Text style={Fonts.textRegular}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            key={`${preset.Name}-delete-container`}
+            style={styles.actionButton}
+            onPress={() => {
+              DataService.deletePreset(preset.Id).then(() => {
+                console.log(`Delete preset:${preset.Id} completed`)
+                reloadItems()
+              })
+              onDeleteItemClicked && onDeleteItemClicked(preset)
+            }}
+          >
+            <Text style={Fonts.textRegular}>Delete</Text>
           </TouchableOpacity>
         </View>
       </Neomorph>
@@ -169,6 +188,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     width: 64,
+    marginLeft: Spacings.s_4,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'yellow',
