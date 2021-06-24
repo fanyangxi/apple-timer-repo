@@ -34,25 +34,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
-  const cachedPresets = [
-    new Preset('', 'Default', 5, 7, 5, 2, 2),
-    new Preset('', 'My Preset A', 5, 7, 5, 1, 1),
-    new Preset('', 'Exercise', 5, 17, 5, 1, 1),
-    new Preset('', 'Calm', 5, 7, 5, 2, 2),
-    new Preset('', 'lana', 5, 7, 5, 2, 2),
-    new Preset('', 'cnduei', 5, 7, 5, 2, 2),
-    new Preset('', 'asdf', 5, 7, 5, 2, 2),
-    new Preset('', 'y34hefgs', 5, 7, 5, 2, 2),
-  ]
 
   useEffect(() => {
     DataService.getActivePreset().then(cachedPreset => {
-      console.log(cachedPreset)
+      console.log('Active-preset:', cachedPreset)
       setActivePreset(cachedPreset)
 
       notificationServiceRef.current = new NotificationService()
       initTimerServiceInstance(cachedPreset)
     })
+
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
     // eslint-disable-next-line
@@ -285,11 +276,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
       <Modalize ref={modalizeRef} adjustToContentHeight={true}>
         <PresetSelectionPopup
-          presets={cachedPresets}
           onSelectionChanged={selectedPreset => {
-            setActivePreset(selectedPreset)
-            initTimerServiceInstance(selectedPreset)
-            modalizeRef.current?.close()
+            DataService.setActivePreset(selectedPreset.Id).then(() => {
+              setActivePreset(selectedPreset)
+              initTimerServiceInstance(selectedPreset)
+              modalizeRef.current?.close()
+            })
           }}
           onEditItemClicked={targetPreset => {
             navigate(Screens.PresetDetail, { current: targetPreset })

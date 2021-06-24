@@ -15,7 +15,6 @@ import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopu
 import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
-import uuid from 'react-native-uuid'
 
 const ModifyTitleButton: React.FC<{
   onPress?: () => void
@@ -40,7 +39,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const isCreatingNewMode = thePreset === undefined
 
   const [current, setCurrent] = useState<Preset>(
-    isCreatingNewMode ? new Preset(`${uuid.v4()}`, 'New Workout 1', 3, 30, 15, 4, 1) : thePreset,
+    isCreatingNewMode ? new Preset('NEW-ID-PLACE-HOLDER', 'New Workout 4', 1, 1, 1, 1, 1) : thePreset,
   )
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
@@ -192,9 +191,9 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             style={[Common.button.rounded]}
             onPress={() => {
               console.log(current)
-              // isCreatingNewMode
-              //   ? DataService.createPreset(current).then(() => {})
-              //   : DataService.updatePreset(current).then(() => {})
+              isCreatingNewMode
+                ? DataService.createPreset(current).then(() => goBack())
+                : DataService.updatePreset(current).then(() => goBack())
             }}
           >
             <Text style={Fonts.textRegular}>{'Save'}</Text>

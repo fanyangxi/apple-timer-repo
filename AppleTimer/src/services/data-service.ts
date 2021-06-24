@@ -2,16 +2,25 @@ import { PresetEntity } from '@/entities/preset-entity'
 import { AsyncStorageUtils } from '@/utils/async-storage-utils'
 import { Preset } from '@/models/preset'
 import _ from 'lodash'
-import { v4 as uuidv4 } from 'uuid'
+import uuid from 'react-native-uuid'
 
 const DATA_TABLE_KEY = 'THE-TIMER-9527'
 
 const getActivePreset = async (): Promise<Preset> => {
   const items = await _getPresetEntities()
+
+  // init default-preset if it doesn't exist
+  if (items.length === 0) {
+    const defaultPreset = new Preset(`${uuid.v4()}`, 'Tabata', 5, 30, 15, 6, 1, true)
+    await createPreset(defaultPreset)
+    return defaultPreset
+  }
+
   const results = items.filter(item => item.isActive)
   if (results.length !== 1) {
-    throw new Error('No active preset is found, even the default one.')
+    throw new Error(`Expect 1 active item to be found, actually found: ${results.length}`)
   }
+
   return _toModel(results[0])
 }
 
@@ -23,14 +32,14 @@ const getPresets = async (): Promise<Preset[]> => {
 const createPreset = async (model: Preset): Promise<void> => {
   // model to entity:
   const entity: PresetEntity = {
-    id: uuidv4(),
+    id: `${uuid.v4()}`,
     name: model.Name,
     setsCount: model.SetsCount,
     repsCount: model.RepsCount,
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
-    isActive: false,
+    isActive: model.IsActive,
   }
 
   // checking:
@@ -62,7 +71,7 @@ const updatePreset = async (model: Preset): Promise<void> => {
   }
   const existing = _.first(items.filter(item => item.id === entity.id))
   if (!existing) {
-    throw new Error(`Id:(${entity.id}) doesn't exist`)
+    throw new Error(`Target with id:(${entity.id}) doesn't exist`)
   }
 
   // saving/update:
@@ -71,16 +80,37 @@ const updatePreset = async (model: Preset): Promise<void> => {
   await AsyncStorageUtils.setObject(DATA_TABLE_KEY, results)
 }
 
+const setActivePreset = async (presetId: string): Promise<void> => {
+  const entity = await _getPresetEntityById(presetId)
+  if (!entity) {
+    throw new Error(`Target preset:id:${presetId} cannot be found`)
+  }
+
+  // Only keep target item as `Active`:
+  const items = await _getPresetEntities()
+  const results = items.map(item => {
+    if (item.id === entity.id) {
+      entity.isActive = true
+      return entity
+    } else {
+      item.isActive = false
+      return item
+    }
+  })
+  console.log('Update:', results)
+  await AsyncStorageUtils.setObject(DATA_TABLE_KEY, results)
+}
+
 const _toEntity = (model: Preset): PresetEntity => {
   return {
-    id: uuidv4(),
+    id: model.Id,
     name: model.Name,
     setsCount: model.SetsCount,
     repsCount: model.RepsCount,
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
-    isActive: false,
+    isActive: model.IsActive,
   } as PresetEntity
 }
 
@@ -105,4 +135,12 @@ const _getPresetEntities = async (): Promise<PresetEntity[]> => {
   return items
 }
 
-export const DataService = { getActivePreset, getPresets, createPreset, updatePreset }
+const _getPresetEntityById = async (id: string): Promise<PresetEntity | undefined> => {
+  const items = await AsyncStorageUtils.getObject<PresetEntity[]>(DATA_TABLE_KEY)
+  if (!items || items.length === 0) {
+    return undefined
+  }
+  return items.filter(item => item.id === id)[0]
+}
+
+export const DataService = { getActivePreset, getPresets, createPreset, updatePreset, setActivePreset }

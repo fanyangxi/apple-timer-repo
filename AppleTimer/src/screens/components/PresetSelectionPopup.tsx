@@ -1,14 +1,15 @@
 import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Preset } from '@/models/preset'
 import { DeviceScreen } from '@/common/device'
 import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { ElementList } from '@/components/ElementList'
+import { DataService } from '@/services/data-service'
+import { useFocusEffect } from '@react-navigation/native'
 
 export interface PresetSelectionPopupProps {
-  presets: Preset[]
   current?: Preset
   onSelectionChanged?: (selected: Preset) => void
   onEditItemClicked?: (selected: Preset) => void
@@ -16,12 +17,28 @@ export interface PresetSelectionPopupProps {
 }
 
 export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
-  presets,
   current,
   onSelectionChanged,
   onEditItemClicked,
   onAddClicked,
 }) => {
+  const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
+
+  useEffect(() => {
+    console.log('>>>> Preset selection-popup loaded')
+    // eslint-disable-next-line
+  }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      DataService.getPresets().then(items => {
+        console.log('Cached-preset:', items)
+        setCachedPresets(items)
+      })
+      console.log('>>>> Preset selection-popup Focused')
+    }, []),
+  )
+
   const renderItem = (preset: Preset) => (
     <View style={styles.row}>
       <Neomorph
@@ -78,7 +95,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         <ElementList
           style={styles.itemsContent}
           itemSeparatorComponent={<View style={styles.itemsSeparator} />}
-          items={presets && presets.map(preset => renderItem(preset))}
+          items={cachedPresets && cachedPresets.map(preset => renderItem(preset))}
         />
       </ScrollView>
     </View>
