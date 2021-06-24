@@ -17,6 +17,7 @@ import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
+import Toast from 'react-native-toast-message'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -221,7 +222,16 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             onPress={() => {
               console.log(current)
               isCreatingNewMode
-                ? DataService.createPreset(current).then(() => goBack())
+                ? DataService.createPreset(current)
+                    .then(() => goBack())
+                    .catch(() => {
+                      Toast.show({
+                        type: 'error',
+                        position: 'top',
+                        text1: 'Hello',
+                        text2: 'This is some something 👋',
+                      })
+                    })
                 : DataService.updatePreset(current).then(() => goBack())
             }}
           >
