@@ -9,13 +9,13 @@ import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import { Preset } from '@/models/preset'
-import { DEFAULT_PRESET } from '@/common/constants'
 import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
 import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
+import uuid from 'react-native-uuid'
 
 const ModifyTitleButton: React.FC<{
   onPress?: () => void
@@ -37,7 +37,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
   const thePreset: Preset = _.get(route.params, 'current', undefined)
-  const [current, setCurrent] = useState<Preset>(DEFAULT_PRESET)
+  const isCreatingNewMode = thePreset === undefined
+
+  const [current, setCurrent] = useState<Preset>(
+    isCreatingNewMode ? new Preset(`${uuid.v4()}`, 'New Workout 1', 3, 30, 15, 4, 1) : thePreset,
+  )
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
   const restSecsDurationPickerRef = useRef<Modalize>(null)
@@ -65,7 +69,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
       bottomInsetBackgroundColor={Colors.transparent}
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
-      <NavigationBar title={'Preset Detail'} showBackButton={true} />
+      <NavigationBar title={isCreatingNewMode ? 'Create New Preset' : 'Edit Preset Detail'} showBackButton={true} />
       <View style={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
@@ -187,10 +191,10 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           <TouchableOpacity
             style={[Common.button.rounded]}
             onPress={() => {
-              const isCreatingNew = thePreset === undefined
-              isCreatingNew
-                ? DataService.createPreset(current).then(() => {})
-                : DataService.updatePreset(current).then(() => {})
+              console.log(current)
+              // isCreatingNewMode
+              //   ? DataService.createPreset(current).then(() => {})
+              //   : DataService.updatePreset(current).then(() => {})
             }}
           >
             <Text style={Fonts.textRegular}>{'Save'}</Text>
