@@ -1,3 +1,5 @@
+// PRESETS TABLE, each single row will be a preset-entity.
+
 export interface PresetEntity {
   id: string
   name: string
