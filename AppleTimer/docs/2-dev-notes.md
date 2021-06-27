@@ -55,7 +55,8 @@ https://www.npmjs.com/package/react-native-haptic-feedback
 https://stackoverflow.com/questions/43760502/enable-haptic-feedback-on-react-native-touchable-view
 
 
-
+### Toast:
+https://www.npmjs.com/package/react-native-toast-message
 
 
 
