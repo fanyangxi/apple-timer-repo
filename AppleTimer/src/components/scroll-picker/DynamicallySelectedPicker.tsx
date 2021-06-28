@@ -222,8 +222,7 @@ export default class DynamicallySelectedPicker extends React.Component<
       <View style={{ height: height, width: width }}>
         <ScrollView
           ref={this.scrollViewRef}
-          // decelerationRate={'normal'}
-          scrollEventThrottle={16}
+          scrollEventThrottle={0}
           onLayout={this.scrollToInitialPosition}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
@@ -240,14 +239,6 @@ export default class DynamicallySelectedPicker extends React.Component<
           //   this.onScrollEndDrag(event)
           // }}
           onScroll={event => {
-            // const currentScrollPos = event.nativeEvent.contentOffset.y
-            // const sensitivity = 50
-            //
-            // if (Math.abs(currentScrollPos - this.state.lastScrollPos) > sensitivity) {
-            //   this.onScroll(event)
-            //   this.setState({ lastScrollPos: event.nativeEvent.contentOffset.y })
-            // }
-            console.log(`>>> ScrollView onScroll: x= ${event.nativeEvent.contentOffset.y}`)
             this.onScroll(event)
           }}
           // initialScrollIndex={itemIndex}
