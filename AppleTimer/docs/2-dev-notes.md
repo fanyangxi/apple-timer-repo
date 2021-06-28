@@ -44,10 +44,9 @@ https://www.npmjs.com/package/@gregfrench/react-native-wheel-picker
 https://www.npmjs.com/package/react-native-wheely-simple-picker
     > Issue: scroll speed to fast
 https://www.npmjs.com/package/react-native-wheel-picker-android
-    > Issue: the ui on android and iOS are very.too different
+    > Issue: the ui on android and iOS are very/too different
 https://www.npmjs.com/package/react-native-wheel-pick
-    > Issue: the ui on android and iOS are very.too different
-
+    > Issue: the ui on android and iOS are very/too different
 
 ### Enable haptic Feedback on react-native:
 react-native-haptic-feedback
