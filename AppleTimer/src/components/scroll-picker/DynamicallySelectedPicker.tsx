@@ -1,5 +1,13 @@
 import React from 'react'
-import { StyleSheet, View, ScrollView, Platform } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Platform,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  ColorValue,
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import PickerListItem from './PickerListItem'
 
@@ -7,7 +15,7 @@ type DynamicallySelectedPickerProps = {
   items?: {
     value?: string | number
     label?: string
-    itemColor?: string
+    itemColor?: ColorValue
   }[]
   onScroll?: (...args: any[]) => any
   onMomentumScrollBegin?: (...args: any[]) => any
@@ -22,12 +30,12 @@ type DynamicallySelectedPickerProps = {
   selectedItemBorderColor?: string
   fontSize?: number
   fontFamily?: string
-  topGradientColors?: any[]
-  bottomGradientColors?: any[]
+  topGradientColors?: (string | number)[]
+  bottomGradientColors?: (string | number)[]
 }
 
 type DynamicallySelectedPickerState = {
-  itemIndex: any
+  itemIndex: number
   itemHeight: number
   lastScrollPos: number
 }
@@ -36,99 +44,167 @@ export default class DynamicallySelectedPicker extends React.Component<
   DynamicallySelectedPickerProps,
   DynamicallySelectedPickerState
 > {
+  private readonly scrollViewRef: React.RefObject<ScrollView>
+
+  // Set default props
+  static defaultProps = {
+    items: [{ value: 0, label: 'No items', itemColor: 'red' }],
+    onScroll: () => {},
+    onScrollBeginDrag: () => {},
+    onScrollEndDrag: () => {},
+    onMomentumScrollBegin: () => {},
+    onMomentumScrollEnd: () => {},
+    width: 300,
+    height: 300,
+    initialSelectedIndex: 0,
+    transparentItemRows: 3,
+    allItemsColor: '#000',
+    fontFamily: 'Arial',
+    selectedItemBorderColor: '#cecece',
+    topGradientColors: [
+      'rgba( 255, 255, 255, 1 )',
+      'rgba( 255, 255, 255, 0.9 )',
+      'rgba( 255, 255, 255, 0.7 )',
+      'rgba( 255, 255, 255, 0.5 )',
+    ],
+    bottomGradientColors: [
+      'rgba( 255, 255, 255, 0.5 )',
+      'rgba( 255, 255, 255, 0.7 )',
+      'rgba( 255, 255, 255, 0.9 )',
+      'rgba( 255, 255, 255, 1 )',
+    ],
+  }
+
   constructor(props: DynamicallySelectedPickerProps) {
     super(props)
-    let itemHeight = this.props.height / (this.props.transparentItemRows * 2 + 1)
+    this.scrollViewRef = React.createRef<ScrollView>()
+
+    const localInitialSelectedIndex =
+      this.props.initialSelectedIndex || DynamicallySelectedPicker.defaultProps.initialSelectedIndex
+    const localHeight = this.props.height || DynamicallySelectedPicker.defaultProps.height
+    const localTransparentItemRows =
+      this.props.transparentItemRows || DynamicallySelectedPicker.defaultProps.transparentItemRows
+    let itemHeight = localHeight / (localTransparentItemRows * 2 + 1)
     if (Platform.OS === 'ios') {
       itemHeight = Math.ceil(itemHeight)
     }
     this.state = {
       itemHeight: itemHeight,
-      itemIndex: this.props.initialSelectedIndex,
+      itemIndex: localInitialSelectedIndex,
       lastScrollPos: 0,
     }
   }
-  static getDerivedStateFromProps(nextProps, prevState) {
+
+  static getDerivedStateFromProps(
+    nextProps: DynamicallySelectedPickerProps,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prevState: DynamicallySelectedPickerState,
+  ) {
     return {
       itemIndex: nextProps.initialSelectedIndex,
     }
   }
+
   scrollToInitialPosition = () => {
-    this.scrollViewRef.scrollTo({
-      y: this.state.itemHeight * this.props.initialSelectedIndex,
+    const localInitialSelectedIndex =
+      this.props.initialSelectedIndex || DynamicallySelectedPicker.defaultProps.initialSelectedIndex
+    this.scrollViewRef.current?.scrollTo({
+      y: this.state.itemHeight * localInitialSelectedIndex,
     })
   }
-  scrollToPosition = index => {
-    this.scrollViewRef.scrollTo({
+
+  scrollToPosition = (index: number) => {
+    this.scrollViewRef.current?.scrollTo({
       y: this.state.itemHeight * index,
     })
   }
+
   fakeItems(n = 3) {
     const itemsArr = []
     for (let i = 0; i < n; i++) {
       itemsArr[i] = {
         value: -1,
         label: '',
+        itemColor: 'transparent',
       }
     }
     return itemsArr
   }
+
   allItemsLength() {
-    return this.extendedItems().length - this.props.transparentItemRows * 2
+    const localTransparentItemRows =
+      this.props.transparentItemRows || DynamicallySelectedPicker.defaultProps.transparentItemRows
+    return this.extendedItems().length - localTransparentItemRows * 2
   }
-  onScroll(event) {
+
+  onScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const { items, onScroll } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
     const tempIndex = this.getItemTemporaryIndex(event)
     if (this.state.itemIndex !== tempIndex && tempIndex >= 0 && tempIndex < this.allItemsLength()) {
       this.setItemIndex(tempIndex)
-      onScroll({ index: tempIndex, item: items[tempIndex] })
+      onScroll && onScroll({ index: tempIndex, item: localItems[tempIndex] })
     }
   }
-  onMomentumScrollBegin(event) {
-    const { items, onMomentumScrollBegin } = this.props
-    const tempIndex = this.getItemTemporaryIndex(event)
-    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-      this.setItemIndex(tempIndex)
-      onMomentumScrollBegin({ index: tempIndex, item: items[tempIndex] })
-    }
-  }
-  onMomentumScrollEnd(event) {
-    const { items, onMomentumScrollEnd } = this.props
-    const tempIndex = this.getItemTemporaryIndex(event)
-    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-      this.setItemIndex(tempIndex)
-      onMomentumScrollEnd({ index: tempIndex, item: items[tempIndex] })
-    }
-  }
-  onScrollBeginDrag(event) {
-    const { items, onScrollBeginDrag } = this.props
-    const tempIndex = this.getItemTemporaryIndex(event)
-    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-      this.setItemIndex(tempIndex)
-      onScrollBeginDrag({ index: tempIndex, item: items[tempIndex] })
-    }
-  }
-  onScrollEndDrag(event) {
+
+  // onMomentumScrollBegin(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  //   const { items, onMomentumScrollBegin } = this.props
+  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
+  //   const tempIndex = this.getItemTemporaryIndex(event)
+  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+  //     this.setItemIndex(tempIndex)
+  //     onMomentumScrollBegin && onMomentumScrollBegin({ index: tempIndex, item: localItems[tempIndex] })
+  //   }
+  // }
+  //
+  // onMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  //   const { items, onMomentumScrollEnd } = this.props
+  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
+  //   const tempIndex = this.getItemTemporaryIndex(event)
+  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+  //     this.setItemIndex(tempIndex)
+  //     onMomentumScrollEnd && onMomentumScrollEnd({ index: tempIndex, item: localItems[tempIndex] })
+  //   }
+  // }
+  //
+  // onScrollBeginDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  //   const { items, onScrollBeginDrag } = this.props
+  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
+  //   const tempIndex = this.getItemTemporaryIndex(event)
+  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+  //     this.setItemIndex(tempIndex)
+  //     onScrollBeginDrag && onScrollBeginDrag({ index: tempIndex, item: localItems[tempIndex] })
+  //   }
+  // }
+
+  onScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const { items, onScrollEndDrag } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
     const tempIndex = this.getItemTemporaryIndex(event)
     if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
       this.setItemIndex(tempIndex)
-      onScrollEndDrag({ index: tempIndex, item: items[tempIndex] })
+      onScrollEndDrag && onScrollEndDrag({ index: tempIndex, item: localItems[tempIndex] })
     }
   }
-  getItemTemporaryIndex(event) {
+
+  getItemTemporaryIndex(event: NativeSyntheticEvent<NativeScrollEvent>) {
     return Math.round(event.nativeEvent.contentOffset.y / this.state.itemHeight)
   }
-  setItemIndex(index) {
+
+  setItemIndex(index: number) {
     this.setState({
       itemIndex: index,
     })
   }
+
   extendedItems() {
-    const { transparentItemRows } = this.props
-    return [...this.fakeItems(transparentItemRows), ...this.props.items, ...this.fakeItems(transparentItemRows)]
+    const { items, transparentItemRows } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
+    return [...this.fakeItems(transparentItemRows), ...localItems, ...this.fakeItems(transparentItemRows)]
   }
+
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { itemIndex, itemHeight } = this.state
     const {
       width,
@@ -141,29 +217,28 @@ export default class DynamicallySelectedPicker extends React.Component<
       fontFamily,
       selectedItemBorderColor,
     } = this.props
+    const localTransparentItemRows = transparentItemRows || DynamicallySelectedPicker.defaultProps.transparentItemRows
     return (
       <View style={{ height: height, width: width }}>
         <ScrollView
-          ref={ref => {
-            this.scrollViewRef = ref
-          }}
+          ref={this.scrollViewRef}
           // decelerationRate={'normal'}
           scrollEventThrottle={16}
           onLayout={this.scrollToInitialPosition}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          onMomentumScrollBegin={event => {
-            // this.onMomentumScrollBegin(event)
-          }}
-          onMomentumScrollEnd={event => {
-            // this.onMomentumScrollEnd(event)
-          }}
-          onScrollBeginDrag={event => {
-            // this.onScrollBeginDrag(event)
-          }}
-          onScrollEndDrag={event => {
-            // this.onScrollEndDrag(event)
-          }}
+          // onMomentumScrollBegin={event => {
+          //   this.onMomentumScrollBegin(event)
+          // }}
+          // onMomentumScrollEnd={event => {
+          //   this.onMomentumScrollEnd(event)
+          // }}
+          // onScrollBeginDrag={event => {
+          //   this.onScrollBeginDrag(event)
+          // }}
+          // onScrollEndDrag={event => {
+          //   this.onScrollEndDrag(event)
+          // }}
           onScroll={event => {
             // const currentScrollPos = event.nativeEvent.contentOffset.y
             // const sensitivity = 50
@@ -175,7 +250,7 @@ export default class DynamicallySelectedPicker extends React.Component<
             console.log(`>>> ScrollView onScroll: x= ${event.nativeEvent.contentOffset.y}`)
             this.onScroll(event)
           }}
-          initialScrollIndex={itemIndex}
+          // initialScrollIndex={itemIndex}
           snapToInterval={itemHeight}
         >
           {this.extendedItems().map((item, index) => {
@@ -209,11 +284,11 @@ export default class DynamicallySelectedPicker extends React.Component<
           pointerEvents="none"
         >
           <LinearGradient
-            colors={topGradientColors}
+            colors={topGradientColors || []}
             style={[
               styles.pickerGradient,
               {
-                height: transparentItemRows * itemHeight,
+                height: localTransparentItemRows * itemHeight,
               },
             ]}
           />
@@ -230,8 +305,8 @@ export default class DynamicallySelectedPicker extends React.Component<
           pointerEvents="none"
         >
           <LinearGradient
-            colors={bottomGradientColors}
-            style={[styles.pickerGradient, { height: transparentItemRows * itemHeight }]}
+            colors={bottomGradientColors || []}
+            style={[styles.pickerGradient, { height: localTransparentItemRows * itemHeight }]}
           />
         </View>
       </View>
@@ -239,33 +314,6 @@ export default class DynamicallySelectedPicker extends React.Component<
   }
 }
 
-DynamicallySelectedPicker.defaultProps = {
-  items: [{ value: 0, label: 'No items', itemColor: 'red' }],
-  onScroll: () => {},
-  onScrollBeginDrag: () => {},
-  onScrollEndDrag: () => {},
-  onMomentumScrollBegin: () => {},
-  onMomentumScrollEnd: () => {},
-  width: 300,
-  height: 300,
-  initialSelectedIndex: 0,
-  transparentItemRows: 3,
-  allItemsColor: '#000',
-  fontFamily: 'Arial',
-  selectedItemBorderColor: '#cecece',
-  topGradientColors: [
-    'rgba( 255, 255, 255, 1 )',
-    'rgba( 255, 255, 255, 0.9 )',
-    'rgba( 255, 255, 255, 0.7 )',
-    'rgba( 255, 255, 255, 0.5 )',
-  ],
-  bottomGradientColors: [
-    'rgba( 255, 255, 255, 0.5 )',
-    'rgba( 255, 255, 255, 0.7 )',
-    'rgba( 255, 255, 255, 0.9 )',
-    'rgba( 255, 255, 255, 1 )',
-  ],
-}
 const styles = StyleSheet.create({
   listItem: {
     alignItems: 'center',
