@@ -10,7 +10,6 @@
 - Fix issue: when pause by closely enough to the second, it will not display on screen, e.g.: 4s, 2s,
 
 
-
 ### Action sheet bottom popup:
 https://www.npmjs.com/package/react-native-modalize
 https://github.com/jeremybarbet/react-native-modalize
@@ -62,14 +61,6 @@ https://www.npmjs.com/package/react-native-toast-message
 
 ### react-native-keep-awake
 https://www.npmjs.com/package/react-native-keep-awake
-
-
-
-
-
-
-
-
 
 
 
@@ -155,6 +146,5 @@ export class TickedPreset {
 {/*  /!*</ActionsheetFooter>*!/*/}
 {/*</Actionsheet>*/}
 ```
-
 
 +

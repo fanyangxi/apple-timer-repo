@@ -14,7 +14,6 @@ Sound files are duplicated under below 2 paths, so whenever make changes to the 
 
 
 ### Home Screen:
-
 //// Top-Bar Section:
 Change App-Settings Button:
 Toggle Mute Button:
