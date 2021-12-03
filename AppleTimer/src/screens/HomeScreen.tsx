@@ -21,10 +21,11 @@ import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
+import { format, toDTime } from '@/utils/date-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
-  const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
-  const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
+  const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
+  const [tickedPreset, setTickedPreset] = useState<TickedPreset>()
   const [activePreset, setActivePreset] = useState<Preset>()
   const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
 
@@ -65,8 +66,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)
-      setSecsLeftInCurrentPhase(secsLeft)
-      setStateTickedPreset(tickedPreset)
+      setSecsLeftInCurrentWorkout(secsLeft)
+      setTickedPreset(tickedPreset)
     }
     timerSvc.OnTimerCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
@@ -152,7 +153,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             style={{
               ...styles.neomorphContainer,
               width: DeviceScreen.width - Spacings.s_48,
-              height: 145,
+              height: 116,
             }}
           >
             <View style={styles.summarySection}>
@@ -175,11 +176,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               {/*<Divider style={styles.summaryDivider} />*/}
               <View style={styles.summaryContent}>
                 <View style={styles.timeRemainingContainer}>
-                  <Text style={styles.itemValue}>{'07:20'}</Text>
-                  <Text style={styles.itemLabel}>Time remaining</Text>
+                  <Text style={styles.itemValue}>{`${format(toDTime(secsLeftInCurrentWorkout ?? 0))}`}</Text>
+                  <Text style={styles.itemLabel}>{`Time remaining (${secsLeftInCurrentWorkout})`}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemValue}>{activePreset && getTotalPresetDurationSecs(activePreset)}</Text>
+                  <Text style={styles.itemValue}>{format(toDTime(getTotalPresetDurationSecs(activePreset)))}</Text>
                   <Text style={styles.itemLabel}>Total time</Text>
                 </View>
               </View>
@@ -224,19 +225,42 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
                 </View>
               </View>
+
               {/* current phase info */}
               {/*<Divider style={styles.contentDivider} />*/}
               <View style={styles.summaryContent}>
                 <View style={styles.itemsContainer}>
-                  <Text style={styles.itemLabel}>setsRemainingCount:{stateTickedPreset?.setsRemainingCount}</Text>
-                  <Text style={styles.itemLabel}>setRepsRemainingCount:{stateTickedPreset?.setRepsRemainingCount}</Text>
-                  <Text style={styles.itemLabel}>setPrepareSecs:{stateTickedPreset?.setPrepareRemainingSecs}</Text>
-                  <Text style={styles.itemLabel}>repWorkoutSecs:{stateTickedPreset?.repWorkoutRemainingSecs}</Text>
-                  <Text style={styles.itemLabel}>repRestSecs:{stateTickedPreset?.repRestRemainingSecs}</Text>
+                  <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>
+                  <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>
+                  <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>
                 </View>
                 <View style={styles.itemsContainer}>
-                  <Text style={styles.itemLabel}>Total: {secsLeftInCurrentPhase}</Text>
-                  <Text style={styles.itemLabel}>setCurrentPhase: {stateTickedPreset?.setCurrentPhase}</Text>
+                  <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>
+                </View>
+              </View>
+            </View>
+          </Neomorph>
+        </View>
+
+        <View style={styles.row}>
+          <Neomorph
+            inner={false}
+            swapShadows
+            style={{
+              ...styles.neomorphContainer,
+              width: DeviceScreen.width - Spacings.s_48,
+              height: 88,
+            }}
+          >
+            <View style={styles.summarySection}>
+              <View style={styles.summaryContent}>
+                <View style={styles.timeRemainingContainer}>
+                  <Text style={styles.itemValue}>{tickedPreset?.setsRemainingCount}</Text>
+                  <Text style={styles.itemLabel}>{'Sets left'}</Text>
+                </View>
+                <View style={styles.totalTimeContainer}>
+                  <Text style={styles.itemValue}>{tickedPreset?.setRepsRemainingCount}</Text>
+                  <Text style={styles.itemLabel}>{'Repetitions left'}</Text>
                 </View>
               </View>
             </View>
@@ -322,20 +346,21 @@ const styles = StyleSheet.create({
     // shadowOffset: { width: 6, height: 6 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    borderRadius: 16,
+    borderRadius: RadiusSizes.r8,
     backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
     flexDirection: 'column',
     justifyContent: 'center',
   },
   // @summary-section:
   summarySection: {
+    flexGrow: 1,
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
-    paddingVertical: Spacings.s_16,
+    paddingVertical: Spacings.s_8,
     // alignItems: 'center',
-    // justifyContent: 'center',
-    // backgroundColor: '#202021', // '#202021',
-    borderRadius: RadiusSizes.r4,
+    justifyContent: 'center',
+    backgroundColor: '#3C3C3C', // '#202021',
+    borderRadius: RadiusSizes.r8,
   },
   summaryContent: {
     flexDirection: 'row',
@@ -350,11 +375,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacings.s_12,
   },
   timeRemainingContainer: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   totalTimeContainer: {
-    alignItems: 'center',
-    color: '#FFFFFF',
+    alignItems: 'flex-end',
     ...Fonts.textLarge,
   },
   itemLabel: {
@@ -385,7 +409,7 @@ const styles = StyleSheet.create({
   // @action-section:
   actionSection: {
     flexDirection: 'row',
-    paddingHorizontal: Spacings.s_24,
+    paddingHorizontal: Spacings.s_16,
     paddingVertical: Spacings.s_4,
     alignItems: 'center',
     justifyContent: 'space-between',

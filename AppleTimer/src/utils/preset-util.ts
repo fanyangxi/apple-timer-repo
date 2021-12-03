@@ -78,6 +78,9 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
   )
 }
 
-export const getTotalPresetDurationSecs = (item: Preset): number => {
+export const getTotalPresetDurationSecs = (item?: Preset): number => {
+  if (!item) {
+    return 0
+  }
   return (item.PrepareSecs + (item.WorkoutSecs + item.RestSecs) * item.RepsCount) * item.SetsCount
 }
