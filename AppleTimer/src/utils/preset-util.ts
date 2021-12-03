@@ -1,6 +1,10 @@
 import { Preset, TickedPreset } from '@/models/preset'
 import { TimerPhase } from '@/models/timer-phase'
 
+export const getRawTickedPreset = (originalPreset: Preset) => {
+  return getUpdatedPreset(originalPreset, getTotalPresetDurationSecs(originalPreset))
+}
+
 export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
   if (remainingPresetDurationSecs === 0) {
     return {

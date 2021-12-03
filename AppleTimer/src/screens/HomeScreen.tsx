@@ -19,14 +19,14 @@ import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
 import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
-import { getTotalPresetDurationSecs } from '@/utils/preset-util'
+import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
-  const [tickedPreset, setTickedPreset] = useState<TickedPreset>()
   const [activePreset, setActivePreset] = useState<Preset>()
+  const [tickedPreset, setTickedPreset] = useState<TickedPreset>()
   const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
 
   const timerServiceRef = useRef<TimerService>()
@@ -35,20 +35,22 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   useEffect(() => {
+    notificationServiceRef.current = new NotificationService()
     DataService.getActivePreset().then(cachedPreset => {
-      console.log('Active-preset:', cachedPreset)
-      setActivePreset(cachedPreset)
-
-      notificationServiceRef.current = new NotificationService()
-      timerServiceRef.current = initTimerServiceRef(cachedPreset)
+      init(cachedPreset)
     })
-
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
     // eslint-disable-next-line
   }, [])
 
-  console.log(`>>> ============= STATUS: ${timerStatus}`)
+  const init = (preset: Preset) => {
+    console.log('Active-preset:', preset)
+    setActivePreset(preset)
+    setTickedPreset(getRawTickedPreset(preset))
+    setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(preset))
+    timerServiceRef.current = initTimerServiceRef(preset)
+  }
 
   const initTimerServiceRef = (thePreset: Preset): TimerService => {
     const timerSvc = new TimerService(thePreset)
@@ -311,8 +313,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <PresetSelectionPopup
           onSelectionChanged={selectedPreset => {
             DataService.setActivePreset(selectedPreset.Id).then(() => {
-              setActivePreset(selectedPreset)
-              initTimerServiceRef(selectedPreset)
+              init(selectedPreset)
               modalizeRef.current?.close()
             })
           }}
