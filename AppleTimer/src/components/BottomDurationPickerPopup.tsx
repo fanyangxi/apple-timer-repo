@@ -1,14 +1,13 @@
 import { Platform, StyleSheet, Text, View } from 'react-native'
 import { Colors, RadiusSizes, Spacings } from '@/theme/Variables'
 import React, { useState } from 'react'
-import { Preset } from '@/models/preset'
 import { Modalize } from 'react-native-modalize'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { HAPTIC_FEEDBACK_OPTIONS, ScrollEventArgs } from '@/common/constants'
 // @ts-ignore
 import DynamicallySelectedPicker from 'react-native-dynamically-selected-picker'
 import { DeviceScreen } from '@/common/device'
-import { toShortTime } from '@/utils/date-util'
+import { toDTime } from '@/utils/date-util'
 
 const DEFAULT_PICKER_HEIGHT = 340
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
@@ -53,10 +52,10 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
       adjustToContentHeight={true}
       panGestureEnabled={true}
       onOpen={() => {
-        const [initialHours, initialMinutes, initialSeconds] = toShortTime(duration || 0)
-        setLocalHours(initialHours)
-        setLocalMinutes(initialMinutes)
-        setLocalSeconds(initialSeconds)
+        const { hours, minutes, seconds } = toDTime(duration || 0)
+        setLocalHours(hours)
+        setLocalMinutes(minutes)
+        setLocalSeconds(seconds)
       }}
       onClose={() => {
         console.log(`>>> local: h${localHours}, m${localMinutes}, s${localSeconds}`)
