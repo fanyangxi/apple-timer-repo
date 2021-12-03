@@ -1,6 +1,11 @@
 # apple-timer-repo
 Yet another timer (Apple Timer)
 
+npx react-native run-ios --device "Yangxi's-12MINI"
+npx react-native run-ios --device "Yangxi's-12MINI" --configuration Release
+npx react-native run-android --deviceId "2294eb002f057ece" --verbose
+npx react-native run-android --deviceId "2294eb002f057ece" --verbose --variant=release
+
 
 ### [Dev-Notes] Maintain the Sound files:
 Sound files are duplicated under below 2 paths, so whenever make changes to the sound files, we need to update the files under below 2 paths.  Reference: https://github.com/zmxv/react-native-sound:
