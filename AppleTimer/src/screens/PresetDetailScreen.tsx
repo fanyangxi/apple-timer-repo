@@ -217,6 +217,9 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </View>
         </View>
         <View style={styles.actionsSection}>
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => goBack()}>
+            <Text style={Fonts.textRegular}>{'Cancel'}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={[Common.button.rounded]}
             onPress={() => {
@@ -245,9 +248,6 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             }}
           >
             <Text style={Fonts.textRegular}>{'Save'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => goBack()}>
-            <Text style={Fonts.textRegular}>{'Cancel'}</Text>
           </TouchableOpacity>
         </View>
       </View>
