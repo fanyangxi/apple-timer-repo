@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Preset, TickedPreset } from '@/models/preset'
@@ -21,10 +20,7 @@ import { DataService } from '@/services/data-service'
 import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
-// import AwesomeButton from 'react-native-really-awesome-button'
-// import AwesomeButtonBlue from 'react-native-really-awesome-button/src/themes/blue'
-// @ts-ignore
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
+import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -36,8 +32,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
-
-  const { Common } = useTheme()
 
   useEffect(() => {
     DataService.getActivePreset().then(cachedPreset => {
@@ -253,36 +247,36 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <View style={styles.actionSection}>
           {(!timerStatus || timerStatus === TimerStatus.IDLE) && (
             <View style={styles.buttonsContainer}>
-              <AwesomeButtonRick raiseLevel={2} type="anchor" stretch={true} onPress={onStartPressed}>
+              <AwesomeButtonMy raiseLevel={2} type="whatsapp" stretch={true} onPress={onStartPressed}>
                 {'Start'}
-              </AwesomeButtonRick>
+              </AwesomeButtonMy>
             </View>
           )}
           {timerStatus === TimerStatus.PAUSED && (
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonLeft}>
-                <AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true} onPress={onResumePressed}>
+                <AwesomeButtonMy raiseLevel={2} type="secondary" stretch={true} onPress={onResumePressed}>
                   {'Resume'}
-                </AwesomeButtonRick>
+                </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
-                <AwesomeButtonRick raiseLevel={2} type="primary" stretch={true} onPress={onStopPressed}>
+                <AwesomeButtonMy raiseLevel={2} type="pinterest" stretch={true} onPress={onStopPressed}>
                   {'Stop'}
-                </AwesomeButtonRick>
+                </AwesomeButtonMy>
               </View>
             </View>
           )}
           {timerStatus === TimerStatus.TICKING && (
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonLeft}>
-                <AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true} onPress={onPausedPressed}>
+                <AwesomeButtonMy raiseLevel={2} type="secondary" stretch={true} onPress={onPausedPressed}>
                   {'Pause'}
-                </AwesomeButtonRick>
+                </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
-                <AwesomeButtonRick raiseLevel={2} type="primary" stretch={true} onPress={onStopPressed}>
+                <AwesomeButtonMy raiseLevel={2} type="pinterest" stretch={true} onPress={onStopPressed}>
                   {'Stop'}
-                </AwesomeButtonRick>
+                </AwesomeButtonMy>
               </View>
             </View>
           )}
