@@ -1,5 +1,5 @@
 import React from 'react'
-import { PanResponder, PanResponderGestureState, View } from 'react-native'
+import { View } from 'react-native'
 import Svg, { Path, Circle, G, Text } from 'react-native-svg'
 
 export type CircularSliderProps = {
@@ -46,15 +46,15 @@ export type CircularSliderProps = {
 const CircularSlider: React.FC<CircularSliderProps> = ({
   /** prop1 description */
   thumbRadius = 12,
-  trackRadius = 100,
+  trackRadius = 50,
   trackWidth = 5,
   trackTintColor = '#e1e8ee',
   trackColor = '#2089dc',
-  value = 0,
-  minValue = 0,
+  value = 80,
+  minValue = 60,
   maxValue = 100,
-  minAngle = 0,
-  maxAngle = 359.9,
+  minAngle = 179.9,
+  maxAngle = 359.9, // 359.9, 179.9
   onChange,
   thumbTextColor = 'white',
   thumbTextSize = 10,
@@ -67,30 +67,31 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
 }) => {
   const location = React.useRef({ x: 0, y: 0 })
   const viewRef = React.useRef<View>(null)
-  const valuePercentage = ((value - minValue) * 100) / maxValue
+  const valuePercentage = ((value - minValue) * 100) / (maxValue - minValue)
+  console.log(`>>> valuePercentage:${valuePercentage}`)
 
-  const { current: panResponder } = React.useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onStartShouldSetPanResponderCapture: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: () => location.current.x && location.current.y,
-      onPanResponderMove: (_e, { moveX, moveY }: PanResponderGestureState) => {
-        let angle = cartesianToPolar(
-          moveX - location.current.x + trackRadius + thumbRadius,
-          moveY - location.current.y + trackRadius + thumbRadius,
-        )
-        if (angle <= minAngle) {
-          onChange?.(minAngle / 3.6)
-        } else if (angle >= maxAngle) {
-          onChange?.(maxAngle / 3.6)
-        } else {
-          onChange?.(angle / 3.6)
-        }
-      },
-    }),
-  )
+  // const { current: panResponder } = React.useRef(
+  //   PanResponder.create({
+  //     onStartShouldSetPanResponder: () => true,
+  //     onStartShouldSetPanResponderCapture: () => true,
+  //     onMoveShouldSetPanResponder: () => true,
+  //     onMoveShouldSetPanResponderCapture: () => true,
+  //     onPanResponderGrant: () => location.current.x && location.current.y,
+  //     onPanResponderMove: (_e, { moveX, moveY }: PanResponderGestureState) => {
+  //       let angle = cartesianToPolar(
+  //         moveX - location.current.x + trackRadius + thumbRadius,
+  //         moveY - location.current.y + trackRadius + thumbRadius,
+  //       )
+  //       if (angle <= minAngle) {
+  //         onChange?.(minAngle / 3.6)
+  //       } else if (angle >= maxAngle) {
+  //         onChange?.(maxAngle / 3.6)
+  //       } else {
+  //         onChange?.(angle / 3.6)
+  //       }
+  //     },
+  //   }),
+  // )
 
   const polarToCartesian = React.useCallback(
     (angleToChange: number) => {
@@ -121,8 +122,8 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
   )
 
   const width = (trackRadius + thumbRadius) * 2
-  const startCoord = polarToCartesian(0)
-  const endCoord = polarToCartesian(valuePercentage * 3.6)
+  const startCoord = polarToCartesian(minAngle)
+  const endCoord = polarToCartesian((valuePercentage / 100) * (maxAngle - minAngle) + minAngle) // 3.6
   const endTintCoord = polarToCartesian(maxAngle)
 
   return (
@@ -178,18 +179,18 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
 
         {!noThumb && (
           <G x={endCoord.x - thumbRadius} y={endCoord.y - thumbRadius}>
-            <Circle r={thumbRadius} cx={thumbRadius} cy={thumbRadius} fill={thumbColor} {...panResponder.panHandlers} />
-            {showThumbText && (
-              <Text
-                x={thumbRadius}
-                y={thumbRadius + thumbTextSize / 2}
-                fontSize={10}
-                fill={thumbTextColor}
-                textAnchor="middle"
-              >
-                {Math.ceil(value).toString().padStart(2, '0')}
-              </Text>
-            )}
+            <Circle r={thumbRadius} cx={thumbRadius} cy={thumbRadius} fill={thumbColor} />
+            {/*{showThumbText && (*/}
+            {/*  <Text*/}
+            {/*    x={thumbRadius}*/}
+            {/*    y={thumbRadius + thumbTextSize / 2}*/}
+            {/*    fontSize={10}*/}
+            {/*    fill={thumbTextColor}*/}
+            {/*    textAnchor="middle"*/}
+            {/*  >*/}
+            {/*    {Math.ceil(value).toString().padStart(2, '0')}*/}
+            {/*  </Text>*/}
+            {/*)}*/}
           </G>
         )}
       </Svg>
