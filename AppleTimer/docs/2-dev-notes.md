@@ -147,4 +147,21 @@ export class TickedPreset {
 {/*</Actionsheet>*/}
 ```
 
+
+```
+<View style={[styles.start]}>
+{/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>*/}
+{/*  <Text style={Fonts.textRegular}>{'Resume'}</Text>*/}
+{/*</TouchableOpacity>*/}
+{/*<LinkButton theme={LinkButtonTheme.Normal} text={'PRIMARY'} onPress={onStartPressed} />*/}
+{/*<Button onPress={() => onStartPressed()} title={'Start'} />*/}
+{/*<AwesomeButton onPress={() => {}}>Text</AwesomeButton>*/}
+{/*<AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true}>{'Pause'}</AwesomeButtonRick>*/}
+{/*<AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true}>Resume</AwesomeButtonRick>*/}
+{/*<AwesomeButtonBlue raiseLevel={2} type="primary">Blue Primary Button</AwesomeButtonBlue>*/}
+{/*<AwesomeButtonBlue raiseLevel={2} type="secondary">Blue Secondary Button</AwesomeButtonBlue>*/}
+</View>
+```
+
+
 +

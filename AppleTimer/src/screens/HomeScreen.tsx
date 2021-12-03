@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
@@ -21,6 +21,10 @@ import { DataService } from '@/services/data-service'
 import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
+// import AwesomeButton from 'react-native-really-awesome-button'
+// import AwesomeButtonBlue from 'react-native-really-awesome-button/src/themes/blue'
+// @ts-ignore
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
@@ -248,31 +252,38 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         {/* @action-section: */}
         <View style={styles.actionSection}>
           {(!timerStatus || timerStatus === TimerStatus.IDLE) && (
-            <View style={[styles.start]}>
-              {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>*/}
-              {/*  <Text style={Fonts.textRegular}>{'Resume'}</Text>*/}
-              {/*</TouchableOpacity>*/}
-              <LinkButton theme={LinkButtonTheme.Normal} text={'PRIMARY'} onPress={onStartPressed} />
+            <View style={styles.buttonsContainer}>
+              <AwesomeButtonRick raiseLevel={2} type="anchor" stretch={true} onPress={onStartPressed}>
+                {'Start'}
+              </AwesomeButtonRick>
             </View>
           )}
           {timerStatus === TimerStatus.PAUSED && (
-            <View style={[styles.start]}>
-              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>
-                <Text style={Fonts.textRegular}>{'Resume'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
-                <Text style={Fonts.textRegular}>{'Stop'}</Text>
-              </TouchableOpacity>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonLeft}>
+                <AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true} onPress={onResumePressed}>
+                  {'Resume'}
+                </AwesomeButtonRick>
+              </View>
+              <View style={styles.buttonRight}>
+                <AwesomeButtonRick raiseLevel={2} type="primary" stretch={true} onPress={onStopPressed}>
+                  {'Stop'}
+                </AwesomeButtonRick>
+              </View>
             </View>
           )}
           {timerStatus === TimerStatus.TICKING && (
-            <View style={[styles.start]}>
-              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
-                <Text style={Fonts.textRegular}>{'Pause'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
-                <Text style={Fonts.textRegular}>{'Stop'}</Text>
-              </TouchableOpacity>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonLeft}>
+                <AwesomeButtonRick raiseLevel={2} type="secondary" stretch={true} onPress={onPausedPressed}>
+                  {'Pause'}
+                </AwesomeButtonRick>
+              </View>
+              <View style={styles.buttonRight}>
+                <AwesomeButtonRick raiseLevel={2} type="primary" stretch={true} onPress={onStopPressed}>
+                  {'Stop'}
+                </AwesomeButtonRick>
+              </View>
             </View>
           )}
         </View>
@@ -380,15 +391,27 @@ const styles = StyleSheet.create({
   // @action-section:
   actionSection: {
     flexDirection: 'row',
-    paddingHorizontal: Spacings.s_40,
+    paddingHorizontal: Spacings.s_24,
     paddingVertical: Spacings.s_4,
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 2,
     // backgroundColor: 'lightgreen', // '#202021',
   },
-  start: {},
-  pause: {},
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  buttonLeft: {
+    flexGrow: 1,
+    marginRight: 10,
+  },
+  buttonRight: {
+    flexGrow: 1,
+    marginLeft: 10,
+  },
   stop: {},
   actionsheetContainer: {
     flexDirection: 'row',
