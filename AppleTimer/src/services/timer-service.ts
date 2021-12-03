@@ -16,6 +16,8 @@ export class TimerService {
   private readonly _preset: Preset
   private _countdownTimer?: CountdownTimer
 
+  public Status: TimerStatus = TimerStatus.IDLE
+  public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
   public OnTimerStarted?: () => Promise<void>
   public OnTicked?: PresetTickedEventHandler
   public OnTimerCompleted?: () => Promise<void>
@@ -107,6 +109,12 @@ export class TimerService {
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
       this.OnStopped && (await this.OnStopped(milliSecsLeft).catch(e => this.handleError('STOPPED', e)))
     }
+    this._countdownTimer.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus): Promise<void> => {
+      logger.info(`TimerService: Status changed: old:${oldStatus} -> new:${newStatus}`)
+      this.OnStatusChanged &&
+        (await this.OnStatusChanged(oldStatus, newStatus).catch(e => this.handleError('Status-changes', e)))
+      this.Status = newStatus
+    }
 
     this.OnTimerStarted && (await this.OnTimerStarted().catch(e => this.handleError('TIMER-STARTED', e)))
     await this._countdownTimer.start()
@@ -114,20 +122,15 @@ export class TimerService {
   }
 
   pause = () => {
-    this._countdownTimer && this._countdownTimer.pause()
+    this._countdownTimer?.pause()
   }
 
   resume = async () => {
-    this._countdownTimer && (await this._countdownTimer.resume())
-  }
-
-  status = (): TimerStatus | undefined => {
-    return this._countdownTimer && this._countdownTimer.Status
+    await this._countdownTimer?.resume()
   }
 
   stop = () => {
-    this._countdownTimer && this._countdownTimer.stopAndReset()
-    // this._countdownTimer && this._countdownTimer.start()
+    this._countdownTimer?.stopAndReset()
   }
 
   // noinspection JSMethodCanBeStatic

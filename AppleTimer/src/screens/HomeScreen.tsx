@@ -4,7 +4,7 @@ import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Preset, TickedPreset } from '@/models/preset'
-import { TickingType } from '@/services/countdown-timer'
+import { TickingType, TimerStatus } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
@@ -26,8 +26,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentPhase, setSecsLeftInCurrentPhase] = useState<number>()
   const [stateTickedPreset, setStateTickedPreset] = useState<TickedPreset>()
   const [activePreset, setActivePreset] = useState<Preset>()
-  const [isRunning, setIsRunning] = useState<boolean>()
-  const [isPaused, setIsPaused] = useState<boolean>()
+  const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
 
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
@@ -50,12 +49,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     // eslint-disable-next-line
   }, [])
 
+  console.log(`>>> ============= STATUS: ${timerStatus}`)
+
   const initTimerServiceInstance = (thePreset: Preset) => {
     timerServiceRef.current = new TimerService(thePreset)
     //
-    timerServiceRef.current.OnTimerStarted = async () => {
-      setIsRunning(true)
-    }
+    timerServiceRef.current.OnTimerStarted = async () => {}
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
       currentRep: number,
@@ -72,7 +71,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setStateTickedPreset(tickedPreset)
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
-      setIsRunning(false)
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
@@ -109,24 +107,25 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnSetCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
+    timerServiceRef.current.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
+      setTimerStatus(newStatus)
+    }
   }
 
   const onStartPressed = async () => {
-    timerServiceRef.current && (await timerServiceRef.current.runPreset())
+    await timerServiceRef.current?.runPreset()
   }
 
   const onPausedPressed = () => {
-    setIsPaused(true)
-    timerServiceRef.current && timerServiceRef.current.pause()
+    timerServiceRef.current?.pause()
   }
 
   const onResumePressed = async () => {
-    setIsPaused(false)
-    timerServiceRef.current && (await timerServiceRef.current.resume())
+    await timerServiceRef.current?.resume()
   }
 
   const onStopPressed = async () => {
-    timerServiceRef.current && timerServiceRef.current.stop()
+    timerServiceRef.current?.stop()
   }
 
   return (
@@ -247,29 +246,33 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
         {/* @action-section: */}
         <View style={styles.actionSection}>
-          {isRunning ? (
-            <React.Fragment>
-              {isPaused ? (
-                <View style={[styles.start]}>
-                  <TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>
-                    <Text style={Fonts.textRegular}>{'Resume'}</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={[styles.start]}>
-                  <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
-                    <Text style={Fonts.textRegular}>{'Pause'}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              <View style={styles.stop}>
-                <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
-                  <Text style={Fonts.textRegular}>{'Stop'}</Text>
-                </TouchableOpacity>
-              </View>
-            </React.Fragment>
-          ) : (
-            <LinkButton theme={LinkButtonTheme.Normal} text={'PRIMARY'} onPress={onStartPressed} />
+          {(!timerStatus || timerStatus === TimerStatus.IDLE) && (
+            <View style={[styles.start]}>
+              {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>*/}
+              {/*  <Text style={Fonts.textRegular}>{'Resume'}</Text>*/}
+              {/*</TouchableOpacity>*/}
+              <LinkButton theme={LinkButtonTheme.Normal} text={'PRIMARY'} onPress={onStartPressed} />
+            </View>
+          )}
+          {timerStatus === TimerStatus.PAUSED && (
+            <View style={[styles.start]}>
+              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onResumePressed()}>
+                <Text style={Fonts.textRegular}>{'Resume'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
+                <Text style={Fonts.textRegular}>{'Stop'}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {timerStatus === TimerStatus.TICKING && (
+            <View style={[styles.start]}>
+              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onPausedPressed()}>
+                <Text style={Fonts.textRegular}>{'Pause'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[Common.button.rounded]} onPress={() => onStopPressed()}>
+                <Text style={Fonts.textRegular}>{'Stop'}</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </View>
