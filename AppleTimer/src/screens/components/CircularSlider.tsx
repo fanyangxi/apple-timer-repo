@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import Svg, { Path, Circle, G, Text } from 'react-native-svg'
 
 export type CircularSliderProps = {
@@ -41,6 +41,8 @@ export type CircularSliderProps = {
   maxAngle?: number
   /** Minimum arc angle in degrees i.e. its range is 0 to 359  */
   minAngle?: number
+  /** Custom styles **/
+  style?: StyleProp<ViewStyle>
 }
 
 const CircularSlider: React.FC<CircularSliderProps> = ({
@@ -64,11 +66,13 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
   thumbColor = '#2089dc',
   textColor = '#2089dc',
   textSize = 80,
+  style,
 }) => {
   const location = React.useRef({ x: 0, y: 0 })
   const viewRef = React.useRef<View>(null)
   const valuePercentage = ((value - minValue) * 100) / (maxValue - minValue)
-  console.log(`>>> valuePercentage:${valuePercentage}`)
+  const valueAngle = (valuePercentage / 100) * (maxAngle - minAngle) + minAngle
+  console.log(`>>> valuePercentage:${valuePercentage}, valueAngle:${valueAngle}`)
 
   // const { current: panResponder } = React.useRef(
   //   PanResponder.create({
@@ -123,12 +127,12 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
 
   const width = (trackRadius + thumbRadius) * 2
   const startCoord = polarToCartesian(minAngle)
-  const endCoord = polarToCartesian((valuePercentage / 100) * (maxAngle - minAngle) + minAngle) // 3.6
+  const endCoord = polarToCartesian(valueAngle) // 3.6
   const endTintCoord = polarToCartesian(maxAngle)
 
   return (
     <View
-      style={{ width, height: width }}
+      style={[{ width, height: width }, style]}
       ref={viewRef}
       onLayout={() => {
         viewRef.current?.measure((x, y, w, h, px, py) => {
@@ -162,7 +166,7 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
           strokeWidth={trackWidth}
           fill="none"
           d={`M${startCoord.x} ${startCoord.y} A ${trackRadius} ${trackRadius} 0 ${
-            valuePercentage * 3.6 > 180 ? 1 : 0
+            valueAngle - minAngle <= 180 ? 0 : 1
           } 1 ${endCoord.x} ${endCoord.y}`}
         />
         {showText && (
