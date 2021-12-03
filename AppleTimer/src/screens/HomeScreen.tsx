@@ -22,6 +22,7 @@ import SvgSettings from '@/assets/icons/Settings'
 import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
+import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -192,56 +193,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
         {/* @details-section: */}
         <View style={styles.row}>
-          <Neomorph
-            inner={false} // <- enable shadow inside of neomorph
-            swapShadows // <- change zIndex of each shadow color
-            style={{
-              ...styles.neomorphContainer,
-              width: DeviceScreen.width - Spacings.s_48,
-              height: 245,
-            }}
-          >
-            <View style={styles.detailsSection}>
-              <View style={styles.summaryContent}>
-                <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemLabel}>Rest:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
-                </View>
-                <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemLabel}>Prepare:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
-                </View>
-                <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemLabel}>Workout:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
-                </View>
-              </View>
-              {/*<Divider style={styles.contentDivider} />*/}
-              <View style={styles.summaryContent}>
-                <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemLabel}>Reps:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
-                </View>
-                <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemLabel}>Sets:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
-                </View>
-              </View>
-
-              {/* current phase info */}
-              {/*<Divider style={styles.contentDivider} />*/}
-              <View style={styles.summaryContent}>
-                <View style={styles.itemsContainer}>
-                  <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>
-                  <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>
-                  <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>
-                </View>
-                <View style={styles.itemsContainer}>
-                  <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>
-                </View>
-              </View>
-            </View>
-          </Neomorph>
+          <WorkoutDetailView tickedPreset={tickedPreset} />
         </View>
 
         <View style={styles.row}>

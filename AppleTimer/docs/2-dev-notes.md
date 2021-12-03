@@ -63,7 +63,8 @@ https://www.npmjs.com/package/react-native-toast-message
 https://www.npmjs.com/package/react-native-keep-awake
 
 
-
+### react-native-reanimated
+https://docs.swmansion.com/react-native-reanimated/docs/tutorials/LayoutAnimations/layoutAnimations
 
 
 
@@ -163,5 +164,32 @@ export class TickedPreset {
 </View>
 ```
 
+```
+  <View style={styles.summaryContent}>
+    <View style={styles.totalTimeContainer}>
+      <Text style={styles.itemLabel}>Rest:</Text>
+      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
+    </View>
+    <View style={styles.totalTimeContainer}>
+      <Text style={styles.itemLabel}>Prepare:</Text>
+      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
+    </View>
+    <View style={styles.totalTimeContainer}>
+      <Text style={styles.itemLabel}>Workout:</Text>
+      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
+    </View>
+  </View>
+  {/*<Divider style={styles.contentDivider} />*/}
+  <View style={styles.summaryContent}>
+    <View style={styles.totalTimeContainer}>
+      <Text style={styles.itemLabel}>Reps:</Text>
+      <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
+    </View>
+    <View style={styles.totalTimeContainer}>
+      <Text style={styles.itemLabel}>Sets:</Text>
+      <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
+    </View>
+  </View>
+```
 
 +
