@@ -41,7 +41,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setActivePreset(cachedPreset)
 
       notificationServiceRef.current = new NotificationService()
-      initTimerServiceInstance(cachedPreset)
+      timerServiceRef.current = initTimerServiceRef(cachedPreset)
     })
 
     // only called once after first render
@@ -51,11 +51,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   console.log(`>>> ============= STATUS: ${timerStatus}`)
 
-  const initTimerServiceInstance = (thePreset: Preset) => {
-    timerServiceRef.current = new TimerService(thePreset)
+  const initTimerServiceRef = (thePreset: Preset): TimerService => {
+    const timerSvc = new TimerService(thePreset)
     //
-    timerServiceRef.current.OnTimerStarted = async () => {}
-    timerServiceRef.current.OnTicked = async (
+    timerSvc.OnTimerStarted = async () => {}
+    timerSvc.OnTicked = async (
       currentSet: number,
       currentRep: number,
       type: TickingType,
@@ -70,22 +70,22 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setSecsLeftInCurrentPhase(secsLeft)
       setStateTickedPreset(tickedPreset)
     }
-    timerServiceRef.current.OnTimerCompleted = async () => {
+    timerSvc.OnTimerCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
-    timerServiceRef.current.OnPaused = async (milliSecsLeft: number) => {
+    timerSvc.OnPaused = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
-    timerServiceRef.current.OnResumed = async (milliSecsLeft: number) => {
+    timerSvc.OnResumed = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
-    timerServiceRef.current.OnStopped = async (milliSecsLeft: number) => {
+    timerSvc.OnStopped = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
-    timerServiceRef.current.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
+    timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${setRepsRemainingCount}.mp3`,
@@ -93,10 +93,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         Sounds.Workout,
       ])
     }
-    timerServiceRef.current.OnWorkoutPhaseIsClosing = async () => {
+    timerSvc.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
-    timerServiceRef.current.OnRestPhaseIsClosing = async (setRepsRemainingCount: number) => {
+    timerSvc.OnRestPhaseIsClosing = async (setRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${setRepsRemainingCount}.mp3`,
@@ -104,12 +104,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         Sounds.Workout,
       ])
     }
-    timerServiceRef.current.OnSetCompleted = async () => {
+    timerSvc.OnSetCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
-    timerServiceRef.current.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
+    timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
       setTimerStatus(newStatus)
     }
+    return timerSvc
   }
 
   const onStartPressed = async () => {
@@ -282,7 +283,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           onSelectionChanged={selectedPreset => {
             DataService.setActivePreset(selectedPreset.Id).then(() => {
               setActivePreset(selectedPreset)
-              initTimerServiceInstance(selectedPreset)
+              initTimerServiceRef(selectedPreset)
               modalizeRef.current?.close()
             })
           }}

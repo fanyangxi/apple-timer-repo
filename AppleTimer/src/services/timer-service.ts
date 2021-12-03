@@ -101,12 +101,15 @@ export class TimerService {
       }
     }
     this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {
+      logger.info(`OnPaused: ${milliSecsLeft}ms left`)
       this.OnPaused && (await this.OnPaused(milliSecsLeft).catch(e => this.handleError('PAUSED', e)))
     }
     this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {
+      logger.info(`OnResumed: ${milliSecsLeft}ms left`)
       this.OnResumed && (await this.OnResumed(milliSecsLeft).catch(e => this.handleError('RESUMED', e)))
     }
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
+      logger.info(`OnStopped: ${milliSecsLeft}ms left`)
       this.OnStopped && (await this.OnStopped(milliSecsLeft).catch(e => this.handleError('STOPPED', e)))
     }
     this._countdownTimer.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus): Promise<void> => {
