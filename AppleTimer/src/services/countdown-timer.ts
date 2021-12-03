@@ -10,9 +10,9 @@ export enum TickingType {
 // Actions: Start, Pause + Resume, StopAndReset
 // Statuses: IDLE, PAUSED, TICKING
 export enum TimerStatus {
-  IDLE = 'idle',
-  PAUSED = 'paused',
-  TICKING = 'ticking',
+  IDLE = 'IDLE',
+  PAUSED = 'PAUSED',
+  TICKING = 'TICKING',
 }
 
 export class CountdownTimer {
@@ -24,6 +24,7 @@ export class CountdownTimer {
   private _runStartedAt: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
+  public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
   public OnTicked?: (type: TickingType, secsLeft: number) => Promise<void>
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
@@ -45,6 +46,7 @@ export class CountdownTimer {
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
     this.clear()
+    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
     this.Status = TimerStatus.TICKING
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
     logger.info('Started')
@@ -58,6 +60,7 @@ export class CountdownTimer {
     // 1.Get the paused time, right before the clear.
     const pausedAt = new Date().getTime()
     setTimeout(() => this.clear(), 0)
+    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.PAUSED).catch(() => {})
     this.Status = TimerStatus.PAUSED
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const before = this._remainingCountdownMilliSecs
@@ -82,6 +85,7 @@ export class CountdownTimer {
     logger.info(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
+    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
     this.Status = TimerStatus.TICKING
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
@@ -90,6 +94,7 @@ export class CountdownTimer {
 
   stopAndReset() {
     this.clear()
+    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.IDLE).catch(() => {})
     this.Status = TimerStatus.IDLE
     this.OnStopped &&
       this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOP-AND-RESET', e))
