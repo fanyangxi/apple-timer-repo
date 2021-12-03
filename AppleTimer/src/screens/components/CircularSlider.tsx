@@ -100,7 +100,7 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
   const polarToCartesian = React.useCallback(
     (angleToChange: number) => {
       let r = trackRadius
-      let hC = trackRadius + thumbRadius
+      let hC = trackRadius + Math.max(thumbRadius, trackWidth)
       let a = ((angleToChange - 90) * Math.PI) / 180.0
 
       let x = hC + r * Math.cos(a)
@@ -112,7 +112,7 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
 
   const cartesianToPolar = React.useCallback(
     (x, y) => {
-      let hC = trackRadius + thumbRadius
+      let hC = trackRadius + Math.max(thumbRadius, trackWidth)
 
       if (x === 0) {
         return y > hC ? 0 : 180
@@ -125,7 +125,7 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
     [trackRadius, thumbRadius],
   )
 
-  const width = (trackRadius + thumbRadius) * 2
+  const width = (trackRadius + Math.max(thumbRadius, trackWidth)) * 2
   const startCoord = polarToCartesian(minAngle)
   const endCoord = polarToCartesian(valueAngle) // 3.6
   const endTintCoord = polarToCartesian(maxAngle)
