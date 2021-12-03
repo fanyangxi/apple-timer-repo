@@ -224,7 +224,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               isCreatingNewMode
                 ? DataService.createPreset(current)
                     .then(() => goBack())
-                    .catch((e) => {
+                    .catch(e => {
                       Toast.show({
                         type: 'error',
                         position: 'top',

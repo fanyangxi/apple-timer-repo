@@ -18,6 +18,8 @@ target 'AppleTimer' do
 
   pod 'RNReactNativeHapticFeedback', :path => '../node_modules/react-native-haptic-feedback'
 
+  pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
+
   target 'AppleTimerTests' do
     inherit! :complete
     # Pods for testing

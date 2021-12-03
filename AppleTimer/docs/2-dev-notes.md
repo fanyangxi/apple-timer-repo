@@ -60,7 +60,8 @@ https://stackoverflow.com/questions/43760502/enable-haptic-feedback-on-react-nat
 https://www.npmjs.com/package/react-native-toast-message
 
 
-
+### react-native-keep-awake
+https://www.npmjs.com/package/react-native-keep-awake
 
 
 

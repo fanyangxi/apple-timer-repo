@@ -10,6 +10,9 @@ import { DebuggerScreen } from '@/screens/DebuggerScreen'
 import { SettingsScreen } from '@/screens/SettingsScreen'
 import { PresetDetailScreen } from '@/screens/PresetDetailScreen'
 import { Screens } from '@/common/constants'
+import KeepAwake from 'react-native-keep-awake'
+// import ScreenContainer from "@/components/ScreenContainer";
+// import { SafeAreaProvider } from "react-native-safe-area-context";
 // import { IndexStartupContainer } from '@/Containers'
 // import { StartupState } from '@/store/Startup'
 
@@ -61,6 +64,7 @@ const ApplicationNavigator = () => {
         {/*  />*/}
         {/*)}*/}
       </Stack.Navigator>
+      <KeepAwake />
       {/*<Tab.Navigator>*/}
       {/*  <Tab.Screen name="Home2" component={HomeScreen} />*/}
       {/*  <Tab.Screen name="Debugger" component={DebuggerScreen} />*/}
