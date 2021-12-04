@@ -58,15 +58,15 @@ export class TimerService {
         // Started
         if (tickedPreset.setPrepareRemainingSecs === this._preset.PrepareSecs) {
           this.OnPreparePhaseStarted &&
-            (await this.OnPreparePhaseStarted().catch(e => this.handleError('PREPARE-PHASE-STARTED', e)))
+            this.OnPreparePhaseStarted().catch(e => this.handleError('PREPARE-PHASE-STARTED', e))
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
         if (tickedPreset.setPrepareRemainingSecs === minClosingSecs) {
           this.OnPreparePhaseIsClosing &&
-            (await this.OnPreparePhaseIsClosing(tickedPreset.setRepsRemainingCount).catch(e =>
+            this.OnPreparePhaseIsClosing(tickedPreset.setRepsRemainingCount).catch(e =>
               this.handleError('PREPARE-PHASE-IS-CLOSING ', e),
-            ))
+            )
         }
       }
 
@@ -74,21 +74,20 @@ export class TimerService {
         // Started
         if (tickedPreset.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
           this.OnWorkoutPhaseStarted &&
-            (await this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e)))
+            this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e))
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
         if (tickedPreset.repWorkoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing &&
-            (await this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e)))
+            this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e))
         }
       }
 
       if (tickedPreset.setCurrentPhase === TimerPhase.Rest) {
         // Started
         if (tickedPreset.repRestRemainingSecs === this._preset.RestSecs) {
-          this.OnRestPhaseStarted &&
-            (await this.OnRestPhaseStarted().catch(e => this.handleError('REST-PHASE-STARTED', e)))
+          this.OnRestPhaseStarted && this.OnRestPhaseStarted().catch(e => this.handleError('REST-PHASE-STARTED', e))
         }
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
@@ -96,32 +95,32 @@ export class TimerService {
           // Since we're still in current Rep, so we do '-1' here.
           const setRepsLeft = tickedPreset.setRepsRemainingCount - 1
           isSetCompleted
-            ? this.OnSetCompleted && (await this.OnSetCompleted().catch(e => this.handleError('SET-COMPLETED', e)))
+            ? this.OnSetCompleted && this.OnSetCompleted().catch(e => this.handleError('SET-COMPLETED', e))
             : this.OnRestPhaseIsClosing &&
-              (await this.OnRestPhaseIsClosing(setRepsLeft).catch(e => this.handleError('REST-PHASE-IS-CLOSING', e)))
+              this.OnRestPhaseIsClosing(setRepsLeft).catch(e => this.handleError('REST-PHASE-IS-CLOSING', e))
         }
       }
     }
     this._countdownTimer.OnStarted = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnStarted: ${milliSecsLeft}ms left`)
-      this.OnTimerStarted && (await this.OnTimerStarted(milliSecsLeft).catch(e => this.handleError('TIMER-STARTED', e)))
+      this.OnTimerStarted && this.OnTimerStarted(milliSecsLeft).catch(e => this.handleError('TIMER-STARTED', e))
     }
     this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnPaused: ${milliSecsLeft}ms left`)
-      this.OnPaused && (await this.OnPaused(milliSecsLeft).catch(e => this.handleError('PAUSED', e)))
+      this.OnPaused && this.OnPaused(milliSecsLeft).catch(e => this.handleError('PAUSED', e))
     }
     this._countdownTimer.OnResumed = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnResumed: ${milliSecsLeft}ms left`)
-      this.OnResumed && (await this.OnResumed(milliSecsLeft).catch(e => this.handleError('RESUMED', e)))
+      this.OnResumed && this.OnResumed(milliSecsLeft).catch(e => this.handleError('RESUMED', e))
     }
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnStopped: ${milliSecsLeft}ms left`)
-      this.OnTimerStopped && (await this.OnTimerStopped(milliSecsLeft).catch(e => this.handleError('TIMER-STOPPED', e)))
+      this.OnTimerStopped && this.OnTimerStopped(milliSecsLeft).catch(e => this.handleError('TIMER-STOPPED', e))
     }
     this._countdownTimer.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus): Promise<void> => {
       logger.info(`TimerService: Status changed: old:${oldStatus} -> new:${newStatus}`)
       this.OnStatusChanged &&
-        (await this.OnStatusChanged(oldStatus, newStatus).catch(e => this.handleError('Status-changes', e)))
+        this.OnStatusChanged(oldStatus, newStatus).catch(e => this.handleError('Status-changes', e))
       this.Status = newStatus
     }
 
@@ -143,5 +142,9 @@ export class TimerService {
   // noinspection JSMethodCanBeStatic
   private handleError(event: string, e: Error) {
     logger.info(`Event:${event} callback error: `, e)
+  }
+
+  private handle(e: Error) {
+    logger.info('Callback error: ', e)
   }
 }
