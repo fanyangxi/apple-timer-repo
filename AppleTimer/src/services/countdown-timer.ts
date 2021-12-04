@@ -50,7 +50,7 @@ export class CountdownTimer {
     this.clear()
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
     this.Status = TimerStatus.TICKING
-    this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STARTED', e))
+    this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STARTED', e))
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
     logger.info('Started')
   }
@@ -70,7 +70,7 @@ export class CountdownTimer {
     const timeLeft = before - (pausedAt - this._runStartedAt)
     this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
     // Trigger Event:
-    this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('PAUSE', e))
+    this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
     // Logs:
     logger.info(
       '[Paused] Remaining MilliSecs:' +
@@ -90,7 +90,7 @@ export class CountdownTimer {
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
     this.Status = TimerStatus.TICKING
-    this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('RESUME', e))
+    this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleErr('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
     logger.info('Resumed')
   }
@@ -100,11 +100,9 @@ export class CountdownTimer {
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.IDLE).catch(() => {})
     this.Status = TimerStatus.IDLE
     if (force) {
-      this.OnStopped &&
-        this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOPPED', e))
+      this.OnStopped && this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STOPPED', e))
     } else {
-      this.OnCompleted &&
-        this.OnCompleted(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('COMPLETED', e))
+      this.OnCompleted && this.OnCompleted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('COMPLETED', e))
     }
     this._remainingCountdownMilliSecs = 0
   }
@@ -148,7 +146,7 @@ export class CountdownTimer {
 
   private triggerCallback(type: TickingType, secsLeft: number, beforeStartDelayMilliSecs?: number) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
-    this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleEventError('TICK', e))
+    this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleErr('TICK', e))
     logger.info(
       `[(${secsLeft} secs)] Trigger-callback-at ${type}` +
         `${beforeStartDelayMilliSecs ? `, beforeStartDelay:${beforeStartDelayMilliSecs}` : ''}`,
@@ -156,7 +154,7 @@ export class CountdownTimer {
   }
 
   // noinspection JSMethodCanBeStatic
-  private handleEventError(event: string, e: Error) {
+  private handleErr(event: string, e: Error) {
     logger.error(`Event:${event} callback error: `, e)
   }
 }
