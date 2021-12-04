@@ -37,6 +37,20 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const {
+    startOrResume: startOrResume0,
+    pause: pause0,
+    stop: stop0,
+    animValue: animValue0,
+  } = useAnimatedTimingValueEffect({
+    from: 0,
+    to: 100,
+    durationMs: (activePreset?.PrepareSecs ?? 0) * 1000,
+    onFinished: () => {
+      // startOrResume1()
+    },
+  })
+
+  const {
     startOrResume: startOrResume1,
     pause: pause1,
     stop: stop1,
@@ -167,7 +181,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onStartPressed = async () => {
-    startOrResume1()
+    startOrResume0()
     await timerServiceRef.current?.runPreset()
   }
 
@@ -255,6 +269,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <View style={styles.row}>
           <WorkoutDetailView
             tickedPreset={tickedPreset}
+            preparePhaseAnimValue={animValue0}
             workoutPhaseAnimValue={animValue1}
             restPhaseAnimValue={animValue2}
           />

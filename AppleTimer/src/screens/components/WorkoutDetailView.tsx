@@ -9,15 +9,22 @@ import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
+  preparePhaseAnimValue?: Animated.Value
   workoutPhaseAnimValue?: Animated.Value
   restPhaseAnimValue?: Animated.Value
 }
 
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
   tickedPreset,
+  preparePhaseAnimValue,
   workoutPhaseAnimValue,
   restPhaseAnimValue,
 }) => {
+  const [preparePhaseRawValue, setPreparePhaseRawValue] = useState<number>(0)
+  preparePhaseAnimValue?.addListener(({ value }) => {
+    setPreparePhaseRawValue(value)
+  })
+
   const [workoutPhaseRawValue, setWorkoutPhaseRawValue] = useState<number>(0)
   // const phase1AnimValue = useRef(new Animated.Value(0)).current
   workoutPhaseAnimValue?.addListener(({ value }) => {
@@ -109,7 +116,12 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
           trackColor={'#3C3C3C'}
           trackTintColor={'red'}
         />
-        <CircleVerticalSlider style={{ position: 'absolute' }} trackRadius={71} value={0} trackStrokeWidth={0} />
+        <CircleVerticalSlider
+          style={{ position: 'absolute' }}
+          trackRadius={71}
+          value={preparePhaseRawValue}
+          trackStrokeWidth={0}
+        />
       </View>
     </Neomorph>
   )

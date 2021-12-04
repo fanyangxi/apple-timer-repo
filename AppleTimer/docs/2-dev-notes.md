@@ -72,11 +72,13 @@ https://www.npmjs.com/package/rn-arc-slider
 rn-arc-slider/index.tsx at next · arpitBhalla/rn-arc-slider (++++)
 \- https://github.com/arpitBhalla/rn-arc-slider/blob/next/src/index.tsx
 \- https://github.com/bartgryszko/react-native-circular-slider
+The Shapes of React Native (+++)
+\- https://codedaily.io/tutorials/The-Shapes-of-React-Native
 Paths — SVG 2
 \- https://www.w3.org/TR/SVG/paths.html
 react-native-svg/react-native-svg: SVG library for React Native, React Native Web, and plain React web projects.
 \- https://github.com/react-native-svg/react-native-svg
-\-https://www.npmjs.com/package/react-native-svg#path
+\- https://www.npmjs.com/package/react-native-svg#path
 React native svg arc path - Stack Overflow
 \- https://stackoverflow.com/questions/53714250/react-native-svg-arc-path
 
