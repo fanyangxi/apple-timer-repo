@@ -30,6 +30,7 @@ export class CountdownTimer {
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnCompleted?: (milliSecsLeft: number) => Promise<void>
 
   constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => Promise<void>) {
     this._initialCountdownSecs = countdownSecs
@@ -94,11 +95,17 @@ export class CountdownTimer {
     logger.info('Resumed')
   }
 
-  stopAndReset() {
+  stopAndReset(force: boolean = false) {
     this.clear()
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.IDLE).catch(() => {})
     this.Status = TimerStatus.IDLE
-    this.OnStopped && this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOPPED', e))
+    if (force) {
+      this.OnStopped &&
+        this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOPPED', e))
+    } else {
+      this.OnCompleted &&
+        this.OnCompleted(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('COMPLETED', e))
+    }
     this._remainingCountdownMilliSecs = 0
   }
 
