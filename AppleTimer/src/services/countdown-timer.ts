@@ -26,6 +26,7 @@ export class CountdownTimer {
   public Status: TimerStatus = TimerStatus.IDLE
   public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
   public OnTicked?: (type: TickingType, secsLeft: number) => Promise<void>
+  public OnStarted?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
@@ -48,6 +49,7 @@ export class CountdownTimer {
     this.clear()
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
     this.Status = TimerStatus.TICKING
+    this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STARTED', e))
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
     logger.info('Started')
   }
@@ -96,8 +98,7 @@ export class CountdownTimer {
     this.clear()
     this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.IDLE).catch(() => {})
     this.Status = TimerStatus.IDLE
-    this.OnStopped &&
-      this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOP-AND-RESET', e))
+    this.OnStopped && this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleEventError('STOPPED', e))
     this._remainingCountdownMilliSecs = 0
   }
 
