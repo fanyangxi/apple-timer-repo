@@ -27,14 +27,15 @@ export class TimerService {
   //
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
+  public OnRepetitionStarted?: () => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
   public OnWorkoutPhaseIsClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
   public OnRestPhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
+  public OnRepetitionCompleted?: () => Promise<void>
   public OnSetCompleted?: () => Promise<void>
 
-  private PREPARE_PHASE_CLOSING_SECS = 3
-  private WORKOUT_PHASE_CLOSING_SECS = 3
+  private CLOSING_SECS = 3
   private REST_PHASE_CLOSING_SECS = 3
 
   constructor(preset: Preset) {
@@ -60,7 +61,7 @@ export class TimerService {
             (await this.OnPreparePhaseStarted().catch(e => this.handleError('PREPARE-PHASE-STARTED', e)))
         }
         // IsClosing
-        const minClosingSecs = Math.min(this.PREPARE_PHASE_CLOSING_SECS, this._preset.PrepareSecs)
+        const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
         if (tickedPreset.setPrepareRemainingSecs === minClosingSecs) {
           this.OnPreparePhaseIsClosing &&
             (await this.OnPreparePhaseIsClosing(tickedPreset.setRepsRemainingCount).catch(e =>
@@ -76,7 +77,7 @@ export class TimerService {
             (await this.OnWorkoutPhaseStarted().catch(e => this.handleError('WORKOUT-PHASE-STARTED', e)))
         }
         // IsClosing
-        const minClosingSecs = Math.min(this.WORKOUT_PHASE_CLOSING_SECS, this._preset.WorkoutSecs)
+        const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
         if (tickedPreset.repWorkoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing &&
             (await this.OnWorkoutPhaseIsClosing().catch(e => this.handleError('WORKOUT-PHASE-IS-CLOSING', e)))
