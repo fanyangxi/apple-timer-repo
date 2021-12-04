@@ -46,9 +46,10 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   }
 
   const stopAndReset = () => {
-    theAnimValue.stopAnimation()
-    theAnimValue.setValue(stateOptionsRef.current.from)
-    currentValueRef.current = stateOptionsRef.current.from
+    theAnimValue.stopAnimation(() => {
+      theAnimValue.setValue(stateOptionsRef.current.from)
+      currentValueRef.current = stateOptionsRef.current.from
+    })
   }
 
   // start / pause / resume / stop|reset

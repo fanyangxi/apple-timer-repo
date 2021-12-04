@@ -63,10 +63,10 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             style={styles.card}
             onPress={() => onSelectionChanged && onSelectionChanged(preset)}
           >
-            <Text style={Fonts.textRegular}>Name: {preset.Name}</Text>
-            <Text style={Fonts.textRegular}>PrepareSecs: {preset.PrepareSecs}</Text>
-            <Text style={[Fonts.textRegular, FontColors.white]}>WorkoutSecs: {preset.WorkoutSecs}</Text>
-            <Text style={Fonts.textRegular}>RestSecs: {preset.RestSecs}</Text>
+            <Text style={Fonts.textRegular}>{preset.Name}</Text>
+            <Text style={[Fonts.textSmall, FontColors.white]}>Prepare: {preset.PrepareSecs}</Text>
+            <Text style={[Fonts.textSmall, FontColors.white]}>Workout: {preset.WorkoutSecs}</Text>
+            <Text style={[Fonts.textSmall, FontColors.white]}>Rest: {preset.RestSecs}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             key={`${preset.Name}-edit-container`}
