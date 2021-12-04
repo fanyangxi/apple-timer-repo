@@ -91,21 +91,18 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = ({
     radius: number,
     valuePercentage: number,
   ): [{ x: number; y: number }, { x: number; y: number }] => {
-    console.log(`>>> centerX:${centerX}, centerY:${centerY}, radius:${radius}, value-percentage:${valuePercentage}`)
     const safeValuePercentage = valuePercentage === 0 ? 0.0001 : valuePercentage
     const oc = 2 * radius * (1 - safeValuePercentage) - radius
-    console.log(`>>> oc:${oc}`)
     const cb = Math.sqrt(Math.pow(radius, 2) - Math.pow(oc, 2))
 
     const leftCoord = { x: centerX - cb, y: centerY - oc }
     const rightCoord = { x: centerX + cb, y: centerY - oc }
-    console.log(`>>> left:${JSON.stringify(leftCoord)}, right:${JSON.stringify(rightCoord)}`)
     return [leftCoord, rightCoord]
   }
 
   const width = trackRadius * 2 + trackStrokeWidth
   const centerCoord = { x: width / 2, y: width / 2 }
-  const valuePercentage = value / (2 * trackRadius)
+  const valuePercentage = (value - minValue) / (maxValue - minValue)
   const [startCoord, endTintCoord] = toCartesianCoords(centerCoord.x, centerCoord.y, trackRadius, valuePercentage)
 
   return (
