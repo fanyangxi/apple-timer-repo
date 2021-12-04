@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Preset, TickedPreset } from '@/models/preset'
 import { useAnimatedTimingValueEffect } from '@/common/use-animated-timing-value-effect'
 import { TimerPhase } from '@/models/timer-phase'
@@ -9,13 +9,12 @@ export type HomeScreenEffectOptions = {
 }
 
 export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
-  const stateOptions = useRef<HomeScreenEffectOptions>(options)
-  const { activePreset, ticked } = stateOptions.current
+  const stateOptionsRef = useRef<HomeScreenEffectOptions>(options)
 
   useEffect(() => {
-    if (JSON.stringify(stateOptions.current) !== JSON.stringify(options)) {
-      // console.log(`New animated-timing options received:${JSON.stringify(options)}`)
-      stateOptions.current = options
+    if (JSON.stringify(stateOptionsRef.current) !== JSON.stringify(options)) {
+      // console.log(`New options received:${JSON.stringify(options)}`)
+      stateOptionsRef.current = options
     }
   }, [options])
 
@@ -27,7 +26,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
-    durationMs: (activePreset?.PrepareSecs ?? 0) * 1000,
+    durationMs: (stateOptionsRef.current.activePreset?.PrepareSecs ?? 0) * 1000,
     onFinished: () => {
       startOrResume1()
     },
@@ -41,7 +40,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
-    durationMs: (activePreset?.WorkoutSecs ?? 0) * 1000,
+    durationMs: (stateOptionsRef.current.activePreset?.WorkoutSecs ?? 0) * 1000,
     onFinished: () => {
       startOrResume2()
     },
@@ -55,11 +54,13 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
-    durationMs: (activePreset?.RestSecs ?? 0) * 1000,
+    durationMs: (stateOptionsRef.current.activePreset?.RestSecs ?? 0) * 1000,
     onFinished: () => {},
   })
 
-  const startOrResume = () => {
+  const startOrResumeSet = () => {
+    const { ticked } = stateOptionsRef.current
+    console.log(`>>> StartOrResumeSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: startOrResume0,
       [`${TimerPhase.Workout}`]: startOrResume1,
@@ -70,6 +71,8 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   }
 
   const pause = () => {
+    const { ticked } = stateOptionsRef.current
+    console.log(`>>> PauseSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: pause0,
       [`${TimerPhase.Workout}`]: pause1,
@@ -79,13 +82,17 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const stopAndReset = () => {
+  const resetSet = () => {
+    const { ticked } = stateOptionsRef.current
+    console.log(`>>> ResetSet: ${ticked?.setCurrentPhase}`)
     stop0()
     stop1()
     stop2()
   }
 
-  const startRepetition = () => {
+  const startOrResumeRepetition = () => {
+    const { ticked } = stateOptionsRef.current
+    console.log(`>>> StartRepetition: ${ticked?.setCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Workout}`]: startOrResume1,
       [`${TimerPhase.Rest}`]: startOrResume2,
@@ -95,17 +102,19 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   }
 
   const resetRepetition = () => {
+    const { ticked } = stateOptionsRef.current
+    console.log(`>>> ResetRepetition: ${ticked?.setCurrentPhase}`)
     stop1()
     stop2()
   }
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
   return {
-    startOrResume: startOrResume,
-    pause: pause,
-    stopAndReset: stopAndReset,
-    startRepetition: startRepetition,
-    resetRepetition: resetRepetition,
+    startOrResumeSet,
+    resetSet,
+    startOrResumeRepetition,
+    resetRepetition,
+    pause,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,

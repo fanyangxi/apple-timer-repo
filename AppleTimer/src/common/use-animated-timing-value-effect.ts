@@ -9,21 +9,22 @@ export type AnimatedTimingValueEffectOptions = {
 }
 
 export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectOptions) => {
-  const stateOptions = useRef<AnimatedTimingValueEffectOptions>(options)
-  const [currentValue, setCurrentValue] = useState<number>(options.from)
+  const stateOptionsRef = useRef<AnimatedTimingValueEffectOptions>(options)
+  const currentValueRef = useRef<number>(options.from)
   const [theAnimValue] = useState(new Animated.Value(options.from))
 
   useEffect(() => {
-    if (JSON.stringify(stateOptions.current) !== JSON.stringify(options)) {
-      // console.log(`New animated-timing options received:${JSON.stringify(options)}`)
-      stateOptions.current = options
+    if (JSON.stringify(stateOptionsRef.current) !== JSON.stringify(options)) {
+      console.log(`New animated-timing options received:${JSON.stringify(options)}`)
+      stateOptionsRef.current = options
     }
   }, [options])
 
   const startOrResume = () => {
-    const { from, to, durationMs, onFinished } = stateOptions.current
-    const remainingPercentage = (to - currentValue) / (to - from)
-    console.log(`>>> start-or-resume: ${remainingPercentage}/${from}/${to}/${currentValue}; durationMs:${durationMs}`)
+    const { from, to, durationMs, onFinished } = stateOptionsRef.current
+    const remainingPercentage = (to - currentValueRef.current) / (to - from)
+    // eslint-disable-next-line max-len,prettier/prettier
+    console.log(`>>> IN:start-or-resume:${remainingPercentage}/${from}/${to}/${currentValueRef.current};durationMs:${durationMs}`)
     Animated.timing(theAnimValue, {
       toValue: to,
       duration: durationMs * remainingPercentage,
@@ -39,14 +40,15 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
 
   const pause = () => {
     theAnimValue.stopAnimation(value => {
-      setCurrentValue(value)
+      console.log(`>>> IN:pause:${value}`)
+      currentValueRef.current = value
     })
   }
 
   const stopAndReset = () => {
     theAnimValue.stopAnimation()
-    theAnimValue.setValue(stateOptions.current.from)
-    setCurrentValue(stateOptions.current.from)
+    theAnimValue.setValue(stateOptionsRef.current.from)
+    currentValueRef.current = stateOptionsRef.current.from
   }
 
   // start / pause / resume / stop|reset

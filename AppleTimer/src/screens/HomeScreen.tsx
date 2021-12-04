@@ -37,11 +37,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const {
-    startOrResume,
-    pause,
-    stopAndReset,
-    startRepetition,
+    startOrResumeSet,
+    resetSet,
+    startOrResumeRepetition,
     resetRepetition,
+    pause,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,
@@ -50,20 +50,21 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
     DataService.getActivePreset().then(cachedPreset => {
-      init(cachedPreset)
+      setActivePreset(cachedPreset)
     })
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
-    // eslint-disable-next-line
   }, [])
 
-  const init = (preset: Preset) => {
-    console.log('Active-preset:', preset)
-    setActivePreset(preset)
-    setTickedPreset(getRawTickedPreset(preset))
-    setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(preset))
-    timerServiceRef.current = initTimerServiceRef(preset)
-  }
+  useEffect(() => {
+    if (activePreset) {
+      console.log(`>>> active-preset: ${JSON.stringify(activePreset)}`)
+      setTickedPreset(getRawTickedPreset(activePreset))
+      setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
+      timerServiceRef.current = initTimerServiceRef(activePreset)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePreset])
 
   const initTimerServiceRef = (thePreset: Preset): TimerService => {
     const timerSvc = new TimerService(thePreset)
@@ -76,39 +77,43 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       currentRep: number,
       type: TickingType,
       secsLeft: number,
-      tickedPreset: TickedPreset,
+      ticked: TickedPreset,
     ) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
-      // await Sleep(5000)
-      setTickedPreset(tickedPreset)
+      setTickedPreset(ticked)
       setSecsLeftInCurrentWorkout(secsLeft)
     }
     //
     timerSvc.OnTimerStarted = async () => {}
     timerSvc.OnPaused = async () => {
+      pause()
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerSvc.OnResumed = async () => {
+      startOrResumeSet()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
-      stopAndReset()
+      resetSet()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
-      stopAndReset()
+      resetSet()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
-    timerSvc.OnSetStarted = async () => {}
+    timerSvc.OnSetStarted = async () => {
+      resetSet()
+      startOrResumeSet()
+    }
     timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
@@ -119,7 +124,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerSvc.OnRepetitionStarted = async () => {
       resetRepetition()
-      startRepetition()
+      startOrResumeRepetition()
     }
     timerSvc.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
@@ -136,25 +141,18 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onStartPressed = async () => {
-    startOrResume()
     await timerServiceRef.current?.runPreset()
   }
 
   const onPausedPressed = () => {
-    pause()
-    // workoutPhaseAnimValue.stopAnimation(value => {
-    //   console.log(`>>> stopAnimation:${value}`)
-    // })
     timerServiceRef.current?.pause()
   }
 
   const onResumePressed = async () => {
-    startOrResume()
     await timerServiceRef.current?.resume()
   }
 
   const onStopPressed = async () => {
-    stopAndReset()
     timerServiceRef.current?.stop()
     notificationServiceRef.current?.stopSounds()
   }
@@ -298,7 +296,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <PresetSelectionPopup
           onSelectionChanged={selectedPreset => {
             DataService.setActivePreset(selectedPreset.Id).then(() => {
-              init(selectedPreset)
+              setActivePreset(selectedPreset)
               modalizeRef.current?.close()
             })
           }}
