@@ -1,15 +1,36 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, Easing, StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { TickedPreset } from '@/models/preset'
+import CircularSlider from '@/screens/components/CircularSlider'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
 }
 
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPreset }) => {
+  const [phase1Value, setPhase1Value] = useState<number>(0)
+  const fadeAnim = useRef(new Animated.Value(0)).current
+  fadeAnim.addListener(({ value }) => {
+    setPhase1Value(value)
+  })
+
+  // phase1RawValue
+  // phase1AnimValue
+  // phase1AnimTiming
+  const phase1Animation = Animated.timing(fadeAnim, {
+    toValue: 100,
+    duration: 8000,
+    easing: Easing.linear,
+    useNativeDriver: true,
+  })
+
+  useEffect(() => {
+    phase1Animation.start()
+  }, [fadeAnim])
+
   return (
     <Neomorph
       inner={false} // <- enable shadow inside of neomorph
@@ -20,25 +41,116 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPres
         height: 245,
       }}
     >
+      {/* current phase info */}
+      {/*<Divider style={styles.contentDivider} />*/}
+      {/*<View style={styles.summaryContent}>*/}
+      {/*  <View style={styles.itemsContainer}>*/}
+      {/*    <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>*/}
+      {/*    <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>*/}
+      {/*    <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>*/}
+      {/*  </View>*/}
+      {/*  <View style={styles.itemsContainer}>*/}
+      {/*    <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+      {/*<View style={styles.detailsSection}>*/}
+      {/*  /!*<Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>*!/*/}
+      {/*  /!*<View style={styles.phase1} />*!/*/}
+      {/*  /!*<Svg height="100" width="100">*!/*/}
+      {/*  /!*  <Circle cx="50" cy="50" r={23} stroke="blue" strokeWidth="2.5" fill="red" />*!/*/}
+      {/*  /!*</Svg>*!/*/}
+      {/*  /!*<Svg width="100" height="100" viewBox="0 0 100 100" style={{ backgroundColor: '#3E3E3E' }}>*!/*/}
+      {/*  /!*  <Defs>*!/*/}
+      {/*  /!*    <ClipPath id="my-clip">*!/*/}
+      {/*  /!*      <Path d="M 50 8 A 1 1 0 0 1 50 92" />*!/*/}
+      {/*  /!*    </ClipPath>*!/*/}
+      {/*  /!*  </Defs>*!/*/}
+      {/*  /!*  <Path clipPath="url(#my-clip)" d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="skyblue" strokeWidth="55" />*!/*/}
+      {/*  /!*  <Path d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="red" strokeWidth="15" />*!/*/}
+      {/*  /!*</Svg>*!/*/}
+      {/*</View>*/}
       <View style={styles.detailsSection}>
-        {/* current phase info */}
-        {/*<Divider style={styles.contentDivider} />*/}
-        <View style={styles.summaryContent}>
-          <View style={styles.itemsContainer}>
-            <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>
-            <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>
-            <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>
-          </View>
-          <View style={styles.itemsContainer}>
-            <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>
-          </View>
-        </View>
+        <CircularSlider
+          value={phase1Value}
+          minValue={0}
+          maxValue={100}
+          minAngle={0}
+          maxAngle={179.9}
+          style={{ position: 'absolute' }}
+          thumbRadius={4}
+          trackRadius={90}
+          trackWidth={36}
+          trackColor={'#3C3C3C'}
+          trackTintColor={'lightgreen'}
+        />
+        <CircularSlider
+          value={5}
+          minValue={0}
+          maxValue={28}
+          minAngle={180}
+          maxAngle={359.9}
+          style={{ position: 'absolute' }}
+          thumbRadius={4}
+          trackRadius={90}
+          trackWidth={36}
+          trackColor={'#3C3C3C'}
+          trackTintColor={'red'}
+        />
       </View>
     </Neomorph>
   )
 }
 
 const styles = StyleSheet.create({
+  phase1: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 60,
+    borderTopColor: 'red',
+    borderLeftWidth: 60,
+    borderLeftColor: 'red',
+    borderRightColor: 'transparent',
+    borderRightWidth: 60,
+    borderBottomColor: 'red',
+    borderBottomWidth: 60,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    borderBottomRightRadius: 60,
+    borderBottomLeftRadius: 60,
+    transform: [{ rotate: '33deg' }],
+  },
+  phase2: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 60,
+    borderTopColor: 'red',
+    borderLeftColor: 'red',
+    borderLeftWidth: 60,
+    borderRightColor: 'transparent',
+    borderRightWidth: 60,
+    borderBottomColor: 'red',
+    borderBottomWidth: 60,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    borderBottomRightRadius: 60,
+    borderBottomLeftRadius: 60,
+  },
+  pacman: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 60,
+    borderTopColor: 'red',
+    borderLeftColor: 'red',
+    borderLeftWidth: 60,
+    borderRightColor: 'transparent',
+    borderRightWidth: 60,
+    borderBottomColor: 'red',
+    borderBottomWidth: 60,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    borderBottomRightRadius: 60,
+    borderBottomLeftRadius: 60,
+  },
   neomorphContainer: {
     // shadowColor: 'red',
     // shadowOffset: { width: 6, height: 6 },
@@ -63,7 +175,10 @@ const styles = StyleSheet.create({
   },
   // @details-section:
   detailsSection: {
+    flex: 1,
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: Spacings.s_16,
     paddingVertical: Spacings.s_16,
     borderRadius: 2,

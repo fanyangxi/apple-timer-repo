@@ -72,7 +72,7 @@ const CircularSlider: React.FC<CircularSliderProps> = ({
   const viewRef = React.useRef<View>(null)
   const valuePercentage = ((value - minValue) * 100) / (maxValue - minValue)
   const valueAngle = (valuePercentage / 100) * (maxAngle - minAngle) + minAngle
-  console.log(`>>> valuePercentage:${valuePercentage}, valueAngle:${valueAngle}`)
+  // console.log(`>>> valuePercentage:${valuePercentage}, valueAngle:${valueAngle}`)
 
   // const { current: panResponder } = React.useRef(
   //   PanResponder.create({
