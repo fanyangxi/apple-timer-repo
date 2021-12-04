@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
-import { DeviceScreen } from '@/common/device'
-import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
+import { FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { TickedPreset } from '@/models/preset'
 import CircularSlider from '@/screens/components/CircularSlider'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
@@ -56,8 +55,8 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
       swapShadows // <- change zIndex of each shadow color
       style={{
         ...styles.neomorphContainer,
-        width: DeviceScreen.width - Spacings.s_48,
-        height: 245,
+        width: 217,
+        height: 217,
       }}
     >
       <View style={styles.detailsSection}>
@@ -157,9 +156,9 @@ const styles = StyleSheet.create({
   neomorphContainer: {
     // shadowColor: 'red',
     // shadowOffset: { width: 6, height: 6 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.6,
     shadowRadius: 4,
-    borderRadius: RadiusSizes.r8,
+    borderRadius: 108,
     backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
     flexDirection: 'column',
     justifyContent: 'center',
