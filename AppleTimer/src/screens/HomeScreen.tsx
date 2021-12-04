@@ -111,8 +111,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)
-      setSecsLeftInCurrentWorkout(secsLeft)
       setTickedPreset(tickedPreset)
+      setSecsLeftInCurrentWorkout(secsLeft)
     }
     //
     timerSvc.OnTimerStarted = async () => {}
@@ -124,10 +124,15 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
-      // notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
+      stop1()
+      stop2()
+      setTickedPreset(getRawTickedPreset(thePreset))
+      setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
+      notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
       // notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
+    timerSvc.OnSetStarted = async () => {}
     timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
@@ -151,10 +156,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
-    }
-    timerSvc.OnSetCompleted = async () => {
-      console.log('$$$$$$$$$$$$$$--$$$$$$$$$$$$$$$$$$$$$$$$$$$$--$$$')
-      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
     return timerSvc
   }

@@ -26,6 +26,7 @@ export class TimerService {
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnTimerStopped?: (milliSecsLeft: number) => Promise<void> // Manually
   //
+  public OnSetStarted?: (setIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
   // The time that new-repetition started, also means the previous repetition competed.
@@ -34,7 +35,6 @@ export class TimerService {
   public OnWorkoutPhaseIsClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
   public OnRestPhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
-  public OnSetCompleted?: () => Promise<void>
 
   private CLOSING_SECS = 3
   private REST_PHASE_CLOSING_SECS = 3
@@ -48,16 +48,18 @@ export class TimerService {
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
       const ticked = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, type, secsLeft, ticked)
-      // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
-      const isSetCompleted = [
-        ticked.setRepsRemainingCount === 1,
-        ticked.setPrepareRemainingSecs === 0,
-        ticked.repWorkoutRemainingSecs === 0,
-      ].every(item => item)
+      // // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
+      // const isSetCompleted = [
+      //   ticked.setRepsRemainingCount === 1,
+      //   ticked.setPrepareRemainingSecs === 0,
+      //   ticked.repWorkoutRemainingSecs === 0,
+      // ].every(item => item)
 
       if (ticked.setCurrentPhase === TimerPhase.Prepare) {
         // Started
         if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
+          logger.info(`${this.TAG}: OnSetStarted: ${ticked.setsRemainingCount} left`)
+          this.OnSetStarted && this.OnSetStarted(ticked.setsRemainingCount).catch(this.handle)
           this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
         }
         // IsClosing
@@ -91,9 +93,7 @@ export class TimerService {
         if (ticked.repRestRemainingSecs === minClosingSecs) {
           // Since we're still in current Rep, so we do '-1' here.
           const setRepsLeft = ticked.setRepsRemainingCount - 1
-          isSetCompleted
-            ? this.OnSetCompleted && this.OnSetCompleted().catch(this.handle)
-            : this.OnRestPhaseIsClosing && this.OnRestPhaseIsClosing(setRepsLeft).catch(this.handle)
+          this.OnRestPhaseIsClosing && this.OnRestPhaseIsClosing(setRepsLeft).catch(this.handle)
         }
       }
     }
