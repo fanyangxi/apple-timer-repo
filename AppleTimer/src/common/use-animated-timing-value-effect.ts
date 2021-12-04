@@ -11,7 +11,7 @@ export type AnimatedTimingValueEffectOptions = {
 export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectOptions) => {
   const stateOptions = useRef<AnimatedTimingValueEffectOptions>(options)
   const [currentValue, setCurrentValue] = useState<number>(options.from)
-  const [workoutPhaseAnimValue] = useState(new Animated.Value(options.from))
+  const [theAnimValue] = useState(new Animated.Value(options.from))
 
   useEffect(() => {
     if (JSON.stringify(stateOptions.current) !== JSON.stringify(options)) {
@@ -23,8 +23,8 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   const startOrResume = () => {
     const { from, to, durationMs, onFinished } = stateOptions.current
     const remainingPercentage = (to - currentValue) / (to - from)
-    console.log(`>>> startOrResume: ${remainingPercentage}/${from}/${to}/${currentValue}; durationMs:${durationMs}`)
-    Animated.timing(workoutPhaseAnimValue, {
+    console.log(`>>> start-or-resume: ${remainingPercentage}/${from}/${to}/${currentValue}; durationMs:${durationMs}`)
+    Animated.timing(theAnimValue, {
       toValue: to,
       duration: durationMs * remainingPercentage,
       easing: Easing.linear,
@@ -38,14 +38,15 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   }
 
   const pause = () => {
-    workoutPhaseAnimValue.stopAnimation(value => {
+    theAnimValue.stopAnimation(value => {
       setCurrentValue(value)
     })
   }
 
   const stopAndReset = () => {
-    workoutPhaseAnimValue.stopAnimation()
-    workoutPhaseAnimValue.setValue(stateOptions.current.from)
+    theAnimValue.stopAnimation()
+    theAnimValue.setValue(stateOptions.current.from)
+    setCurrentValue(stateOptions.current.from)
   }
 
   // start / pause / resume / stop|reset
@@ -53,6 +54,6 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     startOrResume: startOrResume,
     pause: pause,
     stopAndReset: stopAndReset,
-    animValue: workoutPhaseAnimValue,
+    animValue: theAnimValue,
   }
 }
