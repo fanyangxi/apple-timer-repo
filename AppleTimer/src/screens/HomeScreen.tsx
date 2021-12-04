@@ -178,7 +178,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onStopPressed = async () => {
+    stop1()
+    stop2()
     timerServiceRef.current?.stop()
+    notificationServiceRef.current?.stopSounds()
   }
 
   return (
