@@ -39,11 +39,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const {
     startOrResume: startOrResume1,
     pause: pause1,
+    stop: stop1,
     animValue: animValue1,
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
-    durationMs: 5000,
+    durationMs: (activePreset?.WorkoutSecs ?? 0) * 1000,
     onFinished: () => {
       startOrResume2()
     },
@@ -52,11 +53,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const {
     startOrResume: startOrResume2,
     pause: pause2,
+    stop: stop2,
     animValue: animValue2,
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
-    durationMs: 2000,
+    durationMs: (activePreset?.RestSecs ?? 0) * 1000,
+    onFinished: () => {},
   })
 
   // const [workoutPhaseAnimValue] = useState(new Animated.Value(0))
@@ -122,7 +125,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerSvc.OnTimerStopped = async () => {
       // notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
-      notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
+      // notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
     timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
@@ -132,6 +135,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
+    }
+    timerSvc.OnRepetitionStarted = async (repetitionIndex: number) => {
+      stop1()
+      stop2()
+      startOrResume1()
     }
     timerSvc.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
@@ -145,6 +153,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       ])
     }
     timerSvc.OnSetCompleted = async () => {
+      console.log('$$$$$$$$$$$$$$--$$$$$$$$$$$$$$$$$$$$$$$$$$$$--$$$')
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
     return timerSvc

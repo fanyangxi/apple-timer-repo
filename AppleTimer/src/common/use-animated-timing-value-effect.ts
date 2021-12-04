@@ -1,5 +1,5 @@
 import { Animated, Easing } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export type AnimatedTimingValueEffectOptions = {
   from: number
@@ -9,9 +9,10 @@ export type AnimatedTimingValueEffectOptions = {
 }
 
 export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectOptions) => {
-  const { from, to, durationMs, onFinished } = options
-  const [currentValue, setCurrentValue] = useState<number>(from)
-  const [workoutPhaseAnimValue] = useState(new Animated.Value(from))
+  const stateOptions = useRef<AnimatedTimingValueEffectOptions>(options)
+  const [currentValue, setCurrentValue] = useState<number>(options.from)
+  const [workoutPhaseAnimValue] = useState(new Animated.Value(options.from))
+
   // let workoutPhaseAnimTiming = Animated.timing(workoutPhaseAnimValue, {
   //   toValue: 100,
   //   duration: 50000,
@@ -20,8 +21,18 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   //   useNativeDriver: false,
   // })
 
+  useEffect(() => {
+    // console.log(`**** options 333:${JSON.stringify(options)}`)
+    if (JSON.stringify(stateOptions.current) !== JSON.stringify(options)) {
+      console.log(`New animated-timing options received:${JSON.stringify(options)}`)
+      stateOptions.current = options
+    }
+  }, [options])
+
   const startOrResume = () => {
+    const { from, to, durationMs, onFinished } = stateOptions.current
     const remainingPercentage = (to - currentValue) / (to - from)
+    console.log(`>>> startOrResume: ${remainingPercentage}/${from}/${to}/${currentValue}; durationMs:${durationMs}`)
     Animated.timing(workoutPhaseAnimValue, {
       toValue: to,
       duration: durationMs * remainingPercentage,
@@ -32,7 +43,6 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
       if (result.finished) {
         onFinished && onFinished()
       }
-      console.log(`======================> LLLL: ${result.finished}`)
     })
   }
 
@@ -44,7 +54,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
 
   const stop = () => {
     workoutPhaseAnimValue.stopAnimation()
-    workoutPhaseAnimValue.setValue(from)
+    workoutPhaseAnimValue.setValue(stateOptions.current.from)
   }
 
   // start / pause / resume / stop|reset
