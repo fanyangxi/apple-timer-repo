@@ -12,24 +12,25 @@ export interface WorkoutDetailViewProps {
 
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPreset }) => {
   const [phase1Value, setPhase1Value] = useState<number>(0)
-  const fadeAnim = useRef(new Animated.Value(0)).current
-  fadeAnim.addListener(({ value }) => {
+  const phase1AnimValue = useRef(new Animated.Value(0)).current
+  phase1AnimValue.addListener(({ value }) => {
     setPhase1Value(value)
   })
 
   // phase1RawValue
   // phase1AnimValue
   // phase1AnimTiming
-  const phase1Animation = Animated.timing(fadeAnim, {
+  const phase1AnimTiming = Animated.timing(phase1AnimValue, {
     toValue: 100,
     duration: 8000,
     easing: Easing.linear,
-    useNativeDriver: true,
+    // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+    useNativeDriver: false,
   })
 
   useEffect(() => {
-    phase1Animation.start()
-  }, [fadeAnim])
+    phase1AnimTiming.start()
+  }, [phase1AnimValue])
 
   return (
     <Neomorph
