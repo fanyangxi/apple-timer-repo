@@ -128,8 +128,14 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       stop2()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
+      notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
+    }
+    timerSvc.OnTimerCompleted = async () => {
+      stop1()
+      stop2()
+      setTickedPreset(getRawTickedPreset(thePreset))
+      setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
-      // notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
     timerSvc.OnSetStarted = async () => {}

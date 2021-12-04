@@ -25,6 +25,7 @@ export class TimerService {
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnTimerStopped?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnTimerCompleted?: (milliSecsLeft: number) => Promise<void>
   //
   public OnSetStarted?: (setIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
@@ -99,7 +100,7 @@ export class TimerService {
     }
 
     this._countdownTimer.OnStarted = async (milliSecsLeft: number): Promise<void> => {
-      logger.info(`${this.TAG}: OnStarted: ${milliSecsLeft}ms left`)
+      logger.info(`${this.TAG}: OnTimerStarted: ${milliSecsLeft}ms left`)
       this.OnTimerStarted && this.OnTimerStarted(milliSecsLeft).catch(this.handle)
     }
     this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {
@@ -111,8 +112,12 @@ export class TimerService {
       this.OnResumed && this.OnResumed(milliSecsLeft).catch(this.handle)
     }
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
-      logger.info(`${this.TAG}: OnStopped: ${milliSecsLeft}ms left`)
+      logger.info(`${this.TAG}: OnTimerStopped: ${milliSecsLeft}ms left`)
       this.OnTimerStopped && this.OnTimerStopped(milliSecsLeft).catch(this.handle)
+    }
+    this._countdownTimer.OnCompleted = async (milliSecsLeft: number): Promise<void> => {
+      logger.info(`${this.TAG}: OnTimerCompleted: ${milliSecsLeft}ms left`)
+      this.OnTimerCompleted && this.OnTimerCompleted(milliSecsLeft).catch(this.handle)
     }
     this._countdownTimer.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus): Promise<void> => {
       logger.info(`${this.TAG}: Status changed: old:${oldStatus} -> new:${newStatus}`)
@@ -132,7 +137,7 @@ export class TimerService {
   }
 
   stop = () => {
-    this._countdownTimer?.stopAndReset()
+    this._countdownTimer?.stopAndReset(true)
   }
 
   // noinspection JSMethodCanBeStatic
