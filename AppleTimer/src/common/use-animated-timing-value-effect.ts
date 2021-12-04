@@ -52,7 +52,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     })
   }
 
-  const stop = () => {
+  const stopAndReset = () => {
     workoutPhaseAnimValue.stopAnimation()
     workoutPhaseAnimValue.setValue(stateOptions.current.from)
   }
@@ -61,7 +61,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   return {
     startOrResume: startOrResume,
     pause: pause,
-    stop: stop,
+    stopAndReset: stopAndReset,
     animValue: workoutPhaseAnimValue,
   }
 }

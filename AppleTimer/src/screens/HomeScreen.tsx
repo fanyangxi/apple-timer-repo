@@ -39,7 +39,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const {
     startOrResume: startOrResume0,
     pause: pause0,
-    stop: stop0,
+    stopAndReset: stop0,
     animValue: animValue0,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -53,7 +53,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const {
     startOrResume: startOrResume1,
     pause: pause1,
-    stop: stop1,
+    stopAndReset: stop1,
     animValue: animValue1,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -67,7 +67,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const {
     startOrResume: startOrResume2,
     pause: pause2,
-    stop: stop2,
+    stopAndReset: stop2,
     animValue: animValue2,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -257,7 +257,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               <View style={styles.summaryContent}>
                 <View style={styles.timeRemainingContainer}>
                   <Text style={styles.itemValue}>{`${format(toDTime(secsLeftInCurrentWorkout ?? 0))}`}</Text>
-                  <Text style={styles.itemLabel}>{`Time remaining (${secsLeftInCurrentWorkout})`}</Text>
+                  <Text style={styles.itemLabel}>{'Time remaining'}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
                   <Text style={styles.itemValue}>{format(toDTime(getTotalPresetDurationSecs(activePreset)))}</Text>
