@@ -116,8 +116,8 @@ export class CountdownTimer {
         this.triggerCallback(type, counter, beforeStartDelayMilliSecs)
 
         if (counter === 0) {
-          this.stopAndReset()
           this.triggerCallback(TickingType.Finished, counter)
+          this.stopAndReset()
           resolve()
           return
         }
@@ -125,8 +125,8 @@ export class CountdownTimer {
         this._timerId = setInterval(() => {
           counter--
           if (counter === 0) {
-            this.stopAndReset()
             this.triggerCallback(TickingType.Finished, counter)
+            this.stopAndReset()
             resolve()
           } else {
             this.triggerCallback(TickingType.Ticked, counter)
