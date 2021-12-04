@@ -18,12 +18,13 @@ export class TimerService {
 
   public Status: TimerStatus = TimerStatus.IDLE
   public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
-  public OnTimerStarted?: () => Promise<void>
   public OnTicked?: PresetTickedEventHandler
-  public OnTimerCompleted?: () => Promise<void>
+  //
+  public OnTimerStarted?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
-  public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
+  public OnTimerStopped?: (milliSecsLeft: number) => Promise<void> // Manually
+  //
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
@@ -100,6 +101,10 @@ export class TimerService {
         }
       }
     }
+    this._countdownTimer.OnStarted = async (milliSecsLeft: number): Promise<void> => {
+      logger.info(`OnStarted: ${milliSecsLeft}ms left`)
+      this.OnTimerStarted && (await this.OnTimerStarted(milliSecsLeft).catch(e => this.handleError('TIMER-STARTED', e)))
+    }
     this._countdownTimer.OnPaused = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnPaused: ${milliSecsLeft}ms left`)
       this.OnPaused && (await this.OnPaused(milliSecsLeft).catch(e => this.handleError('PAUSED', e)))
@@ -110,7 +115,7 @@ export class TimerService {
     }
     this._countdownTimer.OnStopped = async (milliSecsLeft: number): Promise<void> => {
       logger.info(`OnStopped: ${milliSecsLeft}ms left`)
-      this.OnStopped && (await this.OnStopped(milliSecsLeft).catch(e => this.handleError('STOPPED', e)))
+      this.OnTimerStopped && (await this.OnTimerStopped(milliSecsLeft).catch(e => this.handleError('TIMER-STOPPED', e)))
     }
     this._countdownTimer.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus): Promise<void> => {
       logger.info(`TimerService: Status changed: old:${oldStatus} -> new:${newStatus}`)
@@ -119,9 +124,7 @@ export class TimerService {
       this.Status = newStatus
     }
 
-    this.OnTimerStarted && (await this.OnTimerStarted().catch(e => this.handleError('TIMER-STARTED', e)))
     await this._countdownTimer.start()
-    this.OnTimerCompleted && (await this.OnTimerCompleted().catch(e => this.handleError('TIMER-COMPLETED', e)))
   }
 
   pause = () => {

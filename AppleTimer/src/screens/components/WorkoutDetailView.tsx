@@ -8,29 +8,40 @@ import CircularSlider from '@/screens/components/CircularSlider'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
+  workoutPhaseAnimValue?: Animated.Value
+  restPhaseAnimValue?: Animated.Value
 }
 
-export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPreset }) => {
-  const [phase1Value, setPhase1Value] = useState<number>(0)
-  const phase1AnimValue = useRef(new Animated.Value(0)).current
-  phase1AnimValue.addListener(({ value }) => {
-    setPhase1Value(value)
+export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
+  tickedPreset,
+  workoutPhaseAnimValue,
+  restPhaseAnimValue,
+}) => {
+  const [workoutPhaseRawValue, setWorkoutPhaseRawValue] = useState<number>(0)
+  // const phase1AnimValue = useRef(new Animated.Value(0)).current
+  workoutPhaseAnimValue?.addListener(({ value }) => {
+    setWorkoutPhaseRawValue(value)
   })
 
-  // phase1RawValue
-  // phase1AnimValue
-  // phase1AnimTiming
-  const phase1AnimTiming = Animated.timing(phase1AnimValue, {
-    toValue: 100,
-    duration: 8000,
-    easing: Easing.linear,
-    // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
-    useNativeDriver: false,
+  const [restPhaseRawValue, setRestPhaseRawValue] = useState<number>(0)
+  restPhaseAnimValue?.addListener(({ value }) => {
+    setRestPhaseRawValue(value)
   })
 
-  useEffect(() => {
-    phase1AnimTiming.start()
-  }, [phase1AnimValue])
+  // // phase1RawValue
+  // // phase1AnimValue
+  // // phase1AnimTiming
+  // const phase1AnimTiming = Animated.timing(phase1AnimValue, {
+  //   toValue: 100,
+  //   duration: 8000,
+  //   easing: Easing.linear,
+  //   // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+  //   useNativeDriver: false,
+  // })
+  //
+  // useEffect(() => {
+  //   phase1AnimTiming.start()
+  // }, [phase1AnimValue])
 
   return (
     <Neomorph
@@ -72,7 +83,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPres
       {/*</View>*/}
       <View style={styles.detailsSection}>
         <CircularSlider
-          value={phase1Value}
+          value={workoutPhaseRawValue}
           minValue={0}
           maxValue={100}
           minAngle={0}
@@ -85,9 +96,9 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ tickedPres
           trackTintColor={'lightgreen'}
         />
         <CircularSlider
-          value={5}
+          value={restPhaseRawValue}
           minValue={0}
-          maxValue={28}
+          maxValue={100}
           minAngle={180}
           maxAngle={359.9}
           style={{ position: 'absolute' }}

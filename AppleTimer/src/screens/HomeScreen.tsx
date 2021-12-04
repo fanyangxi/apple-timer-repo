@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Animated, Easing, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Preset, TickedPreset } from '@/models/preset'
@@ -23,6 +23,7 @@ import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-u
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
+import { useAnimatedTimingValueEffect } from '@/common/use-animated-timing-value-effect'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -34,6 +35,42 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
+
+  const {
+    startOrResume: startOrResume1,
+    pause: pause1,
+    animValue: animValue1,
+  } = useAnimatedTimingValueEffect({
+    from: 0,
+    to: 100,
+    durationMs: 5000,
+    onFinished: () => {
+      startOrResume2()
+    },
+  })
+
+  const {
+    startOrResume: startOrResume2,
+    pause: pause2,
+    animValue: animValue2,
+  } = useAnimatedTimingValueEffect({
+    from: 0,
+    to: 100,
+    durationMs: 2000,
+  })
+
+  // const [workoutPhaseAnimValue] = useState(new Animated.Value(0))
+  // let workoutPhaseAnimTiming = Animated.timing(workoutPhaseAnimValue, {
+  //   toValue: 100,
+  //   duration: 8000,
+  //   easing: Easing.linear,
+  //   // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+  //   useNativeDriver: false,
+  // })
+
+  // workoutPhaseAnimValue?.addListener(({ value }) => {
+  //   // console.log(`>>> value: ${value}`)
+  // })
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -56,7 +93,9 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const initTimerServiceRef = (thePreset: Preset): TimerService => {
     const timerSvc = new TimerService(thePreset)
     //
-    timerSvc.OnTimerStarted = async () => {}
+    timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
+      setTimerStatus(newStatus)
+    }
     timerSvc.OnTicked = async (
       currentSet: number,
       currentRep: number,
@@ -72,10 +111,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setSecsLeftInCurrentWorkout(secsLeft)
       setTickedPreset(tickedPreset)
     }
-    timerSvc.OnTimerCompleted = async () => {
-      notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
-    }
     //
+    timerSvc.OnTimerStarted = async () => {}
     timerSvc.OnPaused = async () => {
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
@@ -83,7 +120,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
-    timerSvc.OnStopped = async () => {
+    timerSvc.OnTimerStopped = async () => {
+      // notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     //
@@ -109,21 +147,24 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnSetCompleted = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.SetCompleted])
     }
-    timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
-      setTimerStatus(newStatus)
-    }
     return timerSvc
   }
 
   const onStartPressed = async () => {
+    startOrResume1()
     await timerServiceRef.current?.runPreset()
   }
 
   const onPausedPressed = () => {
+    pause1()
+    // workoutPhaseAnimValue.stopAnimation(value => {
+    //   console.log(`>>> stopAnimation:${value}`)
+    // })
     timerServiceRef.current?.pause()
   }
 
   const onResumePressed = async () => {
+    startOrResume1()
     await timerServiceRef.current?.resume()
   }
 
@@ -193,7 +234,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
         {/* @details-section: */}
         <View style={styles.row}>
-          <WorkoutDetailView tickedPreset={tickedPreset} />
+          <WorkoutDetailView
+            tickedPreset={tickedPreset}
+            workoutPhaseAnimValue={animValue1}
+            restPhaseAnimValue={animValue2}
+          />
         </View>
 
         <View style={styles.row}>
