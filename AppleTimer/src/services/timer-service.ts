@@ -46,50 +46,49 @@ export class TimerService {
   runPreset = async () => {
     this._countdownTimer = new CountdownTimer(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
-      const tickedPreset = getUpdatedPreset(this._preset, secsLeft)
-      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, tickedPreset)
+      const ticked = getUpdatedPreset(this._preset, secsLeft)
+      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, ticked)
       // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
       const isSetCompleted = [
-        tickedPreset.setRepsRemainingCount === 1,
-        tickedPreset.setPrepareRemainingSecs === 0,
-        tickedPreset.repWorkoutRemainingSecs === 0,
+        ticked.setRepsRemainingCount === 1,
+        ticked.setPrepareRemainingSecs === 0,
+        ticked.repWorkoutRemainingSecs === 0,
       ].every(item => item)
 
-      if (tickedPreset.setCurrentPhase === TimerPhase.Prepare) {
+      if (ticked.setCurrentPhase === TimerPhase.Prepare) {
         // Started
-        if (tickedPreset.setPrepareRemainingSecs === this._preset.PrepareSecs) {
+        if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
           this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
-        if (tickedPreset.setPrepareRemainingSecs === minClosingSecs) {
-          this.OnPreparePhaseIsClosing &&
-            this.OnPreparePhaseIsClosing(tickedPreset.setRepsRemainingCount).catch(this.handle)
+        if (ticked.setPrepareRemainingSecs === minClosingSecs) {
+          this.OnPreparePhaseIsClosing && this.OnPreparePhaseIsClosing(ticked.setRepsRemainingCount).catch(this.handle)
         }
       }
 
-      if (tickedPreset.setCurrentPhase === TimerPhase.Workout) {
+      if (ticked.setCurrentPhase === TimerPhase.Workout) {
         // Started
-        if (tickedPreset.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
+        if (ticked.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
           this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
-        if (tickedPreset.repWorkoutRemainingSecs === minClosingSecs) {
+        if (ticked.repWorkoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing && this.OnWorkoutPhaseIsClosing().catch(this.handle)
         }
       }
 
-      if (tickedPreset.setCurrentPhase === TimerPhase.Rest) {
+      if (ticked.setCurrentPhase === TimerPhase.Rest) {
         // Started
-        if (tickedPreset.repRestRemainingSecs === this._preset.RestSecs) {
+        if (ticked.repRestRemainingSecs === this._preset.RestSecs) {
           this.OnRestPhaseStarted && this.OnRestPhaseStarted().catch(this.handle)
         }
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
-        if (tickedPreset.repRestRemainingSecs === minClosingSecs) {
+        if (ticked.repRestRemainingSecs === minClosingSecs) {
           // Since we're still in current Rep, so we do '-1' here.
-          const setRepsLeft = tickedPreset.setRepsRemainingCount - 1
+          const setRepsLeft = ticked.setRepsRemainingCount - 1
           isSetCompleted
             ? this.OnSetCompleted && this.OnSetCompleted().catch(this.handle)
             : this.OnRestPhaseIsClosing && this.OnRestPhaseIsClosing(setRepsLeft).catch(this.handle)
@@ -139,6 +138,7 @@ export class TimerService {
     logger.info(`Event:${event} callback error: `, e)
   }
 
+  // noinspection JSMethodCanBeStatic
   private handle(e: Error) {
     logger.info('Callback error: ', e)
   }
