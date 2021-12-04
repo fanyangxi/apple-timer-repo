@@ -206,4 +206,50 @@ export class TickedPreset {
   </View>
 ```
 
+```
+// // phase1RawValue
+// // phase1AnimValue
+// // phase1AnimTiming
+// const phase1AnimTiming = Animated.timing(phase1AnimValue, {
+//   toValue: 100,
+//   duration: 8000,
+//   easing: Easing.linear,
+//   // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+//   useNativeDriver: false,
+// })
+//
+// useEffect(() => {
+//   phase1AnimTiming.start()
+// }, [phase1AnimValue])
+```
+
+```
+{/* current phase info */}
+{/*<Divider style={styles.contentDivider} />*/}
+{/*<View style={styles.summaryContent}>*/}
+{/*  <View style={styles.itemsContainer}>*/}
+{/*    <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>*/}
+{/*    <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>*/}
+{/*    <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>*/}
+{/*  </View>*/}
+{/*  <View style={styles.itemsContainer}>*/}
+{/*    <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>*/}
+{/*  </View>*/}
+{/*</View>*/}
+{/*<View style={styles.detailsSection}>*/}
+{/*  /!*<Svg height="100" width="100">*!/*/}
+{/*  /!*  <Circle cx="50" cy="50" r={23} stroke="blue" strokeWidth="2.5" fill="red" />*!/*/}
+{/*  /!*</Svg>*!/*/}
+{/*  /!*<Svg width="100" height="100" viewBox="0 0 100 100" style={{ backgroundColor: '#3E3E3E' }}>*!/*/}
+{/*  /!*  <Defs>*!/*/}
+{/*  /!*    <ClipPath id="my-clip">*!/*/}
+{/*  /!*      <Path d="M 50 8 A 1 1 0 0 1 50 92" />*!/*/}
+{/*  /!*    </ClipPath>*!/*/}
+{/*  /!*  </Defs>*!/*/}
+{/*  /!*  <Path clipPath="url(#my-clip)" d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="skyblue" strokeWidth="55" />*!/*/}
+{/*  /!*  <Path d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="red" strokeWidth="15" />*!/*/}
+{/*  /!*</Svg>*!/*/}
+{/*</View>*/}
+```
+
 +

@@ -138,6 +138,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
+      stop0()
       stop1()
       stop2()
       setTickedPreset(getRawTickedPreset(thePreset))
@@ -145,6 +146,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
+      stop0()
       stop1()
       stop2()
       setTickedPreset(getRawTickedPreset(thePreset))
@@ -199,6 +201,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   }
 
   const onStopPressed = async () => {
+    stop0()
     stop1()
     stop2()
     timerServiceRef.current?.stop()

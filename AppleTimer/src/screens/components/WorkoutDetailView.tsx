@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Animated, StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { TickedPreset } from '@/models/preset'
 import CircularSlider from '@/screens/components/CircularSlider'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
+import { format, toDTime } from '@/utils/date-util'
+import { TimerPhase } from '@/models/timer-phase'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
@@ -36,20 +38,17 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
     setRestPhaseRawValue(value)
   })
 
-  // // phase1RawValue
-  // // phase1AnimValue
-  // // phase1AnimTiming
-  // const phase1AnimTiming = Animated.timing(phase1AnimValue, {
-  //   toValue: 100,
-  //   duration: 8000,
-  //   easing: Easing.linear,
-  //   // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
-  //   useNativeDriver: false,
-  // })
-  //
-  // useEffect(() => {
-  //   phase1AnimTiming.start()
-  // }, [phase1AnimValue])
+  const getCurrentPhaseRemainingSecs = (ticked?: TickedPreset): number => {
+    if (!ticked) {
+      return 0
+    }
+    const theMap = {
+      [`${TimerPhase.Prepare}`]: ticked.setPrepareRemainingSecs,
+      [`${TimerPhase.Workout}`]: ticked.repWorkoutRemainingSecs,
+      [`${TimerPhase.Rest}`]: ticked.repRestRemainingSecs,
+    }
+    return theMap[`${ticked.setCurrentPhase}`] ?? 0
+  }
 
   return (
     <Neomorph
@@ -61,34 +60,6 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
         height: 245,
       }}
     >
-      {/* current phase info */}
-      {/*<Divider style={styles.contentDivider} />*/}
-      {/*<View style={styles.summaryContent}>*/}
-      {/*  <View style={styles.itemsContainer}>*/}
-      {/*    <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.setPrepareRemainingSecs}</Text>*/}
-      {/*    <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.repWorkoutRemainingSecs}</Text>*/}
-      {/*    <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>*/}
-      {/*  </View>*/}
-      {/*  <View style={styles.itemsContainer}>*/}
-      {/*    <Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
-      {/*<View style={styles.detailsSection}>*/}
-      {/*  /!*<Text style={styles.itemLabel}>setCurrentPhase: {tickedPreset?.setCurrentPhase}</Text>*!/*/}
-      {/*  /!*<View style={styles.phase1} />*!/*/}
-      {/*  /!*<Svg height="100" width="100">*!/*/}
-      {/*  /!*  <Circle cx="50" cy="50" r={23} stroke="blue" strokeWidth="2.5" fill="red" />*!/*/}
-      {/*  /!*</Svg>*!/*/}
-      {/*  /!*<Svg width="100" height="100" viewBox="0 0 100 100" style={{ backgroundColor: '#3E3E3E' }}>*!/*/}
-      {/*  /!*  <Defs>*!/*/}
-      {/*  /!*    <ClipPath id="my-clip">*!/*/}
-      {/*  /!*      <Path d="M 50 8 A 1 1 0 0 1 50 92" />*!/*/}
-      {/*  /!*    </ClipPath>*!/*/}
-      {/*  /!*  </Defs>*!/*/}
-      {/*  /!*  <Path clipPath="url(#my-clip)" d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="skyblue" strokeWidth="55" />*!/*/}
-      {/*  /!*  <Path d="M 50 8 A 1 1 0 0 1 50 92" fill="none" stroke="red" strokeWidth="15" />*!/*/}
-      {/*  /!*</Svg>*!/*/}
-      {/*</View>*/}
       <View style={styles.detailsSection}>
         <CircularSlider
           value={workoutPhaseRawValue}
@@ -122,6 +93,12 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
           value={preparePhaseRawValue}
           trackStrokeWidth={0}
         />
+        <View style={styles.hintContainer}>
+          <View style={styles.itemsContainer}>
+            <Text style={styles.time}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedPreset)))}</Text>
+            <Text style={styles.hint}>{tickedPreset?.setCurrentPhase}</Text>
+          </View>
+        </View>
       </View>
     </Neomorph>
   )
@@ -191,18 +168,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  itemLabel: {
+  hint: {
     ...Fonts.textSmall,
     ...FontColors.white,
   },
-  itemValue: {
+  time: {
     ...Fonts.textCaption30,
     ...FontColors.white,
   },
   // @details-section:
   detailsSection: {
     flex: 1,
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacings.s_16,
@@ -213,9 +189,12 @@ const styles = StyleSheet.create({
   contentDivider: {
     marginVertical: Spacings.s_16,
   },
+  hintContainer: {
+    // backgroundColor: '#343434', // '#202021',
+  },
   itemsContainer: {
-    flex: 1,
-    alignItems: 'flex-start',
+    // flex: 1,
+    alignItems: 'center',
     color: '#FFFFFF',
     ...Fonts.textLarge,
   },
