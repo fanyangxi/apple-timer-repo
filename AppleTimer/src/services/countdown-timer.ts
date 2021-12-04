@@ -48,8 +48,9 @@ export class CountdownTimer {
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
     this.clear()
-    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
+    const oldStatus = this.Status
     this.Status = TimerStatus.TICKING
+    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
     this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STARTED', e))
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
     logger.info('Started')
@@ -63,8 +64,9 @@ export class CountdownTimer {
     // 1.Get the paused time, right before the clear.
     const pausedAt = new Date().getTime()
     setTimeout(() => this.clear(), 0)
-    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.PAUSED).catch(() => {})
+    const oldStatus = this.Status
     this.Status = TimerStatus.PAUSED
+    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.PAUSED).catch(() => {})
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const before = this._remainingCountdownMilliSecs
     const timeLeft = before - (pausedAt - this._runStartedAt)
@@ -88,8 +90,9 @@ export class CountdownTimer {
     logger.info(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
-    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.TICKING).catch(() => {})
+    const oldStatus = this.Status
     this.Status = TimerStatus.TICKING
+    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleErr('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
     logger.info('Resumed')
@@ -97,8 +100,9 @@ export class CountdownTimer {
 
   stopAndReset(force: boolean = false) {
     this.clear()
-    this.OnStatusChanged && this.OnStatusChanged(this.Status, TimerStatus.IDLE).catch(() => {})
+    const oldStatus = this.Status
     this.Status = TimerStatus.IDLE
+    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.IDLE).catch(() => {})
     if (force) {
       this.OnStopped && this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STOPPED', e))
     } else {
