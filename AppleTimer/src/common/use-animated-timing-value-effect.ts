@@ -13,18 +13,9 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   const [currentValue, setCurrentValue] = useState<number>(options.from)
   const [workoutPhaseAnimValue] = useState(new Animated.Value(options.from))
 
-  // let workoutPhaseAnimTiming = Animated.timing(workoutPhaseAnimValue, {
-  //   toValue: 100,
-  //   duration: 50000,
-  //   easing: Easing.linear,
-  //   // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
-  //   useNativeDriver: false,
-  // })
-
   useEffect(() => {
-    // console.log(`**** options 333:${JSON.stringify(options)}`)
     if (JSON.stringify(stateOptions.current) !== JSON.stringify(options)) {
-      console.log(`New animated-timing options received:${JSON.stringify(options)}`)
+      // console.log(`New animated-timing options received:${JSON.stringify(options)}`)
       stateOptions.current = options
     }
   }, [options])
