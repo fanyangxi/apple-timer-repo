@@ -5,6 +5,7 @@ import { DeviceScreen } from '@/common/device'
 import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { TickedPreset } from '@/models/preset'
 import CircularSlider from '@/screens/components/CircularSlider'
+import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
@@ -108,6 +109,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
           trackColor={'#3C3C3C'}
           trackTintColor={'red'}
         />
+        <CircleVerticalSlider style={{ position: 'absolute' }} trackRadius={71} value={0} trackStrokeWidth={0} />
       </View>
     </Neomorph>
   )

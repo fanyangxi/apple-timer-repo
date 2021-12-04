@@ -17,10 +17,14 @@ export type CircleVerticalSliderProps = {
   maxValue?: number
   // /** onChange Handler */
   // onChange?: (angle: number) => any
-  /** Color for Track  */
-  trackColor?: string
   /** Color for Track Tint  */
   trackTintColor?: string
+  /** Color for Track Tint Stroke */
+  trackTintStrokeColor?: string
+  /** Color for Track  */
+  trackColor?: string
+  /** Color for Track Stroke  */
+  trackStrokeColor?: string
   // /** Color for Thumb  */
   // thumbColor?: string
   // /** Color for Text on Thumb  */
@@ -56,12 +60,14 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = ({
   // trackRadius = 50,
   // trackWidth = 5,
   trackRadius = 50,
-  trackStrokeWidth = 5,
+  trackStrokeWidth = 0,
   value = 10,
   minValue = 0,
   maxValue = 100,
-  trackColor = '#2089dc',
   trackTintColor = '#3C3C3C',
+  trackTintStrokeColor = '#3C3C3C',
+  trackColor = '#E5D996',
+  trackStrokeColor = '#E5D996',
   // minAngle = 179.9,
   // maxAngle = 359.9, // 359.9, 179.9
   // onChange,
@@ -115,19 +121,19 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = ({
         })
       }}
     >
-      <Svg width={width} height={width} ref={viewRef} style={{ backgroundColor: 'azure' }}>
+      <Svg width={width} height={width} ref={viewRef}>
         <Circle
           cx={centerCoord.x}
           cy={centerCoord.y}
           r={trackRadius}
           fill={trackTintColor}
-          stroke={trackTintColor}
-          strokeWidth="5"
+          stroke={trackTintStrokeColor}
+          strokeWidth={trackStrokeWidth}
         />
         <Path
           fill={trackColor}
-          stroke={'red'}
-          strokeWidth={5}
+          stroke={trackStrokeColor}
+          strokeWidth={trackStrokeWidth}
           d={[
             'M',
             startCoord.x,
