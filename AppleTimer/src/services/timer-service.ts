@@ -13,7 +13,7 @@ export type PresetTickedEventHandler = (
 ) => void
 
 export class TimerService {
-  private readonly TAG = '[TimerService]'
+  private readonly TAG = '[TIMER-SERVICE]'
   private readonly _preset: Preset
   private _countdownTimer?: CountdownTimer
 
@@ -28,12 +28,12 @@ export class TimerService {
   //
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
-  public OnRepetitionStarted?: () => Promise<void>
+  // The time that new-repetition started, also means the previous repetition competed.
+  public OnRepetitionStarted?: (repetitionIndex: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
   public OnWorkoutPhaseIsClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
   public OnRestPhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
-  public OnRepetitionCompleted?: () => Promise<void>
   public OnSetCompleted?: () => Promise<void>
 
   private CLOSING_SECS = 3
@@ -70,6 +70,8 @@ export class TimerService {
       if (ticked.setCurrentPhase === TimerPhase.Workout) {
         // Started
         if (ticked.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
+          logger.info(`${this.TAG}: OnRepetitionStarted: ${ticked.setRepsRemainingCount} left`)
+          this.OnRepetitionStarted && this.OnRepetitionStarted(ticked.setRepsRemainingCount).catch(this.handle)
           this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
         }
         // IsClosing
