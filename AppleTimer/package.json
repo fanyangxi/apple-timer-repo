@@ -24,6 +24,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
+    "queue-microtask": "^1.2.3",
     "react": "17.0.1",
     "react-i18next": "^11.8.10",
     "react-native": "0.64.0",
