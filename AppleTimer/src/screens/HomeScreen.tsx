@@ -21,9 +21,10 @@ import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
 import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
-import { format, toDTime } from '@/utils/date-util'
+import { format, FULL_TIMESTAMP, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
 import { useHomeScreenEffect } from '@/common/use-home-screen-effect'
+import moment from 'moment'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -37,11 +38,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const {
-    startOrResumeSet,
-    resetSet,
-    startOrResumeRepetition,
-    resetRepetition,
-    pause,
+    startOrResumeSetAnim,
+    resetSetAnim,
+    pauseAnim,
+    startOrResumeRepetitionAnim,
+    resetRepetitionAnim,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,
@@ -79,40 +80,40 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       secsLeft: number,
       ticked: TickedPreset,
     ) => {
-      // logger.info(
-      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-      //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
-      // )
+      logger.info(
+        `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
+          `${ticked.setCurrentPhase},${type},${JSON.stringify(ticked)}`,
+      )
       setTickedPreset(ticked)
       setSecsLeftInCurrentWorkout(secsLeft)
     }
     //
     timerSvc.OnTimerStarted = async () => {}
     timerSvc.OnPaused = async () => {
-      pause()
+      pauseAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerSvc.OnResumed = async () => {
-      startOrResumeSet()
+      startOrResumeSetAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
-      resetSet()
+      resetSetAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
-      resetSet()
+      resetSetAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
     timerSvc.OnSetStarted = async () => {
-      resetSet()
-      startOrResumeSet()
+      resetSetAnim()
+      startOrResumeSetAnim()
     }
     timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
@@ -123,8 +124,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       ])
     }
     timerSvc.OnRepetitionStarted = async () => {
-      resetRepetition()
-      startOrResumeRepetition()
+      resetRepetitionAnim()
+      startOrResumeRepetitionAnim()
     }
     timerSvc.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])

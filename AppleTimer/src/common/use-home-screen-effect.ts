@@ -58,7 +58,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     onFinished: () => {},
   })
 
-  const startOrResumeSet = () => {
+  const startOrResumeSetAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> StartOrResumeSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
@@ -70,7 +70,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const pause = () => {
+  const pauseAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> PauseSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
@@ -82,7 +82,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const resetSet = () => {
+  const resetSetAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetSet: ${ticked?.setCurrentPhase}`)
     stopAnim0()
@@ -90,7 +90,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     stopAnim2()
   }
 
-  const startOrResumeRepetition = () => {
+  const startOrResumeRepetitionAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> StartRepetition: ${ticked?.setCurrentPhase}`)
     const theMap = {
@@ -101,7 +101,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const resetRepetition = () => {
+  const resetRepetitionAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetRepetition: ${ticked?.setCurrentPhase}`)
     stopAnim1()
@@ -110,11 +110,11 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
   return {
-    startOrResumeSet,
-    resetSet,
-    startOrResumeRepetition,
-    resetRepetition,
-    pause,
+    startOrResumeSetAnim,
+    resetSetAnim,
+    pauseAnim,
+    startOrResumeRepetitionAnim,
+    resetRepetitionAnim,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,

@@ -64,6 +64,7 @@ export class CountdownTimer {
     // 1.Get the paused time, right before the clear.
     const pausedAt = new Date().getTime()
     setTimeout(() => this.clear(), 0)
+    //
     const oldStatus = this.Status
     this.Status = TimerStatus.PAUSED
     this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.PAUSED).catch(() => {})
