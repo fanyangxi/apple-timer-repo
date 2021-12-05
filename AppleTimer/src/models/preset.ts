@@ -40,10 +40,11 @@ export class Preset {
 
 export interface TickedPreset {
   // In Preset:
-  setsRemainingCount: number
+  cyclesRemainingCount: number
   // In Current-Set:
   setRepsRemainingCount: number
   setCurrentPhase?: TimerPhase
+  //
   setPrepareRemainingSecs: number
   // In Current-Rep:
   repWorkoutRemainingSecs: number

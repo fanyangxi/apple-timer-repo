@@ -58,8 +58,8 @@ export class TimerService {
       if (ticked.setCurrentPhase === TimerPhase.Prepare) {
         // Started
         if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
-          logger.info(`${this.TAG}: OnSetStarted: ${ticked.setsRemainingCount} left`)
-          this.OnSetStarted && this.OnSetStarted(ticked.setsRemainingCount).catch(this.handle)
+          logger.info(`${this.TAG}: OnSetStarted: ${ticked.cyclesRemainingCount} left`)
+          this.OnSetStarted && this.OnSetStarted(ticked.cyclesRemainingCount).catch(this.handle)
           this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
         }
         // IsClosing

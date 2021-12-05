@@ -233,7 +233,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             <View style={styles.summarySection}>
               <View style={styles.summaryContent}>
                 <View style={styles.timeRemainingContainer}>
-                  <Text style={styles.itemValue}>{tickedPreset?.setsRemainingCount}</Text>
+                  <Text style={styles.itemValue}>{tickedPreset?.cyclesRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Sets left'}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>

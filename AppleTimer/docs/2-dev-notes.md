@@ -100,14 +100,14 @@ export class TickedPreset {
   public RepRestRemainingSecs: number
 
   constructor(
-    setsRemainingCount: number,
+    cyclesRemainingCount: number,
     setRepsRemainingCount: number,
     setCurrentPhase: TimerPhase | undefined,
     setPrepareRemainingSecs: number,
     repWorkoutRemainingSecs: number,
     repRestRemainingSecs: number,
   ) {
-    this.SetsRemainingCount = setsRemainingCount
+    this.SetsRemainingCount = cyclesRemainingCount
     this.SetRepsRemainingCount = setRepsRemainingCount
     this.SetCurrentPhase = setCurrentPhase
     this.SetPrepareRemainingSecs = setPrepareRemainingSecs
