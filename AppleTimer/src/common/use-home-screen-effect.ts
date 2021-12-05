@@ -29,7 +29,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     durationMs: (stateOptionsRef.current.activePreset?.PrepareSecs ?? 0) * 1000,
     onFinished: () => {
       // This animation doesn't need to be triggered by `startOrResumeAnim0`. It can be triggered by
-      // the `OnRepetitionStarted` event.
+      // the `OnSetStarted` event.
       // startOrResumeAnim1()
     },
   })
@@ -92,9 +92,9 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     stopAndResetAnim2()
   }
 
-  const startOrResumeRepetitionAnim = () => {
+  const startOrResumeSetAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> startOrResumeRepetitionAnim: ${ticked?.cycleCurrentPhase}`)
+    console.log(`>>> startOrResumeSetAnim: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Workout}`]: startOrResumeAnim1,
       [`${TimerPhase.Rest}`]: startOrResumeAnim2,
@@ -103,9 +103,9 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const resetRepetitionAnim = () => {
+  const resetSetAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> resetRepetitionAnim: ${ticked?.cycleCurrentPhase}`)
+    console.log(`>>> resetSetAnim: ${ticked?.cycleCurrentPhase}`)
     stopAndResetAnim1()
     stopAndResetAnim2()
   }
@@ -115,8 +115,8 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     startOrResumeCycleAnim,
     resetCycleAnim,
     pauseAnim,
-    startOrResumeRepetitionAnim,
-    resetRepetitionAnim,
+    startOrResumeSetAnim,
+    resetSetAnim,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,

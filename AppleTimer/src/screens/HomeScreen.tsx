@@ -39,8 +39,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     startOrResumeCycleAnim,
     resetCycleAnim,
     pauseAnim,
-    startOrResumeRepetitionAnim,
-    resetRepetitionAnim,
+    startOrResumeSetAnim,
+    resetSetAnim,
     animValue0: animValue0,
     animValue1: animValue1,
     animValue2: animValue2,
@@ -116,8 +116,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       ])
     }
     timerSvc.OnRepetitionStarted = async () => {
-      resetRepetitionAnim()
-      startOrResumeRepetitionAnim()
+      resetSetAnim()
+      startOrResumeSetAnim()
     }
     timerSvc.OnWorkoutPhaseClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
