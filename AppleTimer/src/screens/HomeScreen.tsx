@@ -3,7 +3,7 @@ import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Preset, TickedPreset } from '@/models/preset'
-import { TickingType, TimerStatus } from '@/services/countdown-timer'
+import { TimerStatus } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
@@ -71,13 +71,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
       setTimerStatus(newStatus)
     }
-    timerSvc.OnTicked = async (
-      currentSet: number,
-      currentRep: number,
-      type: TickingType,
-      secsLeft: number,
-      ticked: TickedPreset,
-    ) => {
+    timerSvc.OnTicked = async (currentSet: number, currentRep: number, secsLeft: number, ticked: TickedPreset) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${ticked.setCurrentPhase},${type},${JSON.stringify(ticked)}`,

@@ -1,13 +1,13 @@
 import { logger } from '@/utils/logger'
 import { PositiveOr0 } from '@/utils/common-util'
-import queueMicrotask from 'queue-microtask'
+// import queueMicrotask from 'queue-microtask'
 
-export enum TickingType {
-  Started = 'Started',
-  Resumed = 'Resumed',
-  Ticked = 'Ticked',
-  Finished = 'Finished',
-}
+// export enum TickingType {
+//   Started = 'Started',
+//   Resumed = 'Resumed',
+//   Ticked = 'Ticked',
+//   Finished = 'Finished',
+// }
 
 // Actions: Start, Pause + Resume, StopAndReset
 // Statuses: IDLE, PAUSED, TICKING
@@ -27,7 +27,7 @@ export class CountdownTimer {
 
   public Status: TimerStatus = TimerStatus.IDLE
   public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
-  public OnTicked?: (type: TickingType, secsLeft: number) => Promise<void>
+  public OnTicked?: (secsLeft: number) => Promise<void>
   public OnStarted?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
@@ -51,7 +51,7 @@ export class CountdownTimer {
     this.clear()
     this.changeStatusTo(TimerStatus.TICKING)
     this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STARTED', e))
-    await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
+    await this.runSlices(this._initialCountdownSecs, 0)
   }
 
   pause() {
@@ -96,7 +96,7 @@ export class CountdownTimer {
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     this.changeStatusTo(TimerStatus.TICKING)
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleErr('RESUME', e))
-    await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
+    await this.runSlices(countdownSecs, beforeStartDelayMilliSecs)
   }
 
   stopAndReset(force: boolean = false) {
@@ -123,40 +123,49 @@ export class CountdownTimer {
     this.OnStatusChanged && this.OnStatusChanged(oldStatus, newStatus).catch(() => {})
   }
 
-  private async runSlices(type: TickingType, countdownSecs: number, beforeStartDelayMilliSecs?: number): Promise<void> {
+  private async runSlices(countdownSecs: number, delayMilliSecs?: number): Promise<void> {
     return new Promise(resolve => {
-      const extracted = () => {
-        let counter = countdownSecs
-        this.triggerCallback(type, counter, beforeStartDelayMilliSecs)
-
-        if (counter === 0) {
-          this.triggerCallback(TickingType.Finished, counter)
+      this.runIntervalTimer(countdownSecs, delayMilliSecs || 0, async (tickedIndex: number, hint: string) => {
+        // logger.info(`>>> ${tickedIndex}:${hint}`)
+        this.triggerCallback(tickedIndex, delayMilliSecs, hint)
+        if (tickedIndex === 0) {
           this.stopAndReset()
           resolve()
-          return
         }
-
-        this._timerId = setInterval(() => {
-          counter--
-          if (counter === 0) {
-            this.triggerCallback(TickingType.Finished, counter)
-            this.stopAndReset()
-            resolve()
-          } else {
-            this.triggerCallback(TickingType.Ticked, counter)
-          }
-        }, this.INTERVAL)
-      }
-
-      this._delayTimerId = setTimeout(() => extracted.call(this), beforeStartDelayMilliSecs || 0)
-      this._runStartedAt = new Date().getTime()
+      })
     })
   }
 
-  private triggerCallback(type: TickingType, secsLeft: number, beforeStartDelayMilliSecs?: number) {
+  private runIntervalTimer(
+    countdownSecs: number,
+    delayMs: number,
+    onTicked: (index: number, hint: string) => Promise<void>,
+  ): void {
+    let counter: number = countdownSecs
+    const trigger = (hint: string) => {
+      onTicked(counter, hint).catch(() => {})
+      if (counter <= 0) {
+        this.clear()
+        return
+      }
+      counter--
+    }
+
+    this._delayTimerId = setTimeout(() => {
+      trigger('ticked-after-delay')
+      if (counter > 0) {
+        this._timerId = setInterval(() => {
+          trigger('ticket-at-interval')
+        }, this.INTERVAL)
+      }
+    }, delayMs)
+    this._runStartedAt = new Date().getTime()
+  }
+
+  private triggerCallback(secsLeft: number, beforeStartDelayMilliSecs?: number, hint?: string) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
-    this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleErr('TICK', e))
-    logger.info(`[(${secsLeft} secs)] Trigger-callback-at (${type}), delay:${beforeStartDelayMilliSecs}`)
+    this.OnTicked && this.OnTicked(secsLeft).catch(e => this.handleErr('TICK', e))
+    logger.info(`[(${secsLeft} secs)] Trigger-callback-at, delay:${beforeStartDelayMilliSecs}, [${hint}]`)
   }
 
   // noinspection JSMethodCanBeStatic

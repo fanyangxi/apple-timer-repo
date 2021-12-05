@@ -1,10 +1,9 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useEffect, useRef } from 'react'
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/assets/icons/DarkAnd'
 import { Preset, TickedPreset } from '@/models/preset'
-import { TickingType } from '@/services/countdown-timer'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
@@ -13,14 +12,13 @@ import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import { logger } from '@/utils/logger'
 
 export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
-  const [isRunning, setIsRunning] = useState<boolean>()
   const isStartedRef = useRef<boolean>(false)
   const isPausedRef = useRef<boolean>(false)
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset('', '', 1, 1, 1, 1, 1)
+  const preset: Preset = new Preset('', '', 1, 2, 1, 1, 1)
   let _timerId: NodeJS.Timeout
   let _executionCount: number = 0
 
@@ -31,13 +29,11 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current = new TimerService(preset)
     //
     timerServiceRef.current.OnTimerStarted = async () => {
-      setIsRunning(true)
       console.log(`OnTimerStarted, execution-count: ${_executionCount}`)
     }
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
       currentRep: number,
-      type: TickingType,
       secsLeft: number,
       tickedPreset: TickedPreset,
     ) => {
@@ -48,9 +44,8 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       // await Sleep(5000)
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
-      setIsRunning(false)
       clearInterval(_timerId)
-      console.log(`OnTimerCompleted, execution-count: ${_executionCount}`)
+      console.log(`OnTimerCompleted, execution-count XXX: ${_executionCount}`)
     }
     // eslint-disable-next-line
   }, [])
@@ -59,6 +54,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     logger.info('start-auto-testing')
     _executionCount = 0
     // Start it first:
+    logger.info(`start-auto-testing: started-at: ${Date.now()}`)
     timerServiceRef.current && timerServiceRef.current.runPreset().then(() => {})
     // Repeating pause & resume at 18ms interval for many times.
     let flag = false
@@ -71,7 +67,8 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
         timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
       }
       flag = !flag
-    }, 18) // Minimum acceptable Resume->Pause interval is 20ms.
+    }, 500) // Minimum acceptable Resume->Pause interval is 20ms.
+    logger.info(`start-auto-testing: interval-run-at: ${Date.now()}`)
   }
 
   const startManualTesting = () => {
@@ -98,7 +95,47 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     isStartedRef.current = false
     isPausedRef.current = false
     _executionCount = 0
+
+    // extracted(4, 29, async (tickedIndex: number, hint: string) => {
+    //   logger.info(`>>> ${tickedIndex}:${hint}`)
+    // })
+    // setTimeout(() => {
+    //   clearInterval(_delayTimerId)
+    //   clearInterval(_intervalTimerId)
+    //   extracted(0, 30, async (tickedIndex: number, hint: string) => {
+    //     logger.info(`>>> ${tickedIndex}:${hint}`)
+    //   })
+    // }, 10)
   }
+
+  // let _delayTimerId: NodeJS.Timeout
+  // let _intervalTimerId: NodeJS.Timeout
+  //function extracted(countdownSecs: number, delay: number, onTicked: (index: number, hint: string) => Promise<void>) {
+  //   let counter: number = countdownSecs
+  //   const trigger = (hint: string) => {
+  //     // console.log('&&&&&&&&&&&&&&&&&& setInterval')
+  //     onTicked(counter, hint).catch(() => {})
+  //     if (counter <= 0) {
+  //       clearInterval(_delayTimerId)
+  //       clearInterval(_intervalTimerId)
+  //       return
+  //     }
+  //     counter--
+  //   }
+  //
+  //   // const _startedAt = new Date().getTime()
+  //   // logger.info('==== 1')
+  //   _delayTimerId = setTimeout(() => {
+  //     // const _endedAt = new Date().getTime()
+  //     // logger.info(`==== 2: ${_endedAt - _startedAt}`)
+  //     trigger('ticked-after-delay')
+  //     if (counter > 0) {
+  //       _intervalTimerId = setInterval(() => {
+  //         trigger('ticket-at-interval')
+  //       }, 1000)
+  //     }
+  //   }, delay)
+  // }
 
   return (
     <ScreenContainer

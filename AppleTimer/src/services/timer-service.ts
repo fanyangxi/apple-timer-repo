@@ -1,5 +1,5 @@
 import { Preset, TickedPreset } from '@/models/preset'
-import { CountdownTimer, TickingType, TimerStatus } from '@/services/countdown-timer'
+import { CountdownTimer, TimerStatus } from '@/services/countdown-timer'
 import { getTotalPresetDurationSecs, getUpdatedPreset } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
 import { logger } from '@/utils/logger'
@@ -7,7 +7,6 @@ import { logger } from '@/utils/logger'
 export type PresetTickedEventHandler = (
   currentSet: number,
   currentRep: number,
-  type: TickingType,
   secsLeft: number,
   tickedPreset: TickedPreset,
 ) => void
@@ -46,9 +45,9 @@ export class TimerService {
 
   runPreset = async () => {
     this._countdownTimer = new CountdownTimer(getTotalPresetDurationSecs(this._preset))
-    this._countdownTimer.OnTicked = async (type: TickingType, secsLeft: number): Promise<void> => {
+    this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
       const ticked = getUpdatedPreset(this._preset, secsLeft)
-      this.OnTicked && this.OnTicked(0, 0, type, secsLeft, ticked)
+      this.OnTicked && this.OnTicked(0, 0, secsLeft, ticked)
       // // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
       // const isSetCompleted = [
       //   ticked.setRepsRemainingCount === 1,
