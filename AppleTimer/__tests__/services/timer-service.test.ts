@@ -14,7 +14,7 @@ describe('timer-service', () => {
       secsLeft: number,
       tickedPreset: TickedPreset,
     ) => {
-      console.log(`${tickedPreset.setCurrentPhase},${type},${secsLeft},${tickedPreset}`)
+      console.log(`${tickedPreset.cycleCurrentPhase},${type},${secsLeft},${tickedPreset}`)
     }
     timerService.runPreset()
   })

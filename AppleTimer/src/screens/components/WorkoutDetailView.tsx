@@ -46,7 +46,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
       [`${TimerPhase.Workout}`]: ticked.repWorkoutRemainingSecs,
       [`${TimerPhase.Rest}`]: ticked.repRestRemainingSecs,
     }
-    return theMap[`${ticked.setCurrentPhase}`] ?? 0
+    return theMap[`${ticked.cycleCurrentPhase}`] ?? 0
   }
 
   return (
@@ -95,7 +95,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
         <View style={styles.hintContainer}>
           <View style={styles.itemsContainer}>
             <Text style={styles.time}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedPreset)))}</Text>
-            <Text style={styles.hint}>{tickedPreset?.setCurrentPhase}</Text>
+            <Text style={styles.hint}>{tickedPreset?.cycleCurrentPhase}</Text>
           </View>
         </View>
       </View>

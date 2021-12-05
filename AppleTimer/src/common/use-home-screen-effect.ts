@@ -62,31 +62,31 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   const startOrResumeSetAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> StartOrResumeSet: ${ticked?.setCurrentPhase}`)
+    console.log(`>>> StartOrResumeSet: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: startOrResumeAnim0,
       [`${TimerPhase.Workout}`]: startOrResumeAnim1,
       [`${TimerPhase.Rest}`]: startOrResumeAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResumeAnim0
+    const resultFunc = theMap[`${ticked?.cycleCurrentPhase}`] ?? startOrResumeAnim0
     return resultFunc()
   }
 
   const pauseAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> PauseSet: ${ticked?.setCurrentPhase}`)
+    console.log(`>>> PauseSet: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: pauseAnim0,
       [`${TimerPhase.Workout}`]: pauseAnim1,
       [`${TimerPhase.Rest}`]: pauseAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? pauseAnim0
+    const resultFunc = theMap[`${ticked?.cycleCurrentPhase}`] ?? pauseAnim0
     return resultFunc()
   }
 
   const resetSetAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> ResetSet: ${ticked?.setCurrentPhase}`)
+    console.log(`>>> ResetSet: ${ticked?.cycleCurrentPhase}`)
     stopAndResetAnim0()
     stopAndResetAnim1()
     stopAndResetAnim2()
@@ -94,18 +94,18 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   const startOrResumeRepetitionAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> StartRepetition: ${ticked?.setCurrentPhase}`)
+    console.log(`>>> StartRepetition: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Workout}`]: startOrResumeAnim1,
       [`${TimerPhase.Rest}`]: startOrResumeAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResumeAnim1
+    const resultFunc = theMap[`${ticked?.cycleCurrentPhase}`] ?? startOrResumeAnim1
     return resultFunc()
   }
 
   const resetRepetitionAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> ResetRepetition: ${ticked?.setCurrentPhase}`)
+    console.log(`>>> ResetRepetition: ${ticked?.cycleCurrentPhase}`)
     stopAndResetAnim1()
     stopAndResetAnim2()
   }

@@ -10,7 +10,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
     return {
       cyclesRemainingCount: 0,
       cycleRepsRemainingCount: 0,
-      setCurrentPhase: undefined,
+      cycleCurrentPhase: undefined,
       setPrepareRemainingSecs: 0,
       repWorkoutRemainingSecs: 0,
       repRestRemainingSecs: 0,
@@ -28,7 +28,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
   let result: TickedPreset = {
     cyclesRemainingCount: originalPreset.CyclesCount,
     cycleRepsRemainingCount: originalPreset.RepsCount,
-    setCurrentPhase: undefined,
+    cycleCurrentPhase: undefined,
     setPrepareRemainingSecs: originalPreset.PrepareSecs,
     repWorkoutRemainingSecs: originalPreset.WorkoutSecs,
     repRestRemainingSecs: originalPreset.RestSecs,
@@ -40,7 +40,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
       result = {
         ...result,
         cyclesRemainingCount: cycleIndex,
-        setCurrentPhase: TimerPhase.Prepare,
+        cycleCurrentPhase: TimerPhase.Prepare,
         setPrepareRemainingSecs: Math.abs(remainingElapsedSecs),
       }
       return result
@@ -53,7 +53,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
           ...result,
           cyclesRemainingCount: cycleIndex,
           cycleRepsRemainingCount: repIndex,
-          setCurrentPhase: TimerPhase.Workout,
+          cycleCurrentPhase: TimerPhase.Workout,
           setPrepareRemainingSecs: 0,
           repWorkoutRemainingSecs: Math.abs(remainingElapsedSecs),
         }
@@ -66,7 +66,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
           ...result,
           cyclesRemainingCount: cycleIndex,
           cycleRepsRemainingCount: repIndex,
-          setCurrentPhase: TimerPhase.Rest,
+          cycleCurrentPhase: TimerPhase.Rest,
           setPrepareRemainingSecs: 0,
           repWorkoutRemainingSecs: 0,
           repRestRemainingSecs: Math.abs(remainingElapsedSecs),

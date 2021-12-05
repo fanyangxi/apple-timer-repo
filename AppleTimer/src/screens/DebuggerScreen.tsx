@@ -39,7 +39,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     ) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-      //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
+      //     `${tickedPreset.cycleCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)
     }

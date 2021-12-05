@@ -49,7 +49,7 @@ export class TimerService {
       const ticked = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, secsLeft, ticked)
 
-      if (ticked.setCurrentPhase === TimerPhase.Prepare) {
+      if (ticked.cycleCurrentPhase === TimerPhase.Prepare) {
         // Started
         if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
           logger.info(`${this.TAG}: OnCycleStarted: ${ticked.cyclesRemainingCount} left`)
@@ -63,7 +63,7 @@ export class TimerService {
         }
       }
 
-      if (ticked.setCurrentPhase === TimerPhase.Workout) {
+      if (ticked.cycleCurrentPhase === TimerPhase.Workout) {
         // Started
         if (ticked.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
           logger.info(`${this.TAG}: OnRepetitionStarted: ${ticked.cycleRepsRemainingCount} left`)
@@ -77,7 +77,7 @@ export class TimerService {
         }
       }
 
-      if (ticked.setCurrentPhase === TimerPhase.Rest) {
+      if (ticked.cycleCurrentPhase === TimerPhase.Rest) {
         // Started
         if (ticked.repRestRemainingSecs === this._preset.RestSecs) {
           this.OnRestPhaseStarted && this.OnRestPhaseStarted().catch(this.handle)
