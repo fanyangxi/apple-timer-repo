@@ -17,13 +17,12 @@ import { Neomorph } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
-import { SvgButton } from '@/components/button/SvgButton'
-import SvgSettings from '@/assets/icons/Settings'
 import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
 import { useHomeScreenEffect } from '@/common/use-home-screen-effect'
+import { SettingsButton } from '@/components/button/SettingsButton'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -170,7 +169,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       <NavigationBar
         title={'Apple Timer'}
         showBackButton={false}
-        right={<SvgButton icon={<SvgSettings color={Colors.white} />} onPress={() => navigate(Screens.Settings)} />}
+        right={<SettingsButton onPress={() => navigate(Screens.Settings)} />}
       />
 
       {/* @summary-section: */}

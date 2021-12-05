@@ -1,27 +1,8 @@
 import React, { ReactElement } from 'react'
-import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
 import { DefaultProps } from '@/common/props'
-import { useNavigation } from '@react-navigation/native'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
-import BackArrow from '@/assets/icons/BackArrow'
-
-const BackButton: React.FC<{
-  onPress?: () => void
-  testID?: string
-}> = ({ onPress }): ReactElement => {
-  const { goBack } = useNavigation()
-  return (
-    <TouchableOpacity
-      style={[styles.barItem, styles.backButton]}
-      onPress={() => {
-        goBack()
-        onPress && onPress()
-      }}
-    >
-      <BackArrow color={Colors.white} />
-    </TouchableOpacity>
-  )
-}
+import { GoBackButton } from '@/components/button/GoBackButton'
 
 // const STATUS_BAR_HEIGHT = Platform.select({ ios: 23, android: StatusBar.currentHeight || 0, default: 25 })
 const NAVIGATION_BAR_HEIGHT = 44
@@ -42,7 +23,7 @@ export interface NavigationBarProps extends DefaultProps {
 export const NavigationBar: React.FC<NavigationBarProps> = props => {
   const renderLeft = () => {
     if (props.showBackButton) {
-      return <BackButton onPress={props.backButtonAction} />
+      return <GoBackButton onPress={props.backButtonAction} />
     }
     return props.left
   }
@@ -113,17 +94,9 @@ const styles = StyleSheet.create({
     right: 0,
     // backgroundColor: 'yellow',
   },
-  barItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   title: {
     textAlign: 'center',
     color: Colors.lightGray,
     ...Fonts.titleNormal,
   } as TextStyle,
-  backButton: {
-    padding: Spacings.s_8,
-  },
 })
