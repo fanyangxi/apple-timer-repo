@@ -28,7 +28,9 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     to: 100,
     durationMs: (stateOptionsRef.current.activePreset?.PrepareSecs ?? 0) * 1000,
     onFinished: () => {
-      startOrResumeAnim1()
+      // This animation doesn't need to be triggered by `startOrResumeAnim0`. It can be triggered by
+      // the `OnRepetitionStarted` event.
+      // startOrResumeAnim1()
     },
   })
 
