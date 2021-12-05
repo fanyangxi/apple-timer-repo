@@ -16,13 +16,13 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
   const [isRunning, setIsRunning] = useState<boolean>()
   const isStartedRef = useRef<boolean>(false)
   const isPausedRef = useRef<boolean>(false)
-  const executionCountRef = useRef<number>(0)
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset('', '', 1, 2, 3, 1, 1)
+  const preset: Preset = new Preset('', '', 1, 1, 1, 1, 1)
   let _timerId: NodeJS.Timeout
+  let _executionCount: number = 0
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -32,7 +32,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     //
     timerServiceRef.current.OnTimerStarted = async () => {
       setIsRunning(true)
-      console.log(`OnTimerStarted, execution-count: ${executionCountRef.current}`)
+      console.log(`OnTimerStarted, execution-count: ${_executionCount}`)
     }
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
@@ -50,28 +50,28 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
       clearInterval(_timerId)
-      console.log(`OnTimerCompleted, execution-count: ${executionCountRef.current}`)
+      console.log(`OnTimerCompleted, execution-count: ${_executionCount}`)
     }
     // eslint-disable-next-line
   }, [])
 
   const startAutoTesting = () => {
     logger.info('start-auto-testing')
-    executionCountRef.current = 0
+    _executionCount = 0
     // Start it first:
     timerServiceRef.current && timerServiceRef.current.runPreset().then(() => {})
     // Repeating pause & resume at 18ms interval for many times.
     let flag = false
     _timerId = setInterval(() => {
-      // console.log(`setInterval, execution-count: ${executionCountRef.current}`)
+      // console.log(`setInterval, execution-count: ${_executionCount}`)
       if (flag) {
         timerServiceRef.current && timerServiceRef.current.pause()
-        executionCountRef.current += 1
+        _executionCount += 1
       } else {
         timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
       }
       flag = !flag
-    }, 20)
+    }, 18) // Minimum acceptable Resume->Pause interval is 20ms.
   }
 
   const startManualTesting = () => {
@@ -84,7 +84,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       // Repeating pause & resume at 18ms interval for many times.
       if (!isPausedRef.current) {
         isPausedRef.current = true
-        executionCountRef.current += 1
+        _executionCount += 1
         timerServiceRef.current && timerServiceRef.current.pause()
       } else {
         isPausedRef.current = false
@@ -97,7 +97,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     logger.info('reset-manual-testing')
     isStartedRef.current = false
     isPausedRef.current = false
-    executionCountRef.current = 0
+    _executionCount = 0
   }
 
   return (
