@@ -20,7 +20,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     }
   }, [options])
 
-  const startOrResume = () => {
+  const startOrResumeAnim = () => {
     const { from, to, durationMs, onFinished } = stateOptionsRef.current
     const remainingPercentage = (to - currentValueRef.current) / (to - from)
     // eslint-disable-next-line max-len,prettier/prettier
@@ -38,14 +38,14 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     })
   }
 
-  const pause = () => {
+  const pauseAnim = () => {
     theAnimValue.stopAnimation(value => {
       console.log(`>>> IN:pause:${value}`)
       currentValueRef.current = value
     })
   }
 
-  const stopAndReset = () => {
+  const stopAndResetAnim = () => {
     theAnimValue.stopAnimation(() => {
       theAnimValue.setValue(stateOptionsRef.current.from)
       currentValueRef.current = stateOptionsRef.current.from
@@ -54,9 +54,9 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
 
   // start / pause / resume / stop|reset
   return {
-    startOrResume: startOrResume,
-    pause: pause,
-    stopAndReset: stopAndReset,
+    startOrResumeAnim,
+    pauseAnim,
+    stopAndResetAnim,
     animValue: theAnimValue,
   }
 }

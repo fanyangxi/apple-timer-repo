@@ -19,37 +19,37 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   }, [options])
 
   const {
-    startOrResume: startOrResume0,
-    pause: pause0,
-    stopAndReset: stop0,
+    startOrResumeAnim: startOrResumeAnim0,
+    pauseAnim: pauseAnim0,
+    stopAndResetAnim: stopAnim0,
     animValue: animValue0,
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
     durationMs: (stateOptionsRef.current.activePreset?.PrepareSecs ?? 0) * 1000,
     onFinished: () => {
-      startOrResume1()
+      startOrResumeAnim1()
     },
   })
 
   const {
-    startOrResume: startOrResume1,
-    pause: pause1,
-    stopAndReset: stop1,
+    startOrResumeAnim: startOrResumeAnim1,
+    pauseAnim: pauseAnim1,
+    stopAndResetAnim: stopAnim1,
     animValue: animValue1,
   } = useAnimatedTimingValueEffect({
     from: 0,
     to: 100,
     durationMs: (stateOptionsRef.current.activePreset?.WorkoutSecs ?? 0) * 1000,
     onFinished: () => {
-      startOrResume2()
+      startOrResumeAnim2()
     },
   })
 
   const {
-    startOrResume: startOrResume2,
-    pause: pause2,
-    stopAndReset: stop2,
+    startOrResumeAnim: startOrResumeAnim2,
+    pauseAnim: pauseAnim2,
+    stopAndResetAnim: stopAnim2,
     animValue: animValue2,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -62,11 +62,11 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> StartOrResumeSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
-      [`${TimerPhase.Prepare}`]: startOrResume0,
-      [`${TimerPhase.Workout}`]: startOrResume1,
-      [`${TimerPhase.Rest}`]: startOrResume2,
+      [`${TimerPhase.Prepare}`]: startOrResumeAnim0,
+      [`${TimerPhase.Workout}`]: startOrResumeAnim1,
+      [`${TimerPhase.Rest}`]: startOrResumeAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResume0
+    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResumeAnim0
     return resultFunc()
   }
 
@@ -74,38 +74,38 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> PauseSet: ${ticked?.setCurrentPhase}`)
     const theMap = {
-      [`${TimerPhase.Prepare}`]: pause0,
-      [`${TimerPhase.Workout}`]: pause1,
-      [`${TimerPhase.Rest}`]: pause2,
+      [`${TimerPhase.Prepare}`]: pauseAnim0,
+      [`${TimerPhase.Workout}`]: pauseAnim1,
+      [`${TimerPhase.Rest}`]: pauseAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? pause0
+    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? pauseAnim0
     return resultFunc()
   }
 
   const resetSet = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetSet: ${ticked?.setCurrentPhase}`)
-    stop0()
-    stop1()
-    stop2()
+    stopAnim0()
+    stopAnim1()
+    stopAnim2()
   }
 
   const startOrResumeRepetition = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> StartRepetition: ${ticked?.setCurrentPhase}`)
     const theMap = {
-      [`${TimerPhase.Workout}`]: startOrResume1,
-      [`${TimerPhase.Rest}`]: startOrResume2,
+      [`${TimerPhase.Workout}`]: startOrResumeAnim1,
+      [`${TimerPhase.Rest}`]: startOrResumeAnim2,
     }
-    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResume1
+    const resultFunc = theMap[`${ticked?.setCurrentPhase}`] ?? startOrResumeAnim1
     return resultFunc()
   }
 
   const resetRepetition = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetRepetition: ${ticked?.setCurrentPhase}`)
-    stop1()
-    stop2()
+    stopAnim1()
+    stopAnim2()
   }
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
