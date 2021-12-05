@@ -35,7 +35,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
   const restSecsDurationPickerRef = useRef<Modalize>(null)
   const repsPickerRef = useRef<Modalize>(null)
-  const setsPickerRef = useRef<Modalize>(null)
+  const cyclesPickerRef = useRef<Modalize>(null)
 
   const { Common } = useTheme()
 
@@ -175,7 +175,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             <TouchableOpacity
               style={styles.barItem}
               onPress={() => {
-                setsPickerRef.current?.open()
+                cyclesPickerRef.current?.open()
               }}
             >
               <Neomorph
@@ -324,7 +324,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         }}
       />
       <BottomNumberPickerPopup
-        popupRef={setsPickerRef}
+        popupRef={cyclesPickerRef}
         value={current.CyclesCount}
         onValueChanged={newValue => {
           setCurrent(

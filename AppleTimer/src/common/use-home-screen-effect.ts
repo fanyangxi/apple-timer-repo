@@ -60,7 +60,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     onFinished: () => {},
   })
 
-  const startOrResumeSetAnim = () => {
+  const startOrResumeCycleAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> StartOrResumeSet: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
@@ -112,7 +112,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
   return {
-    startOrResumeSetAnim,
+    startOrResumeSetAnim: startOrResumeCycleAnim,
     resetSetAnim,
     pauseAnim,
     startOrResumeRepetitionAnim,

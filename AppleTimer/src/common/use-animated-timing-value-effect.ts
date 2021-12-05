@@ -29,7 +29,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
       toValue: to,
       duration: durationMs * remainingPercentage,
       easing: Easing.linear,
-      // Set this to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+      // Config to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
       useNativeDriver: false,
     }).start(result => {
       if (result.finished) {
