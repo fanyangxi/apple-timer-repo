@@ -36,8 +36,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const modalizeRef = useRef<Modalize>(null)
 
   const {
-    startOrResumeSetAnim,
-    resetSetAnim,
+    startOrResumeCycleAnim,
+    resetCycleAnim,
     pauseAnim,
     startOrResumeRepetitionAnim,
     resetRepetitionAnim,
@@ -86,26 +86,26 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerSvc.OnResumed = async () => {
-      startOrResumeSetAnim()
+      startOrResumeCycleAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
-      resetSetAnim()
+      resetCycleAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
-      resetSetAnim()
+      resetCycleAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
     timerSvc.OnCycleStarted = async () => {
-      resetSetAnim()
-      startOrResumeSetAnim()
+      resetCycleAnim()
+      startOrResumeCycleAnim()
     }
     timerSvc.OnPreparePhaseIsClosing = async (cycleRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
