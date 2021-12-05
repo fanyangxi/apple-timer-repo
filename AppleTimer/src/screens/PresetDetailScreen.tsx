@@ -84,7 +84,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
                           current.PrepareSecs,
                           current.WorkoutSecs,
                           current.RestSecs,
-                          current.RepsCount,
+                          current.SetsCount,
                           current.CyclesCount,
                           current.IsActive,
                         ),
@@ -210,7 +210,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               >
                 <View style={styles.barItemContent}>
                   <Text style={[Fonts.textSmall, FontColors.white]}>Reps:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{current.RepsCount}</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>{current.SetsCount}</Text>
                 </View>
               </Neomorph>
             </TouchableOpacity>
@@ -262,7 +262,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               newDuration,
               current.WorkoutSecs,
               current.RestSecs,
-              current.RepsCount,
+              current.SetsCount,
               current.CyclesCount,
               current.IsActive,
             ),
@@ -280,7 +280,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               current.PrepareSecs,
               newDuration,
               current.RestSecs,
-              current.RepsCount,
+              current.SetsCount,
               current.CyclesCount,
               current.IsActive,
             ),
@@ -298,7 +298,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               current.PrepareSecs,
               current.WorkoutSecs,
               newDuration,
-              current.RepsCount,
+              current.SetsCount,
               current.CyclesCount,
               current.IsActive,
             ),
@@ -307,7 +307,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
       />
       <BottomNumberPickerPopup
         popupRef={repsPickerRef}
-        value={current.RepsCount}
+        value={current.SetsCount}
         onValueChanged={newValue => {
           setCurrent(
             new Preset(
@@ -334,7 +334,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               current.PrepareSecs,
               current.WorkoutSecs,
               current.RestSecs,
-              current.RepsCount,
+              current.SetsCount,
               newValue,
               current.IsActive,
             ),

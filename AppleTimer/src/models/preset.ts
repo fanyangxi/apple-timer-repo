@@ -10,8 +10,8 @@ export class Preset {
   public WorkoutSecs: number
   // Phase: rest duration of the Rep.
   public RestSecs: number
-  // The reps count of the Cycle
-  public RepsCount: number
+  // The sets count of the Cycle
+  public SetsCount: number
   // The cycles count of the preset.
   public CyclesCount: number
   //
@@ -23,7 +23,7 @@ export class Preset {
     prepareSecs: number,
     workoutSecs: number,
     restSecs: number,
-    repsCount: number,
+    setsCount: number,
     cyclesCount: number,
     isActive: boolean = false,
   ) {
@@ -32,7 +32,7 @@ export class Preset {
     this.PrepareSecs = prepareSecs
     this.WorkoutSecs = workoutSecs
     this.RestSecs = restSecs
-    this.RepsCount = repsCount
+    this.SetsCount = setsCount
     this.CyclesCount = cyclesCount
     this.IsActive = isActive
   }

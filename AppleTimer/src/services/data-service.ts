@@ -35,7 +35,7 @@ const createPreset = async (model: Preset): Promise<void> => {
     id: `${uuid.v4()}`,
     name: model.Name,
     cyclesCount: model.CyclesCount,
-    repsCount: model.RepsCount,
+    setsCount: model.SetsCount,
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
@@ -127,7 +127,7 @@ const _toEntity = (model: Preset): PresetEntity => {
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
-    repsCount: model.RepsCount,
+    setsCount: model.SetsCount,
     cyclesCount: model.CyclesCount,
     isActive: model.IsActive,
   } as PresetEntity
@@ -140,7 +140,7 @@ const _toModel = (entity: PresetEntity): Preset => {
     entity.prepareSecs,
     entity.workoutSecs,
     entity.restSecs,
-    entity.repsCount,
+    entity.setsCount,
     entity.cyclesCount,
     entity.isActive,
   )
@@ -172,7 +172,7 @@ const _getPresetEntityById = async (id: string): Promise<PresetEntity | undefine
 }
 
 const _isValid = (item: any): boolean => {
-  return ['id', 'name', 'prepareSecs', 'workoutSecs', 'restSecs', 'repsCount', 'cyclesCount', 'isActive'].every(prop =>
+  return ['id', 'name', 'prepareSecs', 'workoutSecs', 'restSecs', 'setsCount', 'cyclesCount', 'isActive'].every(prop =>
     item.hasOwnProperty(prop),
   )
 }

@@ -8,7 +8,7 @@ export interface PresetEntity {
   workoutSecs: number
   restSecs: number
   //
-  repsCount: number
+  setsCount: number
   cyclesCount: number
   // Means it's the timer that user is currently using
   isActive: boolean
