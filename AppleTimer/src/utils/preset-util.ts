@@ -18,7 +18,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
   }
 
   const elapsedSecs = getTotalPresetDurationSecs(originalPreset) - remainingPresetDurationSecs
-  if (elapsedSecs < 0) {
+  if (isNaN(elapsedSecs) || elapsedSecs < 0) {
     throw new Error(
       `Invalid remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
         `should be less/equal than: ${getTotalPresetDurationSecs(originalPreset)}`,
@@ -78,7 +78,8 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
 
   throw new Error(
     `Failed to get TickedPreset from remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
-      `for preset with total: ${getTotalPresetDurationSecs(originalPreset)}`,
+      `for preset with total: ${getTotalPresetDurationSecs(originalPreset)}. The ` +
+      `original-preset is: ${JSON.stringify(originalPreset)}`,
   )
 }
 

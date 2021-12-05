@@ -3,9 +3,11 @@
 export interface PresetEntity {
   id: string
   name: string
+  //
   prepareSecs: number
   workoutSecs: number
   restSecs: number
+  //
   repsCount: number
   cyclesCount: number
   // Means it's the timer that user is currently using

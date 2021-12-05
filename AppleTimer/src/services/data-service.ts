@@ -160,7 +160,7 @@ const _getPresetEntities = async (): Promise<PresetEntity[]> => {
   if (!items) {
     return []
   }
-  return items
+  return items.filter(item => _isValid(item))
 }
 
 const _getPresetEntityById = async (id: string): Promise<PresetEntity | undefined> => {
@@ -169,6 +169,12 @@ const _getPresetEntityById = async (id: string): Promise<PresetEntity | undefine
     return undefined
   }
   return items.filter(item => item.id === id)[0]
+}
+
+const _isValid = (item: any): boolean => {
+  return ['id', 'name', 'prepareSecs', 'workoutSecs', 'restSecs', 'repsCount', 'cyclesCount', 'isActive'].every(prop =>
+    item.hasOwnProperty(prop),
+  )
 }
 
 export const DataService = { getActivePreset, getPresets, createPreset, updatePreset, deletePreset, setActivePreset }
