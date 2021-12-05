@@ -188,7 +188,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
                 }}
               >
                 <View style={styles.barItemContent}>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>Sets:</Text>
+                  <Text style={[Fonts.textSmall, FontColors.white]}>Cycles:</Text>
                   <Text style={[Fonts.textSmall, FontColors.white]}>{current.CyclesCount}</Text>
                 </View>
               </Neomorph>

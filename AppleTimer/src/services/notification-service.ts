@@ -1,7 +1,7 @@
 import Sound from 'react-native-sound'
 import { logger } from '@/utils/logger'
 
-// - * sets to go (EG.: 6 sets to go)
+// - * cycles to go (EG.: 6 cycles to go)
 // - 1,2,3,4,5,6,7,8,9, - 49,
 // - ** Repetition completed
 // Notes:: Value of the enum members cannot be duplicated.
