@@ -49,9 +49,7 @@ export class CountdownTimer {
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
     this.clear()
-    const oldStatus = this.Status
-    this.Status = TimerStatus.TICKING
-    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
+    this.changeStatusTo(TimerStatus.TICKING)
     this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STARTED', e))
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
   }
@@ -65,9 +63,7 @@ export class CountdownTimer {
     const pausedAt = new Date().getTime()
     this.clear()
     //
-    const oldStatus = this.Status
-    this.Status = TimerStatus.PAUSED
-    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.PAUSED).catch(() => {})
+    this.changeStatusTo(TimerStatus.PAUSED)
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const before = this._remainingCountdownMilliSecs
     // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
@@ -98,18 +94,14 @@ export class CountdownTimer {
     // console.log(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
-    const oldStatus = this.Status
-    this.Status = TimerStatus.TICKING
-    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
+    this.changeStatusTo(TimerStatus.TICKING)
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleErr('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
   }
 
   stopAndReset(force: boolean = false) {
     this.clear()
-    const oldStatus = this.Status
-    this.Status = TimerStatus.IDLE
-    this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.IDLE).catch(() => {})
+    this.changeStatusTo(TimerStatus.IDLE)
     if (force) {
       this.OnStopped && this.OnStopped(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STOPPED', e))
     } else {
@@ -123,6 +115,12 @@ export class CountdownTimer {
     this._delayTimerId = undefined
     this._timerId && clearInterval(this._timerId)
     this._timerId = undefined
+  }
+
+  private changeStatusTo(newStatus: TimerStatus) {
+    const oldStatus = this.Status
+    this.Status = newStatus
+    this.OnStatusChanged && this.OnStatusChanged(oldStatus, newStatus).catch(() => {})
   }
 
   private async runSlices(type: TickingType, countdownSecs: number, beforeStartDelayMilliSecs?: number): Promise<void> {
