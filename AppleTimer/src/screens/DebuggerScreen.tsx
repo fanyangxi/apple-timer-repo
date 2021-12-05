@@ -9,22 +9,30 @@ import { TimerService } from '@/services/timer-service'
 import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
+import { getTotalPresetDurationSecs } from '@/utils/preset-util'
+import { logger } from '@/utils/logger'
 
 export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
   const [isRunning, setIsRunning] = useState<boolean>()
+  const isStartedRef = useRef<boolean>(false)
+  const isPausedRef = useRef<boolean>(false)
+  const executionCountRef = useRef<number>(0)
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset('', '', 3, 4, 2, 2, 2)
+  const preset: Preset = new Preset('', '', 1, 2, 3, 1, 1)
+  let _timerId: NodeJS.Timeout
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
 
+    console.log(`>>> active-preset: ${JSON.stringify(preset)}, total:${getTotalPresetDurationSecs(preset) * 1000}-ms`)
     timerServiceRef.current = new TimerService(preset)
     //
     timerServiceRef.current.OnTimerStarted = async () => {
       setIsRunning(true)
+      console.log(`OnTimerStarted, execution-count: ${executionCountRef.current}`)
     }
     timerServiceRef.current.OnTicked = async (
       currentSet: number,
@@ -41,21 +49,55 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       setIsRunning(false)
+      clearInterval(_timerId)
+      console.log(`OnTimerCompleted, execution-count: ${executionCountRef.current}`)
     }
     // eslint-disable-next-line
   }, [])
 
-  const onTestCountdownTimerPressed = () => {
+  const startAutoTesting = () => {
+    logger.info('start-auto-testing')
+    executionCountRef.current = 0
     // Start it first:
     timerServiceRef.current && timerServiceRef.current.runPreset().then(() => {})
     // Repeating pause & resume at 18ms interval for many times.
     let flag = false
-    setInterval(() => {
-      flag
-        ? timerServiceRef.current && timerServiceRef.current.pause()
-        : timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
+    _timerId = setInterval(() => {
+      // console.log(`setInterval, execution-count: ${executionCountRef.current}`)
+      if (flag) {
+        timerServiceRef.current && timerServiceRef.current.pause()
+        executionCountRef.current += 1
+      } else {
+        timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
+      }
       flag = !flag
-    }, 18)
+    }, 20)
+  }
+
+  const startManualTesting = () => {
+    // logger.info('start-manual-testing')
+    // Start it first:
+    if (!isStartedRef.current) {
+      isStartedRef.current = true
+      timerServiceRef.current && timerServiceRef.current.runPreset().then(() => {})
+    } else {
+      // Repeating pause & resume at 18ms interval for many times.
+      if (!isPausedRef.current) {
+        isPausedRef.current = true
+        executionCountRef.current += 1
+        timerServiceRef.current && timerServiceRef.current.pause()
+      } else {
+        isPausedRef.current = false
+        timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
+      }
+    }
+  }
+
+  const resetManualTesting = () => {
+    logger.info('reset-manual-testing')
+    isStartedRef.current = false
+    isPausedRef.current = false
+    executionCountRef.current = 0
   }
 
   return (
@@ -69,9 +111,23 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       <View style={styles.rootContainer}>
         {/* @action-section: */}
         <View style={styles.actionSection}>
-          <View style={[styles.start]}>
-            <TouchableOpacity style={[Common.button.rounded]} onPress={() => onTestCountdownTimerPressed()}>
-              <Text style={Fonts.textRegular}>{'Test-Countdown-Timer'}</Text>
+          <Text style={Fonts.textRegular}>
+            {'Auto-Test: For 6s, try to pause/resume every 20ms, for around 300 times'}
+          </Text>
+          <View style={[styles.buttons]}>
+            <TouchableOpacity style={[Common.button.rounded]} onPress={() => startAutoTesting()}>
+              <Text style={Fonts.textRegular}>{'Start auto-test'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.actionSection}>
+          <Text style={Fonts.textRegular}>{'Manual-Test: Click to start, then pause/resume'}</Text>
+          <View style={[styles.buttons]}>
+            <TouchableOpacity style={[Common.button.rounded]} onPress={() => startManualTesting()}>
+              <Text style={Fonts.textRegular}>{'--- Go ---'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[Common.button.rounded]} onPress={() => resetManualTesting()}>
+              <Text style={Fonts.textRegular}>{'Reset'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -91,17 +147,20 @@ const styles = StyleSheet.create({
   },
   // @action-section:
   actionSection: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingHorizontal: Spacings.s_40,
-    paddingVertical: Spacings.s_4,
-    alignItems: 'center',
+    paddingVertical: Spacings.s_24,
+    alignItems: 'stretch',
     justifyContent: 'space-between',
     backgroundColor: 'lightgreen', // '#202021',
     borderRadius: 2,
   },
-  start: {},
-  pause: {},
-  stop: {},
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  left: {},
+  right: {},
   background: {
     backgroundColor: 'lightgreen', // '#202021',
     position: 'absolute',
