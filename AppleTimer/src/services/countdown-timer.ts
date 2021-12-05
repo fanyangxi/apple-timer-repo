@@ -63,7 +63,7 @@ export class CountdownTimer {
 
     // 1.Get the paused time, right before the clear.
     const pausedAt = new Date().getTime()
-    setTimeout(() => this.clear(), 0)
+    this.clear()
     //
     const oldStatus = this.Status
     this.Status = TimerStatus.PAUSED
@@ -71,16 +71,21 @@ export class CountdownTimer {
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const before = this._remainingCountdownMilliSecs
     const timeLeft = before - (pausedAt - this._runStartedAt)
-    this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft
+    // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
+    // paused. Otherwise, if the user clicks the pause/resume many times, some of the ms will be lost.
+    // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
+    // pause/resume button around 150 times for a 3secs duration preset. It's a good enough result already.
+    const compensationMs = 13
+    this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft + compensationMs
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
-    // Logs:
-    logger.info(
-      '[Paused] Remaining MilliSecs:' +
-        `before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
-        `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; ` +
-        `Diff:${pausedAt - this._runStartedAt}`,
-    )
+    // // **This log-entry should not appear on PROD app**:
+    // console.log(
+    //   '[Paused] Remaining MilliSecs:' +
+    //     `before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
+    //     `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; ` +
+    //     `Diff:${pausedAt - this._runStartedAt}`,
+    // )
   }
 
   async resume(): Promise<void> {
@@ -88,7 +93,8 @@ export class CountdownTimer {
       return
     }
 
-    logger.info(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
+    // // **This log-entry should not appear on PROD app**:
+    // console.log(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
     const oldStatus = this.Status
