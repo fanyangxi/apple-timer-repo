@@ -4,16 +4,16 @@ export class Preset {
   public Id: string
   //
   public Name: string
-  // The cycles count of the preset.
-  public CyclesCount: number
-  // The reps count of the Cycle
-  public RepsCount: number
   // Phase: prepare duration of the Cycle.
   public PrepareSecs: number
   // Phase: workout duration of the Rep.
   public WorkoutSecs: number
   // Phase: rest duration of the Rep.
   public RestSecs: number
+  // The reps count of the Cycle
+  public RepsCount: number
+  // The cycles count of the preset.
+  public CyclesCount: number
   //
   public IsActive: boolean
 
