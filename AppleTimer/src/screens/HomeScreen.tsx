@@ -115,7 +115,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         Sounds.Workout,
       ])
     }
-    timerSvc.OnRepetitionStarted = async () => {
+    timerSvc.OnSetStarted = async () => {
       resetSetAnim()
       startOrResumeSetAnim()
     }

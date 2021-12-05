@@ -24,8 +24,8 @@ export class TimerService {
   public OnCycleStarted?: (cycleIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseClosing?: (cycleSetsRemainingCount: number) => Promise<void>
-  // The time that new-repetition started, also means the previous repetition competed.
-  public OnRepetitionStarted?: (repetitionIndex: number) => Promise<void>
+  // The time that new-set started, also means the previous set is competed.
+  public OnSetStarted?: (setIndex: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
   public OnWorkoutPhaseClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
@@ -61,8 +61,8 @@ export class TimerService {
       if (ticked.cycleCurrentPhase === TimerPhase.Workout) {
         // Started
         if (ticked.workoutRemainingSecs === this._preset.WorkoutSecs) {
-          logger.info(`${this.TAG}: OnRepetitionStarted: ${ticked.cycleSetsRemainingCount} left`)
-          this.OnRepetitionStarted && this.OnRepetitionStarted(ticked.cycleSetsRemainingCount).catch(this.handle)
+          logger.info(`${this.TAG}: OnSetStarted: ${ticked.cycleSetsRemainingCount} left`)
+          this.OnSetStarted && this.OnSetStarted(ticked.cycleSetsRemainingCount).catch(this.handle)
           this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
         }
         // IsClosing
