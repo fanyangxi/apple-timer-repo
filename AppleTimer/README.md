@@ -29,8 +29,8 @@ current preset:
     - prepare: in Sec
     - workout: in Sec
     - rest: in Sec
-    - reps-count: int,
     - sets-count:
+    - cycles-count: int,
 In-timer-phase state (Prepare|Workout|Rest)
     - phase-name
     - time-left-in-phase 

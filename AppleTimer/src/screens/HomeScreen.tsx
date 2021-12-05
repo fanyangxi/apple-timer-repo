@@ -107,10 +107,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       resetCycleAnim()
       startOrResumeCycleAnim()
     }
-    timerSvc.OnPreparePhaseClosing = async (cycleRepsRemainingCount: number) => {
+    timerSvc.OnPreparePhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
-        `num_${cycleRepsRemainingCount}.mp3`,
+        `num_${cycleSetsRemainingCount}.mp3`,
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
@@ -122,10 +122,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnWorkoutPhaseClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
-    timerSvc.OnRestPhaseClosing = async (cycleRepsRemainingCount: number) => {
+    timerSvc.OnRestPhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
-        `num_${cycleRepsRemainingCount}.mp3`,
+        `num_${cycleSetsRemainingCount}.mp3`,
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])

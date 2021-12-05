@@ -4,9 +4,9 @@ Preset:
 - prepare: in Sec
 - work: in Sec
 - rest: in Sec
-- reps count: int,
-- sets-divider: in Sec
 - sets-count:
+- cycles-divider: in Sec
+- cycles count: int,
 
 Preset:
 - The user's pre-configuration of a workout timer.

@@ -23,13 +23,13 @@ export class TimerService {
   //
   public OnCycleStarted?: (cycleIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
-  public OnPreparePhaseClosing?: (cycleRepsRemainingCount: number) => Promise<void>
+  public OnPreparePhaseClosing?: (cycleSetsRemainingCount: number) => Promise<void>
   // The time that new-repetition started, also means the previous repetition competed.
   public OnRepetitionStarted?: (repetitionIndex: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
   public OnWorkoutPhaseClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
-  public OnRestPhaseClosing?: (cycleRepsRemainingCount: number) => Promise<void>
+  public OnRestPhaseClosing?: (cycleSetsRemainingCount: number) => Promise<void>
 
   private CLOSING_SECS = 3
   private REST_PHASE_CLOSING_SECS = 3

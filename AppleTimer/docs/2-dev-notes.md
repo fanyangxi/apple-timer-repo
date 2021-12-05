@@ -170,11 +170,11 @@ React native svg arc path - Stack Overflow
   {/*<Divider style={styles.contentDivider} />*/}
   <View style={styles.summaryContent}>
     <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Reps:</Text>
+      <Text style={styles.itemLabel}>Sets:</Text>
       <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
     </View>
     <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Sets:</Text>
+      <Text style={styles.itemLabel}>Cycles:</Text>
       <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
     </View>
   </View>
