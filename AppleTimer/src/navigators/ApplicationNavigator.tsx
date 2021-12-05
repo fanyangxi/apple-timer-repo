@@ -48,11 +48,12 @@ const ApplicationNavigator = () => {
   return (
     <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
       <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
-      <Stack.Navigator headerMode={'none'}>
+      {/** Change this `initialRouteName` if you need the debugger **/}
+      <Stack.Navigator headerMode={'none'} initialRouteName={Screens.Home}>
         <Stack.Screen name={Screens.Home} component={HomeScreen} />
         <Stack.Screen name={Screens.Settings} component={SettingsScreen} />
-        <Stack.Screen name={Screens.Debugger} component={DebuggerScreen} />
         <Stack.Screen name={Screens.PresetDetail} component={PresetDetailScreen} />
+        <Stack.Screen name={Screens.Debugger} component={DebuggerScreen} />
         {/*<Stack.Screen name="Startup" component={IndexStartupContainer} />*/}
         {/*{isApplicationLoaded && MainNavigator != null && (*/}
         {/*  <Stack.Screen*/}

@@ -1,17 +1,13 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement } from 'react'
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useTheme } from '@/theme'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/assets/icons/DarkAnd'
-import { Preset, TickedPreset } from '@/models/preset'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
 import { ElementList } from '@/components/ElementList'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import SvgEdit from '@/assets/icons/Edit'
-import { useNavigation } from '@react-navigation/native'
-import { Screens } from '@/common/constants'
 
 interface ActionButtonProps {
   key: string
@@ -21,19 +17,9 @@ interface ActionButtonProps {
 }
 
 export const SettingsScreen: React.FC<{}> = (): ReactElement => {
-  const { navigate } = useNavigation()
-
   const actionButtons: ActionButtonProps[] = [
     { key: '01', title: 'Rate us', icon: <SvgEdit color={Colors.white} width={20} />, onPress: () => {} },
     { key: '02', title: 'Share with friends', icon: <SvgEdit color={Colors.white} width={20} />, onPress: () => {} },
-    {
-      key: '03',
-      title: 'Debugger View',
-      icon: <SvgEdit color={Colors.white} width={20} />,
-      onPress: () => {
-        navigate(Screens.Debugger)
-      },
-    },
   ]
 
   const renderItem = (buttonProps: ActionButtonProps) => (
