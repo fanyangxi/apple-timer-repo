@@ -34,12 +34,12 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
     repRestRemainingSecs: originalPreset.RestSecs,
   }
   let remainingElapsedSecs = elapsedSecs
-  for (let setIndex = originalPreset.CyclesCount; setIndex > 0; setIndex--) {
+  for (let cycleIndex = originalPreset.CyclesCount; cycleIndex > 0; cycleIndex--) {
     remainingElapsedSecs = Math.abs(remainingElapsedSecs) - originalPreset.PrepareSecs
     if (remainingElapsedSecs < 0) {
       result = {
         ...result,
-        cyclesRemainingCount: setIndex,
+        cyclesRemainingCount: cycleIndex,
         setCurrentPhase: TimerPhase.Prepare,
         setPrepareRemainingSecs: Math.abs(remainingElapsedSecs),
       }
@@ -51,7 +51,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
       if (remainingElapsedSecs < 0) {
         result = {
           ...result,
-          cyclesRemainingCount: setIndex,
+          cyclesRemainingCount: cycleIndex,
           setRepsRemainingCount: repIndex,
           setCurrentPhase: TimerPhase.Workout,
           setPrepareRemainingSecs: 0,
@@ -64,7 +64,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
       if (remainingElapsedSecs < 0) {
         result = {
           ...result,
-          cyclesRemainingCount: setIndex,
+          cyclesRemainingCount: cycleIndex,
           setRepsRemainingCount: repIndex,
           setCurrentPhase: TimerPhase.Rest,
           setPrepareRemainingSecs: 0,
