@@ -9,7 +9,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
   if (remainingPresetDurationSecs === 0) {
     return {
       cyclesRemainingCount: 0,
-      cycleRepsRemainingCount: 0,
+      cycleSetsRemainingCount: 0,
       cycleCurrentPhase: undefined,
       prepareRemainingSecs: 0,
       workoutRemainingSecs: 0,
@@ -27,7 +27,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
 
   let result: TickedPreset = {
     cyclesRemainingCount: originalPreset.CyclesCount,
-    cycleRepsRemainingCount: originalPreset.SetsCount,
+    cycleSetsRemainingCount: originalPreset.SetsCount,
     cycleCurrentPhase: undefined,
     prepareRemainingSecs: originalPreset.PrepareSecs,
     workoutRemainingSecs: originalPreset.WorkoutSecs,
@@ -52,7 +52,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
         result = {
           ...result,
           cyclesRemainingCount: cycleIndex,
-          cycleRepsRemainingCount: repIndex,
+          cycleSetsRemainingCount: repIndex,
           cycleCurrentPhase: TimerPhase.Workout,
           prepareRemainingSecs: 0,
           workoutRemainingSecs: Math.abs(remainingElapsedSecs),
@@ -65,7 +65,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
         result = {
           ...result,
           cyclesRemainingCount: cycleIndex,
-          cycleRepsRemainingCount: repIndex,
+          cycleSetsRemainingCount: repIndex,
           cycleCurrentPhase: TimerPhase.Rest,
           prepareRemainingSecs: 0,
           workoutRemainingSecs: 0,

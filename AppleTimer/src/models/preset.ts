@@ -42,7 +42,7 @@ export interface TickedPreset {
   // In Preset:
   cyclesRemainingCount: number
   // In Current-Cycle:
-  cycleRepsRemainingCount: number
+  cycleSetsRemainingCount: number
   cycleCurrentPhase?: TimerPhase
   //
   prepareRemainingSecs: number
