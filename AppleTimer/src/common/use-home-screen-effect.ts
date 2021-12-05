@@ -21,7 +21,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const {
     startOrResumeAnim: startOrResumeAnim0,
     pauseAnim: pauseAnim0,
-    stopAndResetAnim: stopAnim0,
+    stopAndResetAnim: stopAndResetAnim0,
     animValue: animValue0,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -35,7 +35,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const {
     startOrResumeAnim: startOrResumeAnim1,
     pauseAnim: pauseAnim1,
-    stopAndResetAnim: stopAnim1,
+    stopAndResetAnim: stopAndResetAnim1,
     animValue: animValue1,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -49,7 +49,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const {
     startOrResumeAnim: startOrResumeAnim2,
     pauseAnim: pauseAnim2,
-    stopAndResetAnim: stopAnim2,
+    stopAndResetAnim: stopAndResetAnim2,
     animValue: animValue2,
   } = useAnimatedTimingValueEffect({
     from: 0,
@@ -85,9 +85,9 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const resetSetAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetSet: ${ticked?.setCurrentPhase}`)
-    stopAnim0()
-    stopAnim1()
-    stopAnim2()
+    stopAndResetAnim0()
+    stopAndResetAnim1()
+    stopAndResetAnim2()
   }
 
   const startOrResumeRepetitionAnim = () => {
@@ -104,8 +104,8 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const resetRepetitionAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetRepetition: ${ticked?.setCurrentPhase}`)
-    stopAnim1()
-    stopAnim2()
+    stopAndResetAnim1()
+    stopAndResetAnim2()
   }
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)

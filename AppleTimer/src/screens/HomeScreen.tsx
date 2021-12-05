@@ -21,10 +21,9 @@ import { SvgButton } from '@/components/button/SvgButton'
 import SvgSettings from '@/assets/icons/Settings'
 import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
-import { format, FULL_TIMESTAMP, toDTime } from '@/utils/date-util'
+import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
 import { useHomeScreenEffect } from '@/common/use-home-screen-effect'
-import moment from 'moment'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -80,10 +79,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       secsLeft: number,
       ticked: TickedPreset,
     ) => {
-      logger.info(
-        `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-          `${ticked.setCurrentPhase},${type},${JSON.stringify(ticked)}`,
-      )
+      // logger.info(
+      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
+      //     `${ticked.setCurrentPhase},${type},${JSON.stringify(ticked)}`,
+      // )
       setTickedPreset(ticked)
       setSecsLeftInCurrentWorkout(secsLeft)
     }
