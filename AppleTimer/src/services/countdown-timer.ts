@@ -32,9 +32,8 @@ export class CountdownTimer {
   public OnStopped?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnCompleted?: (milliSecsLeft: number) => Promise<void>
 
-  constructor(countdownSecs: number, onTicked?: (type: TickingType, secsLeft: number) => Promise<void>) {
+  constructor(countdownSecs: number) {
     this._initialCountdownSecs = countdownSecs
-    this.OnTicked = onTicked
 
     if ((countdownSecs * 1000) % this.INTERVAL !== 0) {
       throw new Error(
