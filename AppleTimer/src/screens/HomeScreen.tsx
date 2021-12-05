@@ -34,6 +34,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const notificationServiceRef = useRef<NotificationService>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
+  const TAG = '$$[HOME]$$'
 
   const {
     startOrResumeCycleAnim,
@@ -82,10 +83,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     //
     timerSvc.OnTimerStarted = async () => {}
     timerSvc.OnPaused = async () => {
+      logger.info(`${TAG}: timerSvc.OnPaused`)
       pauseAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerSvc.OnResumed = async () => {
+      logger.info(`${TAG}: timerSvc.OnResumed`)
       startOrResumeCycleAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
@@ -104,6 +107,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     //
     timerSvc.OnCycleStarted = async () => {
+      logger.info(`${TAG}: timerSvc.OnCycleStarted`)
       resetCycleAnim()
       startOrResumeCycleAnim()
     }
@@ -116,6 +120,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       ])
     }
     timerSvc.OnSetStarted = async () => {
+      logger.info(`${TAG}: timerSvc.OnSetStarted`)
       resetSetAnim()
       startOrResumeSetAnim()
     }

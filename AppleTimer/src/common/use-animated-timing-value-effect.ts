@@ -24,7 +24,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     const { from, to, durationMs, onFinished } = stateOptionsRef.current
     const remainingPercentage = (to - currentValueRef.current) / (to - from)
     // eslint-disable-next-line max-len,prettier/prettier
-    console.log(`>>> IN:start-or-resume:${remainingPercentage}/${from}/${to}/${currentValueRef.current};durationMs:${durationMs}`)
+    console.log(`IN:startOrResumeAnim:${remainingPercentage}/${from}/${to}/${currentValueRef.current};durationMs:${durationMs}`)
     Animated.timing(theAnimValue, {
       toValue: to,
       duration: durationMs * remainingPercentage,
@@ -40,13 +40,14 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
 
   const pauseAnim = () => {
     theAnimValue.stopAnimation(value => {
-      console.log(`>>> IN:pause:${value}`)
+      console.log(`IN:pauseAnim:${value}`)
       currentValueRef.current = value
     })
   }
 
   const stopAndResetAnim = () => {
     theAnimValue.stopAnimation(() => {
+      console.log('IN:stopAndResetAnim:')
       theAnimValue.setValue(stateOptionsRef.current.from)
       currentValueRef.current = stateOptionsRef.current.from
     })
