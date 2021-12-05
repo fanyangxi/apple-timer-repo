@@ -4,12 +4,7 @@ import { getTotalPresetDurationSecs, getUpdatedPreset } from '@/utils/preset-uti
 import { TimerPhase } from '@/models/timer-phase'
 import { logger } from '@/utils/logger'
 
-export type PresetTickedEventHandler = (
-  currentSet: number,
-  currentRep: number,
-  secsLeft: number,
-  tickedPreset: TickedPreset,
-) => void
+export type PresetTickedEventHandler = (secsLeft: number, tickedPreset: TickedPreset) => void
 
 export class TimerService {
   private readonly TAG = '[TIMER-SERVICE]'
@@ -47,7 +42,7 @@ export class TimerService {
     this._countdownTimer = new CountdownTimer(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
       const ticked = getUpdatedPreset(this._preset, secsLeft)
-      this.OnTicked && this.OnTicked(0, 0, secsLeft, ticked)
+      this.OnTicked && this.OnTicked(secsLeft, ticked)
 
       if (ticked.cycleCurrentPhase === TimerPhase.Prepare) {
         // Started
@@ -59,7 +54,8 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
         if (ticked.prepareRemainingSecs === minClosingSecs) {
-          this.OnPreparePhaseIsClosing && this.OnPreparePhaseIsClosing(ticked.cycleRepsRemainingCount).catch(this.handle)
+          this.OnPreparePhaseIsClosing &&
+            this.OnPreparePhaseIsClosing(ticked.cycleRepsRemainingCount).catch(this.handle)
         }
       }
 
