@@ -26,7 +26,7 @@ export class TimerService {
   public OnTimerStopped?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnTimerCompleted?: (milliSecsLeft: number) => Promise<void>
   //
-  public OnSetStarted?: (setIndex: number) => Promise<void>
+  public OnCycleStarted?: (cycleIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
   public OnPreparePhaseIsClosing?: (setRepsRemainingCount: number) => Promise<void>
   // The time that new-repetition started, also means the previous repetition competed.
@@ -52,8 +52,8 @@ export class TimerService {
       if (ticked.setCurrentPhase === TimerPhase.Prepare) {
         // Started
         if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
-          logger.info(`${this.TAG}: OnSetStarted: ${ticked.cyclesRemainingCount} left`)
-          this.OnSetStarted && this.OnSetStarted(ticked.cyclesRemainingCount).catch(this.handle)
+          logger.info(`${this.TAG}: OnCycleStarted: ${ticked.cyclesRemainingCount} left`)
+          this.OnCycleStarted && this.OnCycleStarted(ticked.cyclesRemainingCount).catch(this.handle)
           this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
         }
         // IsClosing

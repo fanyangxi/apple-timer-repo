@@ -103,7 +103,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
-    timerSvc.OnSetStarted = async () => {
+    timerSvc.OnCycleStarted = async () => {
       resetSetAnim()
       startOrResumeSetAnim()
     }
