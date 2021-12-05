@@ -20,6 +20,8 @@ target 'AppleTimer' do
 
   pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
 
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
   target 'AppleTimerTests' do
     inherit! :complete
     # Pods for testing
