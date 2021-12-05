@@ -47,6 +47,6 @@ export interface TickedPreset {
   //
   prepareRemainingSecs: number
   // In Current-Rep:
-  repWorkoutRemainingSecs: number
+  workoutRemainingSecs: number
   repRestRemainingSecs: number
 }

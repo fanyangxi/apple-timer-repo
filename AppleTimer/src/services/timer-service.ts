@@ -65,14 +65,14 @@ export class TimerService {
 
       if (ticked.cycleCurrentPhase === TimerPhase.Workout) {
         // Started
-        if (ticked.repWorkoutRemainingSecs === this._preset.WorkoutSecs) {
+        if (ticked.workoutRemainingSecs === this._preset.WorkoutSecs) {
           logger.info(`${this.TAG}: OnRepetitionStarted: ${ticked.cycleRepsRemainingCount} left`)
           this.OnRepetitionStarted && this.OnRepetitionStarted(ticked.cycleRepsRemainingCount).catch(this.handle)
           this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
-        if (ticked.repWorkoutRemainingSecs === minClosingSecs) {
+        if (ticked.workoutRemainingSecs === minClosingSecs) {
           this.OnWorkoutPhaseIsClosing && this.OnWorkoutPhaseIsClosing().catch(this.handle)
         }
       }
