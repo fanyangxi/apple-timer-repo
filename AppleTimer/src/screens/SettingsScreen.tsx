@@ -1,62 +1,61 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
-import { Colors, Fonts, Spacings } from '@/theme/Variables'
+import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/assets/icons/DarkAnd'
 import { Preset, TickedPreset } from '@/models/preset'
-import { TickingType } from '@/services/countdown-timer'
-import { TimerService } from '@/services/timer-service'
-import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
+import { ElementList } from '@/components/ElementList'
+import { Neomorph } from 'react-native-neomorph-shadows'
+import { DeviceScreen } from '@/common/device'
+import SvgEdit from '@/assets/icons/Edit'
+import { useNavigation } from '@react-navigation/native'
+import { Screens } from '@/common/constants'
+
+interface ActionButtonProps {
+  key: string
+  icon: Element
+  title: string
+  onPress: () => void
+}
 
 export const SettingsScreen: React.FC<{}> = (): ReactElement => {
-  const [isRunning, setIsRunning] = useState<boolean>()
-  const timerServiceRef = useRef<TimerService>()
-  const notificationServiceRef = useRef<NotificationService>()
+  const { navigate } = useNavigation()
 
-  const { Common } = useTheme()
-  const preset: Preset = new Preset('', 'name', 3, 4, 2, 2, 2)
+  const actionButtons: ActionButtonProps[] = [
+    { key: '01', title: 'Rate us', icon: <SvgEdit color={Colors.white} width={20} />, onPress: () => {} },
+    { key: '02', title: 'Share with friends', icon: <SvgEdit color={Colors.white} width={20} />, onPress: () => {} },
+    {
+      key: '03',
+      title: 'Debugger View',
+      icon: <SvgEdit color={Colors.white} width={20} />,
+      onPress: () => {
+        navigate(Screens.Debugger)
+      },
+    },
+  ]
 
-  useEffect(() => {
-    notificationServiceRef.current = new NotificationService()
-
-    timerServiceRef.current = new TimerService(preset)
-    //
-    timerServiceRef.current.OnTimerStarted = async () => {
-      setIsRunning(true)
-    }
-    timerServiceRef.current.OnTicked = async (
-      currentSet: number,
-      currentRep: number,
-      type: TickingType,
-      secsLeft: number,
-      tickedPreset: TickedPreset,
-    ) => {
-      // logger.info(
-      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-      //     `${tickedPreset.setCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
-      // )
-      // await Sleep(5000)
-    }
-    timerServiceRef.current.OnTimerCompleted = async () => {
-      setIsRunning(false)
-    }
-    // eslint-disable-next-line
-  }, [])
-
-  const onTestCountdownTimerPressed = () => {
-    // Start it first:
-    timerServiceRef.current && timerServiceRef.current.runPreset().then(() => {})
-    // Repeating pause & resume at 18ms interval for many times.
-    let flag = false
-    setInterval(() => {
-      flag
-        ? timerServiceRef.current && timerServiceRef.current.pause()
-        : timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
-      flag = !flag
-    }, 18)
-  }
+  const renderItem = (buttonProps: ActionButtonProps) => (
+    <View style={styles.row}>
+      <Neomorph
+        inner={false} // <- enable shadow inside of neomorph
+        swapShadows // <- change zIndex of each shadow color
+        style={{
+          ...styles.neomorphContainer,
+          width: DeviceScreen.width - Spacings.s_48,
+          height: 56,
+        }}
+      >
+        <View style={styles.rowContent}>
+          <TouchableOpacity key={buttonProps.key} style={styles.card} onPress={() => buttonProps.onPress()}>
+            <View style={styles.cardIconContainer}>{buttonProps.icon}</View>
+            <Text style={[Fonts.textRegular, FontColors.white]}>{buttonProps.title}</Text>
+          </TouchableOpacity>
+        </View>
+      </Neomorph>
+    </View>
+  )
 
   return (
     <ScreenContainer
@@ -66,26 +65,31 @@ export const SettingsScreen: React.FC<{}> = (): ReactElement => {
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
       <NavigationBar title={'Settings'} showBackButton={true} />
-      <View style={styles.rootContainer}>
-        {/* @action-section: */}
-        <View style={styles.actionSection}>
-          <View style={[styles.start]}>
-            <TouchableOpacity style={[Common.button.rounded]} onPress={() => onTestCountdownTimerPressed()}>
-              <Text style={Fonts.textRegular}>{'Test-Countdown-Timer'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      <ScrollView style={styles.rootContainer}>
+        {/*{presets && presets.map(preset => renderItem(preset))}*/}
+        <ElementList
+          style={styles.itemsContent}
+          // itemSeparatorComponent={<View style={styles.itemsSeparator} />}
+          items={actionButtons.map(item => renderItem(item))}
+        />
+        {/*<View style={styles.actionSection}>*/}
+        {/*  <View style={[styles.start]}>*/}
+        {/*    /!*<TouchableOpacity style={[Common.button.rounded]} onPress={() => onTestCountdownTimerPressed()}>*!/*/}
+        {/*    /!*  <Text style={Fonts.textRegular}>{'Test-Countdown-Timer'}</Text>*!/*/}
+        {/*    /!*</TouchableOpacity>*!/*/}
+        {/*  </View>*/}
+        {/*</View>*/}
+      </ScrollView>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flexDirection: 'column',
     flex: 1,
+    flexDirection: 'column',
     // backgroundColor: 'lightgrey',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
     paddingHorizontal: Spacings.s_8,
     paddingVertical: Spacings.s_16,
   },
@@ -99,11 +103,51 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen', // '#202021',
     borderRadius: 2,
   },
-  start: {},
-  pause: {},
-  stop: {},
   background: {
     backgroundColor: 'lightgreen', // '#202021',
     position: 'absolute',
+  },
+  row: {
+    // marginTop: 50,
+    // backgroundColor: 'lightgrey',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingVertical: Spacings.s_4,
+  },
+  neomorphContainer: {
+    // shadowColor: 'red',
+    // shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    borderRadius: 8,
+    backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  rowContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  card: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: Spacings.s_12,
+    marginRight: Spacings.s_8,
+    // backgroundColor: 'lightblue',
+  },
+  cardIconContainer: {
+    marginRight: Spacings.s_8,
+  },
+  itemsContent: {
+    // flex: 1,
+    // backgroundColor: 'lightgreen',
+    // paddingTop: defaultSpacing(SpacingType.Base),
+    // paddingHorizontal: defaultSpacing(SpacingType.Medium),
+    paddingBottom: Spacings.s_24,
+  },
+  itemsSeparator: {
+    height: Spacings.s_4,
   },
 })
