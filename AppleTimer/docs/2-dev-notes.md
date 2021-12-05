@@ -204,7 +204,7 @@ React native svg arc path - Stack Overflow
 {/*  <View style={styles.itemsContainer}>*/}
 {/*    <Text style={styles.itemLabel}>setPrepareSecs:{tickedPreset?.prepareRemainingSecs}</Text>*/}
 {/*    <Text style={styles.itemLabel}>repWorkoutSecs:{tickedPreset?.workoutRemainingSecs}</Text>*/}
-{/*    <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.repRestRemainingSecs}</Text>*/}
+{/*    <Text style={styles.itemLabel}>repRestSecs:{tickedPreset?.restRemainingSecs}</Text>*/}
 {/*  </View>*/}
 {/*  <View style={styles.itemsContainer}>*/}
 {/*    <Text style={styles.itemLabel}>cycleCurrentPhase: {tickedPreset?.cycleCurrentPhase}</Text>*/}
