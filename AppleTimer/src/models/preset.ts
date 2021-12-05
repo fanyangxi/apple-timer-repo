@@ -6,9 +6,9 @@ export class Preset {
   public Name: string
   // The cycles count of the preset.
   public CyclesCount: number
-  // The reps count of the set
+  // The reps count of the Cycle
   public RepsCount: number
-  // Phase: prepare duration of the Set.
+  // Phase: prepare duration of the Cycle.
   public PrepareSecs: number
   // Phase: workout duration of the Rep.
   public WorkoutSecs: number
@@ -41,7 +41,7 @@ export class Preset {
 export interface TickedPreset {
   // In Preset:
   cyclesRemainingCount: number
-  // In Current-Set:
+  // In Current-Cycle:
   setRepsRemainingCount: number
   setCurrentPhase?: TimerPhase
   //

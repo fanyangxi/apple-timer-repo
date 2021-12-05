@@ -17,6 +17,9 @@ Cycles:
 Set: has multiple reps/repetitions;
 - A set is a series of repetitions performed sequentially, with rest interval in between. For example, eight repetitions can be one set of bench presses.
 
+Phase:
+- There are 3 typical phases: 0.prepare, 1.workout, 3.rest
+
 Reps/Repetition (This's not the word for my purpose);
 - A repetition (rep) is one completion of an exercise, such as one deadlift, one bench press, or one arm curl. A repetition maximum (1RM) is your personal best, or the most you can lift once in a single repetition of an exercise. Therefore, a 12RM is the most you can lift and successfully perform 12 repetitions with proper form.
 

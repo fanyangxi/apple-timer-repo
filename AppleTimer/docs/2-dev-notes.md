@@ -88,36 +88,6 @@ React native svg arc path - Stack Overflow
 
 
 ```
-export class TickedPreset {
-  // In Preset:
-  public SetsRemainingCount: number
-  // In Current-Set: setRepsRemainingCount
-  public setRepsRemainingCount: number
-  public SetCurrentPhase: TimerPhase | undefined
-  public SetPrepareRemainingSecs: number
-  // In Current-Rep:
-  public RepWorkoutRemainingSecs: number
-  public RepRestRemainingSecs: number
-
-  constructor(
-    cyclesRemainingCount: number,
-    setRepsRemainingCount: number,
-    setCurrentPhase: TimerPhase | undefined,
-    setPrepareRemainingSecs: number,
-    repWorkoutRemainingSecs: number,
-    repRestRemainingSecs: number,
-  ) {
-    this.SetsRemainingCount = cyclesRemainingCount
-    this.SetRepsRemainingCount = setRepsRemainingCount
-    this.SetCurrentPhase = setCurrentPhase
-    this.SetPrepareRemainingSecs = setPrepareRemainingSecs
-    this.RepWorkoutRemainingSecs = repWorkoutRemainingSecs
-    this.RepRestRemainingSecs = repRestRemainingSecs
-  }
-}
-```
-
-```
 {/*<ActionSheet*/}
 {/*  // @ts-ignore*/}
 {/*  ref={actionSheetRef}*/}

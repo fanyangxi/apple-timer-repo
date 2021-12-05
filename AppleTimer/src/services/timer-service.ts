@@ -48,12 +48,6 @@ export class TimerService {
     this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
       const ticked = getUpdatedPreset(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(0, 0, secsLeft, ticked)
-      // // Current rep is closing (Prepare & Workout are 0), & it's the last one in current set:
-      // const isSetCompleted = [
-      //   ticked.setRepsRemainingCount === 1,
-      //   ticked.setPrepareRemainingSecs === 0,
-      //   ticked.repWorkoutRemainingSecs === 0,
-      // ].every(item => item)
 
       if (ticked.setCurrentPhase === TimerPhase.Prepare) {
         // Started
