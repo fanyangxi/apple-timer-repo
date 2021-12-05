@@ -1,4 +1,6 @@
 import { logger } from '@/utils/logger'
+import { PositiveOr0 } from '@/utils/common-util'
+import queueMicrotask from 'queue-microtask'
 
 export enum TickingType {
   Started = 'Started',
@@ -52,7 +54,6 @@ export class CountdownTimer {
     this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
     this.OnStarted && this.OnStarted(this._remainingCountdownMilliSecs).catch(e => this.handleErr('STARTED', e))
     await this.runSlices(TickingType.Started, this._initialCountdownSecs, 0)
-    logger.info('Started')
   }
 
   pause() {
@@ -69,21 +70,22 @@ export class CountdownTimer {
     this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.PAUSED).catch(() => {})
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
     const before = this._remainingCountdownMilliSecs
-    const timeLeft = before - (pausedAt - this._runStartedAt)
     // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
     // paused. Otherwise, if the user clicks the pause/resume many times, some of the ms will be lost.
     // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
     // pause/resume button around 150 times for a 3secs duration preset. It's a good enough result already.
     const compensationMs = 13
-    this._remainingCountdownMilliSecs = timeLeft < 0 ? 0 : timeLeft + compensationMs
+    const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._runStartedAt)
+    const remainingMsLeft = PositiveOr0(before - timeElapsedMs)
+    this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
     // // **This log-entry should not appear on PROD app**:
     // console.log(
-    //   '[Paused] Remaining MilliSecs:' +
-    //     `before:${before}|after:${this._remainingCountdownMilliSecs}; ` +
-    //     `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}; ` +
-    //     `Diff:${pausedAt - this._runStartedAt}`,
+    //   '[Paused] Remaining milliSecs: ' +
+    //     `before:${before}|after:${this._remainingCountdownMilliSecs}|` +
+    //     `elapsed:${before - this._remainingCountdownMilliSecs}; ` +
+    //     `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}`,
     // )
   }
 
@@ -101,7 +103,6 @@ export class CountdownTimer {
     this.OnStatusChanged && this.OnStatusChanged(oldStatus, TimerStatus.TICKING).catch(() => {})
     this.OnResumed && this.OnResumed(this._remainingCountdownMilliSecs).catch(e => this.handleErr('RESUME', e))
     await this.runSlices(TickingType.Resumed, countdownSecs, beforeStartDelayMilliSecs)
-    logger.info('Resumed')
   }
 
   stopAndReset(force: boolean = false) {
@@ -157,10 +158,7 @@ export class CountdownTimer {
   private triggerCallback(type: TickingType, secsLeft: number, beforeStartDelayMilliSecs?: number) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(type, secsLeft).catch(e => this.handleErr('TICK', e))
-    logger.info(
-      `[(${secsLeft} secs)] Trigger-callback-at ${type}` +
-        `${beforeStartDelayMilliSecs ? `, beforeStartDelay:${beforeStartDelayMilliSecs}` : ''}`,
-    )
+    logger.info(`[(${secsLeft} secs)] Trigger-callback-at (${type}), delay:${beforeStartDelayMilliSecs}`)
   }
 
   // noinspection JSMethodCanBeStatic

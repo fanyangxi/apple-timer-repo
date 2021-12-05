@@ -9,6 +9,10 @@
 - Workout terms, PRs, Sets, Reps, ...
 - Fix issue: when pause by closely enough to the second, it will not display on screen, e.g.: 4s, 2s,
 
+### Timer(s):
+https://www.npmjs.com/package/timer-node
+https://github.com/perymimon/Timer/blob/master/src/timer.js
+
 
 ### Action sheet bottom popup:
 https://www.npmjs.com/package/react-native-modalize
