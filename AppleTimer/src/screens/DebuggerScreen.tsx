@@ -31,12 +31,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnTimerStarted = async () => {
       console.log(`OnTimerStarted, execution-count: ${_executionCount}`)
     }
-    timerServiceRef.current.OnTicked = async (
-      currentSet: number,
-      currentRep: number,
-      secsLeft: number,
-      tickedPreset: TickedPreset,
-    ) => {
+    timerServiceRef.current.OnTicked = async (secsLeft: number, tickedPreset: TickedPreset) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${tickedPreset.cycleCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,

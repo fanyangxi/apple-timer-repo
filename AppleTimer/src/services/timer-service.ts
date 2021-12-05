@@ -80,7 +80,7 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
         if (ticked.restRemainingSecs === minClosingSecs) {
-          // Since we're still in current Rep, so we do '-1' here.
+          // Since we're still in current Set, so we do '-1' here.
           const cycleSetsLeft = ticked.cycleSetsRemainingCount - 1
           this.OnRestPhaseClosing && this.OnRestPhaseClosing(cycleSetsLeft).catch(this.handle)
         }

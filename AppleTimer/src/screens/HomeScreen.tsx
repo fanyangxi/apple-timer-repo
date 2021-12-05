@@ -73,8 +73,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerSvc.OnTicked = async (secsLeft: number, ticked: TickedPreset) => {
       // logger.info(
-      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-      //     `${ticked.cycleCurrentPhase},${type},${JSON.stringify(ticked)}`,
+      //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}],` +
+      //     `${ticked.cycleCurrentPhase},${JSON.stringify(ticked)}`,
       // )
       setTickedPreset(ticked)
       setSecsLeftInCurrentWorkout(secsLeft)

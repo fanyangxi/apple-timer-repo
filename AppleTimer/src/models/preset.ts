@@ -6,9 +6,9 @@ export class Preset {
   public Name: string
   // Phase: prepare duration of the Cycle.
   public PrepareSecs: number
-  // Phase: workout duration of the Rep.
+  // Phase: workout duration of the Set.
   public WorkoutSecs: number
-  // Phase: rest duration of the Rep.
+  // Phase: rest duration of the Set.
   public RestSecs: number
   // The sets count of the Cycle
   public SetsCount: number
