@@ -62,7 +62,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   const startOrResumeCycleAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> StartOrResumeSet: ${ticked?.cycleCurrentPhase}`)
+    console.log(`>>> startOrResumeCycleAnim: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: startOrResumeAnim0,
       [`${TimerPhase.Workout}`]: startOrResumeAnim1,
@@ -74,7 +74,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   const pauseAnim = () => {
     const { ticked } = stateOptionsRef.current
-    console.log(`>>> PauseSet: ${ticked?.cycleCurrentPhase}`)
+    console.log(`>>> pauseAnim: ${ticked?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: pauseAnim0,
       [`${TimerPhase.Workout}`]: pauseAnim1,
@@ -84,7 +84,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     return resultFunc()
   }
 
-  const resetSetAnim = () => {
+  const resetCycleAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> ResetSet: ${ticked?.cycleCurrentPhase}`)
     stopAndResetAnim0()
@@ -113,7 +113,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
   return {
     startOrResumeSetAnim: startOrResumeCycleAnim,
-    resetSetAnim,
+    resetSetAnim: resetCycleAnim,
     pauseAnim,
     startOrResumeRepetitionAnim,
     resetRepetitionAnim,
