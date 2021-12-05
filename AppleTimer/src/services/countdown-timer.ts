@@ -1,13 +1,5 @@
 import { logger } from '@/utils/logger'
 import { PositiveOr0 } from '@/utils/common-util'
-// import queueMicrotask from 'queue-microtask'
-
-// export enum TickingType {
-//   Started = 'Started',
-//   Resumed = 'Resumed',
-//   Ticked = 'Ticked',
-//   Finished = 'Finished',
-// }
 
 // Actions: Start, Pause + Resume, StopAndReset
 // Statuses: IDLE, PAUSED, TICKING
