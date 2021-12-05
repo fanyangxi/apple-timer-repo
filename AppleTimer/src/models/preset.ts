@@ -4,8 +4,8 @@ export class Preset {
   public Id: string
   //
   public Name: string
-  // The sets count of the preset.
-  public SetsCount: number
+  // The cycles count of the preset.
+  public CyclesCount: number
   // The reps count of the set
   public RepsCount: number
   // Phase: prepare duration of the Set.
@@ -24,7 +24,7 @@ export class Preset {
     workoutSecs: number,
     restSecs: number,
     repsCount: number,
-    setsCount: number,
+    cyclesCount: number,
     isActive: boolean = false,
   ) {
     this.Id = id
@@ -33,7 +33,7 @@ export class Preset {
     this.WorkoutSecs = workoutSecs
     this.RestSecs = restSecs
     this.RepsCount = repsCount
-    this.SetsCount = setsCount
+    this.CyclesCount = cyclesCount
     this.IsActive = isActive
   }
 }

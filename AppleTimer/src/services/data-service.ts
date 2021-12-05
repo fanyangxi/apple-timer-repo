@@ -34,7 +34,7 @@ const createPreset = async (model: Preset): Promise<void> => {
   const entity: PresetEntity = {
     id: `${uuid.v4()}`,
     name: model.Name,
-    setsCount: model.SetsCount,
+    cyclesCount: model.CyclesCount,
     repsCount: model.RepsCount,
     prepareSecs: model.PrepareSecs,
     workoutSecs: model.WorkoutSecs,
@@ -128,7 +128,7 @@ const _toEntity = (model: Preset): PresetEntity => {
     workoutSecs: model.WorkoutSecs,
     restSecs: model.RestSecs,
     repsCount: model.RepsCount,
-    setsCount: model.SetsCount,
+    cyclesCount: model.CyclesCount,
     isActive: model.IsActive,
   } as PresetEntity
 }
@@ -141,7 +141,7 @@ const _toModel = (entity: PresetEntity): Preset => {
     entity.workoutSecs,
     entity.restSecs,
     entity.repsCount,
-    entity.setsCount,
+    entity.cyclesCount,
     entity.isActive,
   )
 }
