@@ -107,10 +107,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       resetSetAnim()
       startOrResumeSetAnim()
     }
-    timerSvc.OnPreparePhaseIsClosing = async (setRepsRemainingCount: number) => {
+    timerSvc.OnPreparePhaseIsClosing = async (cycleRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
-        `num_${setRepsRemainingCount}.mp3`,
+        `num_${cycleRepsRemainingCount}.mp3`,
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
@@ -122,10 +122,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnWorkoutPhaseIsClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
-    timerSvc.OnRestPhaseIsClosing = async (setRepsRemainingCount: number) => {
+    timerSvc.OnRestPhaseIsClosing = async (cycleRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
-        `num_${setRepsRemainingCount}.mp3`,
+        `num_${cycleRepsRemainingCount}.mp3`,
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
@@ -237,7 +237,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   <Text style={styles.itemLabel}>{'Sets left'}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemValue}>{tickedPreset?.setRepsRemainingCount}</Text>
+                  <Text style={styles.itemValue}>{tickedPreset?.cycleRepsRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Repetitions left'}</Text>
                 </View>
               </View>
