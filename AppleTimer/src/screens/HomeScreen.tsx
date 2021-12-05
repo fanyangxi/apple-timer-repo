@@ -71,7 +71,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
       setTimerStatus(newStatus)
     }
-    timerSvc.OnTicked = async (currentSet: number, currentRep: number, secsLeft: number, ticked: TickedPreset) => {
+    timerSvc.OnTicked = async (secsLeft: number, ticked: TickedPreset) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
       //     `${ticked.cycleCurrentPhase},${type},${JSON.stringify(ticked)}`,
@@ -107,7 +107,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       resetCycleAnim()
       startOrResumeCycleAnim()
     }
-    timerSvc.OnPreparePhaseIsClosing = async (cycleRepsRemainingCount: number) => {
+    timerSvc.OnPreparePhaseClosing = async (cycleRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${cycleRepsRemainingCount}.mp3`,
@@ -119,10 +119,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       resetRepetitionAnim()
       startOrResumeRepetitionAnim()
     }
-    timerSvc.OnWorkoutPhaseIsClosing = async () => {
+    timerSvc.OnWorkoutPhaseClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
-    timerSvc.OnRestPhaseIsClosing = async (cycleRepsRemainingCount: number) => {
+    timerSvc.OnRestPhaseClosing = async (cycleRepsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${cycleRepsRemainingCount}.mp3`,

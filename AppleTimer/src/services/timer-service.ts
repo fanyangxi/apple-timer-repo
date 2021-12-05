@@ -23,13 +23,13 @@ export class TimerService {
   //
   public OnCycleStarted?: (cycleIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
-  public OnPreparePhaseIsClosing?: (cycleRepsRemainingCount: number) => Promise<void>
+  public OnPreparePhaseClosing?: (cycleRepsRemainingCount: number) => Promise<void>
   // The time that new-repetition started, also means the previous repetition competed.
   public OnRepetitionStarted?: (repetitionIndex: number) => Promise<void>
   public OnWorkoutPhaseStarted?: () => Promise<void>
-  public OnWorkoutPhaseIsClosing?: () => Promise<void>
+  public OnWorkoutPhaseClosing?: () => Promise<void>
   public OnRestPhaseStarted?: () => Promise<void>
-  public OnRestPhaseIsClosing?: (cycleRepsRemainingCount: number) => Promise<void>
+  public OnRestPhaseClosing?: (cycleRepsRemainingCount: number) => Promise<void>
 
   private CLOSING_SECS = 3
   private REST_PHASE_CLOSING_SECS = 3
@@ -54,8 +54,7 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
         if (ticked.prepareRemainingSecs === minClosingSecs) {
-          this.OnPreparePhaseIsClosing &&
-            this.OnPreparePhaseIsClosing(ticked.cycleRepsRemainingCount).catch(this.handle)
+          this.OnPreparePhaseClosing && this.OnPreparePhaseClosing(ticked.cycleRepsRemainingCount).catch(this.handle)
         }
       }
 
@@ -69,7 +68,7 @@ export class TimerService {
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
         if (ticked.workoutRemainingSecs === minClosingSecs) {
-          this.OnWorkoutPhaseIsClosing && this.OnWorkoutPhaseIsClosing().catch(this.handle)
+          this.OnWorkoutPhaseClosing && this.OnWorkoutPhaseClosing().catch(this.handle)
         }
       }
 
@@ -83,7 +82,7 @@ export class TimerService {
         if (ticked.restRemainingSecs === minClosingSecs) {
           // Since we're still in current Rep, so we do '-1' here.
           const setRepsLeft = ticked.cycleRepsRemainingCount - 1
-          this.OnRestPhaseIsClosing && this.OnRestPhaseIsClosing(setRepsLeft).catch(this.handle)
+          this.OnRestPhaseClosing && this.OnRestPhaseClosing(setRepsLeft).catch(this.handle)
         }
       }
     }
