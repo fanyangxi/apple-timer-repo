@@ -42,7 +42,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
       return 0
     }
     const theMap = {
-      [`${TimerPhase.Prepare}`]: ticked.setPrepareRemainingSecs,
+      [`${TimerPhase.Prepare}`]: ticked.prepareRemainingSecs,
       [`${TimerPhase.Workout}`]: ticked.repWorkoutRemainingSecs,
       [`${TimerPhase.Rest}`]: ticked.repRestRemainingSecs,
     }

@@ -51,14 +51,14 @@ export class TimerService {
 
       if (ticked.cycleCurrentPhase === TimerPhase.Prepare) {
         // Started
-        if (ticked.setPrepareRemainingSecs === this._preset.PrepareSecs) {
+        if (ticked.prepareRemainingSecs === this._preset.PrepareSecs) {
           logger.info(`${this.TAG}: OnCycleStarted: ${ticked.cyclesRemainingCount} left`)
           this.OnCycleStarted && this.OnCycleStarted(ticked.cyclesRemainingCount).catch(this.handle)
           this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
         }
         // IsClosing
         const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
-        if (ticked.setPrepareRemainingSecs === minClosingSecs) {
+        if (ticked.prepareRemainingSecs === minClosingSecs) {
           this.OnPreparePhaseIsClosing && this.OnPreparePhaseIsClosing(ticked.cycleRepsRemainingCount).catch(this.handle)
         }
       }
