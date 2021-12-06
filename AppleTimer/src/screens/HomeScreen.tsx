@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   buttonLeft: {
-    flexGrow: 1,
+    flexGrow: 2,
     marginRight: 10,
   },
   buttonRight: {
