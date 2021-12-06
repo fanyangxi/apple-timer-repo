@@ -18,7 +18,8 @@ export const runAccurateBackgroundCountdownTimer = (
   onTicked: (remainingSecs: number, rawRemainingMs: number, diff: number) => Promise<void>,
 ): number => {
   // Tried: 10ms / 100ms / 200ms / 500ms, seems like all works fine.
-  const miniIntervalMs = 500
+  // Confirmed that, even with 50ms, running for 7minutes, the phone is not gettng hot.
+  const miniIntervalMs = 50
   let remainingMs: number = countdownSecs * 1000 + delayMs
   let previousRemaining = remainingMs
 
