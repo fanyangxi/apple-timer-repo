@@ -21,6 +21,7 @@ export class CountdownTimerV2 {
   private _timerId?: number
   // private _delayTimerId?: number
   private _runStartedAt: number = 0
+  private _secsCounter: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
   public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
@@ -69,8 +70,10 @@ export class CountdownTimerV2 {
     // pause/resume button around 150 times for a 3secs duration preset. It's a good enough result already.
     const compensationMs = 13
     const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._runStartedAt)
-    const remainingMsLeft = PositiveOr0(before - timeElapsedMs)
-    this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
+    // const remainingMsLeft = PositiveOr0(before - timeElapsedMs)
+    // this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
+    this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
+
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
     // **This log-entry should not appear on PROD app**:
@@ -121,6 +124,7 @@ export class CountdownTimerV2 {
   }
 
   private async runSlices(countdownSecs: number, delayMilliSecs?: number): Promise<void> {
+    this._secsCounter = countdownSecs
     return new Promise(resolve => {
       // this.runIntervalTimer(countdownSecs, delayMilliSecs || 0, async (tickedIndex: number, hint: string) => {
       //   // logger.info(`>>> ${tickedIndex}:${hint}`)
@@ -135,7 +139,9 @@ export class CountdownTimerV2 {
         delayMilliSecs || 0,
         async (remainingSecs: number, rawRemainingMs: number, diff: number) => {
           // logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
-          this.triggerCallback(remainingSecs, delayMilliSecs, 'hint')
+          this._secsCounter = remainingSecs
+          this.reduceRemainingMs(remainingSecs, diff, 'run-slices')
+          //
           if (remainingSecs === 0) {
             this.stopAndReset()
             resolve()
@@ -144,6 +150,15 @@ export class CountdownTimerV2 {
       )
       this._runStartedAt = new Date().getTime()
     })
+  }
+
+  private reduceRemainingMs = (secsCounter: number, inputMs: number, hint: string) => {
+    this._remainingCountdownMilliSecs -= inputMs
+    // console.log(`>>> reduce-remainingMs [${hint}]: ${inputMs}, new-remaining: ${this._remainingCountdownMilliSecs}`)
+    //
+    if (this._remainingCountdownMilliSecs < secsCounter * 1000) {
+      this.triggerCallback(secsCounter, this._remainingCountdownMilliSecs, 'hint')
+    }
   }
 
   // private runIntervalTimer(
@@ -173,10 +188,10 @@ export class CountdownTimerV2 {
   //   this._runStartedAt = new Date().getTime()
   // }
 
-  private triggerCallback(secsLeft: number, beforeStartDelayMilliSecs?: number, hint?: string) {
+  private triggerCallback(secsLeft: number, rawRemaining?: number, hint?: string) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(secsLeft).catch(e => this.handleErr('TICK', e))
-    logger.info(`[(${secsLeft} secs)] Ticked, delay:${beforeStartDelayMilliSecs}, [${hint}]`)
+    logger.info(`[(${secsLeft} secs)] Ticked, rawRemaining:${rawRemaining}, [${hint}]`)
   }
 
   // noinspection JSMethodCanBeStatic
