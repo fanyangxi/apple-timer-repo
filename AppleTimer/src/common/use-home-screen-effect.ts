@@ -8,6 +8,24 @@ export type HomeScreenEffectOptions = {
   ticked?: TickedPreset
 }
 
+/**
+ * The animation handling follows bellow pattern:
+ *
+ * -- on-timer-started
+ * -- #A-cycle:
+ * --     prepare-started/cycle-started (resetCycleAnim, startOrResumePreparePhaseAnim)
+ * --     #1
+ * --     workout-started/set-stared (resetSetAnim, startOrResumeWorkoutPhaseAnim)
+ * --     rest-started (startOrResumeSetPhaseAnim)
+ * --     #2
+ * --     workout-started/set-stared (resetSetAnim, startOrResumeWorkoutPhaseAnim)
+ * --     rest-started (startOrResumeSetPhaseAnim)
+ * --     #3
+ * --     ...
+ * -- #B-cycle:
+ * --     ......
+ * -- on-timer-completed
+ * */
 export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
   const stateOptionsRef = useRef<HomeScreenEffectOptions>(options)
 
@@ -18,6 +36,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     }
   }, [options])
 
+  // For `Prepare` Phase:
   const {
     startOrResumeAnim: startOrResumeAnim0,
     pauseAnim: pauseAnim0,
@@ -34,6 +53,7 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     },
   })
 
+  // For `Workout` Phase:
   const {
     startOrResumeAnim: startOrResumeAnim1,
     pauseAnim: pauseAnim1,
@@ -44,10 +64,12 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     to: 100,
     durationMs: (stateOptionsRef.current.activePreset?.WorkoutSecs ?? 0) * 1000,
     onFinished: () => {
-      startOrResumeAnim2()
+      // Each anim should be started by its own phase-started event
+      // startOrResumeAnim2()
     },
   })
 
+  // For `Rest` Phase:
   const {
     startOrResumeAnim: startOrResumeAnim2,
     pauseAnim: pauseAnim2,
@@ -92,17 +114,6 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
     stopAndResetAnim2()
   }
 
-  const startOrResumeSetAnim = () => {
-    const { ticked } = stateOptionsRef.current
-    console.log(`>>> startOrResumeSetAnim: ${ticked?.cycleCurrentPhase}`)
-    const theMap = {
-      [`${TimerPhase.Workout}`]: startOrResumeAnim1,
-      [`${TimerPhase.Rest}`]: startOrResumeAnim2,
-    }
-    const resultFunc = theMap[`${ticked?.cycleCurrentPhase}`] ?? startOrResumeAnim1
-    return resultFunc()
-  }
-
   const resetSetAnim = () => {
     const { ticked } = stateOptionsRef.current
     console.log(`>>> resetSetAnim: ${ticked?.cycleCurrentPhase}`)
@@ -112,10 +123,12 @@ export const useHomeScreenEffect = (options: HomeScreenEffectOptions) => {
 
   // startOrResume (from 0, or any) / pause (any) / resume (any) / stop|reset (any)
   return {
+    startOrResumePreparePhaseAnim: startOrResumeAnim0,
+    startOrResumeWorkoutPhaseAnim: startOrResumeAnim1,
+    startOrResumeSetPhaseAnim: startOrResumeAnim2,
     startOrResumeCycleAnim,
-    resetCycleAnim,
     pauseAnim,
-    startOrResumeSetAnim,
+    resetCycleAnim,
     resetSetAnim,
     animValue0: animValue0,
     animValue1: animValue1,

@@ -37,10 +37,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const TAG = '$$[HOME]$$'
 
   const {
+    startOrResumePreparePhaseAnim,
+    startOrResumeWorkoutPhaseAnim,
+    startOrResumeSetPhaseAnim,
     startOrResumeCycleAnim,
-    resetCycleAnim,
     pauseAnim,
-    startOrResumeSetAnim,
+    resetCycleAnim,
     resetSetAnim,
     animValue0: animValue0,
     animValue1: animValue1,
@@ -109,7 +111,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnCycleStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnCycleStarted`)
       resetCycleAnim()
-      startOrResumeCycleAnim()
+    }
+    timerSvc.OnPreparePhaseStarted = async () => {
+      logger.info(`${TAG}: timerSvc.OnPreparePhaseStarted`)
+      startOrResumePreparePhaseAnim()
     }
     timerSvc.OnPreparePhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
@@ -122,10 +127,17 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnSetStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnSetStarted`)
       resetSetAnim()
-      startOrResumeSetAnim()
+    }
+    timerSvc.OnWorkoutPhaseStarted = async () => {
+      logger.info(`${TAG}: timerSvc.OnWorkoutPhaseStarted`)
+      startOrResumeWorkoutPhaseAnim()
     }
     timerSvc.OnWorkoutPhaseClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
+    }
+    timerSvc.OnRestPhaseStarted = async () => {
+      logger.info(`${TAG}: timerSvc.OnRestPhaseStarted`)
+      startOrResumeSetPhaseAnim()
     }
     timerSvc.OnRestPhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
