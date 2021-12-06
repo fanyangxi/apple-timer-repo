@@ -9,6 +9,7 @@ import { ElementList } from '@/components/ElementList'
 import { DataService } from '@/services/data-service'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
+import Modal, { ModalButton, ModalContent, ModalFooter, ModalTitle, ScaleAnimation } from 'react-native-modals'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -26,6 +27,8 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   onAddClicked,
 }) => {
   const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
+  const [deletingPreset, setDeletingPreset] = useState<Preset | undefined>()
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false)
 
   useEffect(() => {
     console.log('>>>> Preset selection-popup loaded')
@@ -44,6 +47,22 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       console.log('Cached-preset:', items)
       setCachedPresets(items)
     })
+  }
+
+  function deletePreset(presetId: string) {
+    DataService.deletePreset(presetId)
+      .then(() => {
+        console.log(`Delete preset:${presetId} completed`)
+        reloadItems()
+      })
+      .catch(e => {
+        Toast.show({
+          type: 'error',
+          position: 'top',
+          text1: 'Delete preset failed:',
+          text2: `Detail: ${e}`,
+        })
+      })
   }
 
   const renderItem = (preset: Preset) => (
@@ -79,20 +98,8 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             key={`${preset.Name}-delete-container`}
             style={styles.actionButton}
             onPress={() => {
-              DataService.deletePreset(preset.Id)
-                .then(() => {
-                  console.log(`Delete preset:${preset.Id} completed`)
-                  reloadItems()
-                })
-                .catch(e => {
-                  Toast.show({
-                    type: 'error',
-                    position: 'top',
-                    text1: 'Delete preset failed:',
-                    text2: `Detail: ${e}`,
-                  })
-                })
-              onDeleteItemClicked && onDeleteItemClicked(preset)
+              setDeletingPreset(preset)
+              setShowConfirmationDialog(true)
             }}
           >
             <Text style={Fonts.textRegular}>Delete</Text>
@@ -127,6 +134,38 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           items={cachedPresets && cachedPresets.map(preset => renderItem(preset))}
         />
       </ScrollView>
+      <Modal
+        visible={showConfirmationDialog}
+        modalAnimation={new ScaleAnimation(500)}
+        modalTitle={<ModalTitle title="Confirm deletion" />}
+        width={0.7}
+        footer={
+          <ModalFooter>
+            <ModalButton
+              style={styles.confirmationLeftButton}
+              text="Cancel"
+              onPress={() => setShowConfirmationDialog(false)}
+            />
+            <ModalButton
+              style={styles.confirmationRightButton}
+              text="Yes"
+              onPress={() => {
+                setShowConfirmationDialog(false)
+                if (deletingPreset) {
+                  deletePreset(deletingPreset.Id)
+                  onDeleteItemClicked && onDeleteItemClicked(deletingPreset)
+                }
+              }}
+            />
+          </ModalFooter>
+        }
+      >
+        <ModalContent style={styles.confirmationContent}>
+          <Text style={[Fonts.textRegular, styles.confirmationText]}>
+            Are you sure to delete preset ({`${deletingPreset?.Name}`})?
+          </Text>
+        </ModalContent>
+      </Modal>
     </View>
   )
 }
@@ -206,6 +245,19 @@ const styles = StyleSheet.create({
   separator: {
     height: 4,
     backgroundColor: 'lightblue',
+  },
+  confirmationContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmationText: {
+    textAlign: 'center',
+  },
+  confirmationLeftButton: {
+    alignSelf: 'flex-start',
+  },
+  confirmationRightButton: {
+    alignSelf: 'flex-end',
   },
 })
 
