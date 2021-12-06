@@ -15,9 +15,8 @@ export class CountdownTimerV2 {
   private readonly INTERVAL = 1000
   private readonly _initialCountdownSecs: number
   private _remainingCountdownMilliSecs: number = 0
-  private _timerId?: number
-  private _runStartedAt: number = 0
   private _remainingMsLastUpdatedAt: number = 0
+  private _timerId?: number
   private _secsCounter: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
@@ -63,7 +62,7 @@ export class CountdownTimerV2 {
     // pause/resume button around 150 times for a 3secs duration preset. It's a good enough result already.
     const compensationMs = 13
     const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._remainingMsLastUpdatedAt)
-    console.log(`>>> IN:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
+    // console.log(`>>> countdown-timer-v2:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
     this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
@@ -120,7 +119,9 @@ export class CountdownTimerV2 {
           }
         },
       )
-      this._runStartedAt = new Date().getTime()
+      // For New-Start or Resume, we should consider it as `new remainingMs accepted`, so need to update this field.
+      // We named it as `this._runStartedAt` previously.
+      this._remainingMsLastUpdatedAt = Date.now()
     })
   }
 
@@ -129,12 +130,15 @@ export class CountdownTimerV2 {
     this._remainingCountdownMilliSecs -= elapsedMs
     this._remainingMsLastUpdatedAt = Date.now()
     logger.info(
-      `[${hint}][reduce-remainingMs]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
+      `[reduce-remainingMs][${hint}]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
         `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
         `old-remaining:${oldRemaining}`,
     )
-    if (this._remainingCountdownMilliSecs < secsCounter * 1000) {
-      this.triggerCallback(secsCounter, this._remainingCountdownMilliSecs, 'hint')
+    // When oldSecs != newSecs, then trigger the Ticked event
+    const oldSecs = Math.floor(oldRemaining / this.INTERVAL)
+    const newSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
+    if (newSecs !== oldSecs) {
+      this.triggerCallback(oldSecs, this._remainingCountdownMilliSecs, 'hint')
     }
   }
 
