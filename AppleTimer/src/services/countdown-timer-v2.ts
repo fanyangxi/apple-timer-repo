@@ -54,13 +54,9 @@ export class CountdownTimerV2 {
       return
     }
 
-    // 1.Get the paused time, right before the clear.
     const pausedAt = new Date().getTime()
     this.clear()
-    //
     this.changeStatusTo(TimerStatus.PAUSED)
-    // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
-    // const before = this._remainingCountdownMilliSecs
     // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
     // paused. Otherwise, if the user clicks the pause/resume many times, some of the ms will be lost.
     // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
@@ -74,13 +70,6 @@ export class CountdownTimerV2 {
 
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
-    // // **This log-entry should not appear on PROD app**:
-    // console.log(
-    //   '[Paused] Remaining milliSecs: ' +
-    //     `before:${before}|after:${this._remainingCountdownMilliSecs}|` +
-    //     `elapsed:${before - this._remainingCountdownMilliSecs}; ` +
-    //     `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}`,
-    // )
   }
 
   async resume(): Promise<void> {
@@ -88,7 +77,6 @@ export class CountdownTimerV2 {
       return
     }
 
-    // **This log-entry should not appear on PROD app**:
     console.log(`[Resumed] With remaining milliSecs:${this._remainingCountdownMilliSecs}`)
     const countdownSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
     const beforeStartDelayMilliSecs = this._remainingCountdownMilliSecs % this.INTERVAL
@@ -122,14 +110,6 @@ export class CountdownTimerV2 {
   private async runSlices(countdownSecs: number, delayMilliSecs?: number): Promise<void> {
     this._secsCounter = countdownSecs
     return new Promise(resolve => {
-      // this.runIntervalTimer(countdownSecs, delayMilliSecs || 0, async (tickedIndex: number, hint: string) => {
-      //   // logger.info(`>>> ${tickedIndex}:${hint}`)
-      //   this.triggerCallback(tickedIndex, delayMilliSecs, hint)
-      //   if (tickedIndex === 0) {
-      //     this.stopAndReset()
-      //     resolve()
-      //   }
-      // })
       this._timerId = runAccurateBackgroundCountdownTimer(
         countdownSecs,
         delayMilliSecs || 0,
