@@ -62,7 +62,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
         timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
       }
       flag = !flag
-    }, 500) // Minimum acceptable Resume->Pause interval is 20ms.
+    }, 200) // Minimum acceptable Resume->Pause interval is 20ms.
     logger.info(`start-auto-testing: interval-run-at: ${Date.now()}`)
   }
 
@@ -83,54 +83,26 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
         timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
       }
     }
+
+    // runAccurateBackgroundCountdownTimer(
+    //   420,
+    //   239,
+    //   async (remainingSecs: number, rawRemainingMs: number, diff: number) => {
+    //     logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
+    //     await sleep(3500)
+    //     notificationServiceRef.current?.playSounds([Sounds._bell])
+    //   },
+    // )
   }
 
   const resetManualTesting = () => {
-    logger.info('reset-manual-testing')
+    // logger.info('reset-')
+    // BackgroundTimer.stopBackgroundTimer()
+
     isStartedRef.current = false
     isPausedRef.current = false
     _executionCount = 0
-
-    // extracted(4, 29, async (tickedIndex: number, hint: string) => {
-    //   logger.info(`>>> ${tickedIndex}:${hint}`)
-    // })
-    // setTimeout(() => {
-    //   clearInterval(_delayTimerId)
-    //   clearInterval(_intervalTimerId)
-    //   extracted(0, 30, async (tickedIndex: number, hint: string) => {
-    //     logger.info(`>>> ${tickedIndex}:${hint}`)
-    //   })
-    // }, 10)
   }
-
-  // let _delayTimerId: NodeJS.Timeout
-  // let _intervalTimerId: NodeJS.Timeout
-  //function extracted(countdownSecs: number, delay: number, onTicked: (index: number, hint: string) => Promise<void>) {
-  //   let counter: number = countdownSecs
-  //   const trigger = (hint: string) => {
-  //     // console.log('&&&&&&&&&&&&&&&&&& setInterval')
-  //     onTicked(counter, hint).catch(() => {})
-  //     if (counter <= 0) {
-  //       clearInterval(_delayTimerId)
-  //       clearInterval(_intervalTimerId)
-  //       return
-  //     }
-  //     counter--
-  //   }
-  //
-  //   // const _startedAt = new Date().getTime()
-  //   // logger.info('==== 1')
-  //   _delayTimerId = setTimeout(() => {
-  //     // const _endedAt = new Date().getTime()
-  //     // logger.info(`==== 2: ${_endedAt - _startedAt}`)
-  //     trigger('ticked-after-delay')
-  //     if (counter > 0) {
-  //       _intervalTimerId = setInterval(() => {
-  //         trigger('ticket-at-interval')
-  //       }, 1000)
-  //     }
-  //   }, delay)
-  // }
 
   return (
     <ScreenContainer
