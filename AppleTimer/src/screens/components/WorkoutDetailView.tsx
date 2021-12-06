@@ -28,7 +28,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
     const aaa = toDecimal(preparePhaseRawValueRef.current)
     const bbb = toDecimal(value)
     if (aaa !== bbb) {
-      console.log(`>>> prepare-phase-anim: preparePhaseRawValue:${aaa}, value:${bbb}`)
+      // console.log(`>>> prepare-phase-anim: preparePhaseRawValue:${aaa}, value:${bbb}`)
       preparePhaseRawValueRef.current = bbb
       setPreparePhaseRawValue(value)
     }
@@ -40,7 +40,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
     const aaa = toDecimal(workoutPhaseRawValueRef.current)
     const bbb = toDecimal(value)
     if (aaa !== bbb) {
-      console.log(`>>> workout-phase-anim: workoutPhaseRawValue:${aaa}, value:${bbb}`)
+      // console.log(`>>> workout-phase-anim: workoutPhaseRawValue:${aaa}, value:${bbb}`)
       workoutPhaseRawValueRef.current = bbb
       setWorkoutPhaseRawValue(value)
     }
@@ -52,7 +52,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
     const aaa = toDecimal(restPhaseRawValueRef.current)
     const bbb = toDecimal(value)
     if (aaa !== bbb) {
-      console.log(`>>> rest-phase-anim: restPhaseRawValue:${aaa}, value:${bbb}`)
+      // console.log(`>>> rest-phase-anim: restPhaseRawValue:${aaa}, value:${bbb}`)
       restPhaseRawValueRef.current = bbb
       setRestPhaseRawValue(value)
     }

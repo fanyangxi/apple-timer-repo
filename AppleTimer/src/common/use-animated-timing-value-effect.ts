@@ -11,7 +11,7 @@ export type AnimatedTimingValueEffectOptions = {
 export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectOptions) => {
   const stateOptionsRef = useRef<AnimatedTimingValueEffectOptions>(options)
   const currentValueRef = useRef<number>(options.from)
-  const [theAnimValue] = useState(new Animated.Value(options.from))
+  const theAnimValue = useRef(new Animated.Value(options.from))
 
   useEffect(() => {
     if (JSON.stringify(stateOptionsRef.current) !== JSON.stringify(options)) {
@@ -25,7 +25,7 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     const remainingPercentage = (to - currentValueRef.current) / (to - from)
     // eslint-disable-next-line max-len,prettier/prettier
     console.log(`IN:startOrResumeAnim:${remainingPercentage}/${from}/${to}/${currentValueRef.current};durationMs:${durationMs}`)
-    Animated.timing(theAnimValue, {
+    Animated.timing(theAnimValue.current, {
       toValue: to,
       duration: durationMs * remainingPercentage,
       easing: Easing.linear,
@@ -39,16 +39,16 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
   }
 
   const pauseAnim = () => {
-    theAnimValue.stopAnimation(value => {
+    theAnimValue.current.stopAnimation(value => {
       console.log(`IN:pauseAnim:${value}`)
       currentValueRef.current = value
     })
   }
 
   const stopAndResetAnim = () => {
-    theAnimValue.stopAnimation(() => {
+    theAnimValue.current.stopAnimation(() => {
       console.log('IN:stopAndResetAnim:')
-      theAnimValue.setValue(stateOptionsRef.current.from)
+      theAnimValue.current.setValue(stateOptionsRef.current.from)
       currentValueRef.current = stateOptionsRef.current.from
     })
   }
@@ -58,6 +58,6 @@ export const useAnimatedTimingValueEffect = (options: AnimatedTimingValueEffectO
     startOrResumeAnim,
     pauseAnim,
     stopAndResetAnim,
-    animValue: theAnimValue,
+    animValue: theAnimValue.current,
   }
 }

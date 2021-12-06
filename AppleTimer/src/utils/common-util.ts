@@ -31,5 +31,6 @@ export const hashCode = (input: string): number => {
 }
 
 export const toDecimal = (input: number) => {
-  return Math.round(input * 100) / 100
+  // return Math.round(input)
+  return Math.round(input * 10) / 10
 }

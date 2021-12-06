@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import Svg, { Path, Circle, G, Text } from 'react-native-svg'
+import Svg, { Path, Circle } from 'react-native-svg'
 
 export type CircleVerticalSliderProps = {
   // /** Size of Thumb*/
