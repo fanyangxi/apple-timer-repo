@@ -17,6 +17,7 @@ export class CountdownTimerV2 {
   private _remainingCountdownMilliSecs: number = 0
   private _timerId?: number
   private _runStartedAt: number = 0
+  private _remainingMsLastUpdatedAt: number = 0
   private _secsCounter: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
@@ -61,9 +62,7 @@ export class CountdownTimerV2 {
     // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
     // pause/resume button around 150 times for a 3secs duration preset. It's a good enough result already.
     const compensationMs = 13
-    const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._runStartedAt)
-    // const remainingMsLeft = PositiveOr0(before - timeElapsedMs)
-    // this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
+    const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._remainingMsLastUpdatedAt)
     console.log(`>>> IN:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
     this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
     // Trigger Event:
@@ -128,6 +127,7 @@ export class CountdownTimerV2 {
   private reduceRemainingMs = (secsCounter: number, elapsedMs: number, hint: string) => {
     const oldRemaining = this._remainingCountdownMilliSecs
     this._remainingCountdownMilliSecs -= elapsedMs
+    this._remainingMsLastUpdatedAt = Date.now()
     logger.info(
       `[${hint}][reduce-remainingMs]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
         `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
