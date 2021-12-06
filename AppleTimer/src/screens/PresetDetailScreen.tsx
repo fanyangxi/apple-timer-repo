@@ -18,6 +18,7 @@ import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import Toast from 'react-native-toast-message'
+import Modal, { ModalButton, ModalContent, ModalFooter, ModalTitle, ScaleAnimation } from 'react-native-modals'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -31,6 +32,8 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const [newTitle, setNewTitle] = useState<string>(currentPreset.Name)
   const [isModifyingTitle, setIsModifyingTitle] = useState<boolean>(false)
   const [current, setCurrent] = useState<Preset>(currentPreset)
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false)
+
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
   const restSecsDurationPickerRef = useRef<Modalize>(null)
@@ -49,6 +52,41 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
     // eslint-disable-next-line
   }, [current])
 
+  function saveChanges() {
+    console.log(current)
+    isCreatingNewMode
+      ? DataService.createPreset(current)
+          .then(() => goBack())
+          .catch(e => {
+            Toast.show({
+              type: 'error',
+              position: 'top',
+              text1: 'Create preset failed:',
+              text2: `Detail: ${e}`,
+            })
+          })
+      : DataService.updatePreset(current)
+          .then(() => goBack())
+          .catch(e => {
+            Toast.show({
+              type: 'error',
+              position: 'top',
+              text1: 'Update preset failed:',
+              text2: `Detail: ${e}`,
+            })
+          })
+  }
+
+  function cancel() {
+    const original = JSON.stringify(thePreset)
+    const updated = JSON.stringify(current)
+    if (original !== updated) {
+      setShowConfirmationDialog(true)
+    } else {
+      goBack()
+    }
+  }
+
   return (
     <ScreenContainer
       backgroundComponent={() => (
@@ -58,7 +96,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
       bottomInsetBackgroundColor={Colors.transparent}
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
-      <NavigationBar title={isCreatingNewMode ? 'Create New Preset' : 'Edit Preset Detail'} showBackButton={true} />
+      <NavigationBar
+        title={isCreatingNewMode ? 'Create New Preset' : 'Edit Preset Detail'}
+        showBackButton={true}
+        backButtonAction={() => cancel()}
+      />
       <View style={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
@@ -217,40 +259,15 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </View>
         </View>
         <View style={styles.actionsSection}>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => goBack()}>
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => cancel()}>
             <Text style={Fonts.textRegular}>{'Cancel'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[Common.button.rounded]}
-            onPress={() => {
-              console.log(current)
-              isCreatingNewMode
-                ? DataService.createPreset(current)
-                    .then(() => goBack())
-                    .catch(e => {
-                      Toast.show({
-                        type: 'error',
-                        position: 'top',
-                        text1: 'Create preset failed:',
-                        text2: `Detail: ${e}`,
-                      })
-                    })
-                : DataService.updatePreset(current)
-                    .then(() => goBack())
-                    .catch(e => {
-                      Toast.show({
-                        type: 'error',
-                        position: 'top',
-                        text1: 'Update preset failed:',
-                        text2: `Detail: ${e}`,
-                      })
-                    })
-            }}
-          >
+          <TouchableOpacity style={[Common.button.rounded]} onPress={() => saveChanges()}>
             <Text style={Fonts.textRegular}>{'Save'}</Text>
           </TouchableOpacity>
         </View>
       </View>
+
       <BottomDurationPickerPopup
         popupRef={prepareSecsDurationPickerRef}
         duration={current.PrepareSecs}
@@ -341,6 +358,37 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           )
         }}
       />
+      <Modal
+        visible={showConfirmationDialog}
+        modalAnimation={new ScaleAnimation(500)}
+        modalTitle={<ModalTitle title="Confirmation" />}
+        width={0.7}
+        footer={
+          <ModalFooter>
+            <ModalButton
+              style={styles.confirmationLeftButton}
+              text="Discard!"
+              onPress={() => {
+                setShowConfirmationDialog(false)
+                goBack()
+              }}
+            />
+            <ModalButton
+              style={styles.confirmationRightButton}
+              text="Keep Editing"
+              onPress={() => {
+                setShowConfirmationDialog(false)
+              }}
+            />
+          </ModalFooter>
+        }
+      >
+        <ModalContent style={styles.confirmationContent}>
+          <Text style={[Fonts.textRegular, styles.confirmationText]}>
+            Data has been changed. Do you want to discard the changes?
+          </Text>
+        </ModalContent>
+      </Modal>
     </ScreenContainer>
   )
 }
@@ -438,5 +486,18 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     // backgroundColor: 'lightgreen', // '#202021',
+  },
+  confirmationContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmationText: {
+    textAlign: 'center',
+  },
+  confirmationLeftButton: {
+    alignSelf: 'flex-start',
+  },
+  confirmationRightButton: {
+    alignSelf: 'flex-end',
   },
 })

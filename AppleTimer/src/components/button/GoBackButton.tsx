@@ -15,8 +15,7 @@ export const GoBackButton: React.FC<{
       style={{ width: 32, height: 32 }}
       icon={<BackArrow color={Colors.white} style={{ margin: 8 }} />}
       onPress={() => {
-        goBack()
-        onPress && onPress()
+        onPress ? onPress() : goBack()
       }}
     />
   )

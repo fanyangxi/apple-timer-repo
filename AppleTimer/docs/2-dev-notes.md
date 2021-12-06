@@ -24,6 +24,10 @@ https://www.npmjs.com/package/react-native-scroll-bottom-sheet
 https://www.npmjs.com/package/@gorhom/bottom-sheet
 
 
+### react-native modals / popup / confirmation-dialog:
+https://www.npmjs.com/package/react-native-modals
+https://www.npmjs.com/package/react-native-simple-dialogs
+
 ### scroll/wheel picker:
 https://www.npmjs.com/package/react-native-dynamically-selected-picker ++++
 https://www.npmjs.com/package/react-native-wheel-scroll-picker +++
