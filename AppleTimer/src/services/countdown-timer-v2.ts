@@ -1,10 +1,7 @@
 import { logger } from '@/utils/logger'
 import { PositiveOr0 } from '@/utils/common-util'
 import BackgroundTimer from 'react-native-background-timer'
-import queueMicrotask from 'queue-microtask'
-import { runAccurateBackgroundCountdownTimer, sleep } from '@/utils/timer-util'
-import { format, toDTime } from '@/utils/date-util'
-import { Sounds } from '@/services/notification-service'
+import { runAccurateBackgroundCountdownTimer } from '@/utils/timer-util'
 
 // Actions: Start, Pause + Resume, StopAndReset
 // Statuses: IDLE, PAUSED, TICKING
@@ -63,7 +60,7 @@ export class CountdownTimerV2 {
     //
     this.changeStatusTo(TimerStatus.PAUSED)
     // 2.Exclude the passed milli-secs, then get the `remaining-countdown-milli-secs`.
-    const before = this._remainingCountdownMilliSecs
+    // const before = this._remainingCountdownMilliSecs
     // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
     // paused. Otherwise, if the user clicks the pause/resume many times, some of the ms will be lost.
     // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
@@ -72,17 +69,18 @@ export class CountdownTimerV2 {
     const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._runStartedAt)
     // const remainingMsLeft = PositiveOr0(before - timeElapsedMs)
     // this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
+    console.log(`>>> IN:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
     this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
 
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
-    // **This log-entry should not appear on PROD app**:
-    console.log(
-      '[Paused] Remaining milliSecs: ' +
-        `before:${before}|after:${this._remainingCountdownMilliSecs}|` +
-        `elapsed:${before - this._remainingCountdownMilliSecs}; ` +
-        `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}`,
-    )
+    // // **This log-entry should not appear on PROD app**:
+    // console.log(
+    //   '[Paused] Remaining milliSecs: ' +
+    //     `before:${before}|after:${this._remainingCountdownMilliSecs}|` +
+    //     `elapsed:${before - this._remainingCountdownMilliSecs}; ` +
+    //     `runStartedAt:${this._runStartedAt}/pausedAt:${pausedAt}`,
+    // )
   }
 
   async resume(): Promise<void> {
@@ -111,8 +109,6 @@ export class CountdownTimerV2 {
   }
 
   private clear() {
-    // this._delayTimerId && BackgroundTimer.clearTimeout(this._delayTimerId)
-    // this._delayTimerId = undefined
     this._timerId && BackgroundTimer.clearInterval(this._timerId)
     this._timerId = undefined
   }
@@ -141,7 +137,6 @@ export class CountdownTimerV2 {
           // logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
           this._secsCounter = remainingSecs
           this.reduceRemainingMs(remainingSecs, diff, 'run-slices')
-          //
           if (remainingSecs === 0) {
             this.stopAndReset()
             resolve()
@@ -152,46 +147,23 @@ export class CountdownTimerV2 {
     })
   }
 
-  private reduceRemainingMs = (secsCounter: number, inputMs: number, hint: string) => {
-    this._remainingCountdownMilliSecs -= inputMs
-    // console.log(`>>> reduce-remainingMs [${hint}]: ${inputMs}, new-remaining: ${this._remainingCountdownMilliSecs}`)
-    //
+  private reduceRemainingMs = (secsCounter: number, elapsedMs: number, hint: string) => {
+    const oldRemaining = this._remainingCountdownMilliSecs
+    this._remainingCountdownMilliSecs -= elapsedMs
+    logger.info(
+      `[${hint}][reduce-remainingMs]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
+        `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
+        `old-remaining:${oldRemaining}`,
+    )
     if (this._remainingCountdownMilliSecs < secsCounter * 1000) {
       this.triggerCallback(secsCounter, this._remainingCountdownMilliSecs, 'hint')
     }
   }
 
-  // private runIntervalTimer(
-  //   countdownSecs: number,
-  //   delayMs: number,
-  //   onTicked: (index: number, hint: string) => Promise<void>,
-  // ): void {
-  //   let counter: number = countdownSecs
-  //   const trigger = (hint: string) => {
-  //     console.log(`>>>>>>>>>>>>>> ${counter}/${delayMs}:${hint}`)
-  //     onTicked(counter, hint).catch(() => {})
-  //     if (counter <= 0) {
-  //       this.clear()
-  //       return
-  //     }
-  //     counter--
-  //   }
-  //
-  //   this._delayTimerId = BackgroundTimer.setTimeout(() => {
-  //     trigger('ticked-after-delay')
-  //     if (counter > 0) {
-  //       this._timerId = BackgroundTimer.setInterval(() => {
-  //         trigger('ticket-at-interval')
-  //       }, this.INTERVAL)
-  //     }
-  //   }, delayMs)
-  //   this._runStartedAt = new Date().getTime()
-  // }
-
-  private triggerCallback(secsLeft: number, rawRemaining?: number, hint?: string) {
+  private triggerCallback(secsLeft: number, rawRemainingMs?: number, hint?: string) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(secsLeft).catch(e => this.handleErr('TICK', e))
-    logger.info(`[(${secsLeft} secs)] Ticked, rawRemaining:${rawRemaining}, [${hint}]`)
+    logger.info(`[(${secsLeft} secs)] Ticked, rawRemainingMs:${rawRemainingMs}, [${hint}]`)
   }
 
   // noinspection JSMethodCanBeStatic
