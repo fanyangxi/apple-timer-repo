@@ -16,7 +16,6 @@ export class CountdownTimerV2 {
   private readonly _initialCountdownSecs: number
   private _remainingCountdownMilliSecs: number = 0
   private _timerId?: number
-  // private _delayTimerId?: number
   private _runStartedAt: number = 0
   private _secsCounter: number = 0
 
@@ -67,7 +66,6 @@ export class CountdownTimerV2 {
     // this._remainingCountdownMilliSecs = before < remainingMsLeft ? before : remainingMsLeft
     console.log(`>>> IN:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
     this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
-
     // Trigger Event:
     this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
   }
