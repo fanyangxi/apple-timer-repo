@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { FontColors, Fonts, Spacings } from '@/theme/Variables'
@@ -7,6 +7,7 @@ import CircularSlider from '@/screens/components/CircularSlider'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 import { format, toDTime } from '@/utils/date-util'
 import { TimerPhase } from '@/models/timer-phase'
+import { toDecimal } from '@/utils/common-util'
 
 export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
@@ -22,19 +23,39 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
   restPhaseAnimValue,
 }) => {
   const [preparePhaseRawValue, setPreparePhaseRawValue] = useState<number>(0)
+  const preparePhaseRawValueRef = useRef<number>(0)
   preparePhaseAnimValue?.addListener(({ value }) => {
-    setPreparePhaseRawValue(value)
+    const aaa = toDecimal(preparePhaseRawValueRef.current)
+    const bbb = toDecimal(value)
+    if (aaa !== bbb) {
+      console.log(`>>> prepare-phase-anim: preparePhaseRawValue:${aaa}, value:${bbb}`)
+      preparePhaseRawValueRef.current = bbb
+      setPreparePhaseRawValue(value)
+    }
   })
 
   const [workoutPhaseRawValue, setWorkoutPhaseRawValue] = useState<number>(0)
-  // const phase1AnimValue = useRef(new Animated.Value(0)).current
+  const workoutPhaseRawValueRef = useRef<number>(0)
   workoutPhaseAnimValue?.addListener(({ value }) => {
-    setWorkoutPhaseRawValue(value)
+    const aaa = toDecimal(workoutPhaseRawValueRef.current)
+    const bbb = toDecimal(value)
+    if (aaa !== bbb) {
+      console.log(`>>> workout-phase-anim: workoutPhaseRawValue:${aaa}, value:${bbb}`)
+      workoutPhaseRawValueRef.current = bbb
+      setWorkoutPhaseRawValue(value)
+    }
   })
 
   const [restPhaseRawValue, setRestPhaseRawValue] = useState<number>(0)
+  const restPhaseRawValueRef = useRef<number>(0)
   restPhaseAnimValue?.addListener(({ value }) => {
-    setRestPhaseRawValue(value)
+    const aaa = toDecimal(restPhaseRawValueRef.current)
+    const bbb = toDecimal(value)
+    if (aaa !== bbb) {
+      console.log(`>>> rest-phase-anim: restPhaseRawValue:${aaa}, value:${bbb}`)
+      restPhaseRawValueRef.current = bbb
+      setRestPhaseRawValue(value)
+    }
   })
 
   const getCurrentPhaseRemainingSecs = (ticked?: TickedPreset): number => {

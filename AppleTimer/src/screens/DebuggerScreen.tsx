@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@/theme'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
@@ -16,9 +16,10 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
   const isPausedRef = useRef<boolean>(false)
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
+  const [displayNote, setDisplayNote] = useState<string>('...')
 
   const { Common } = useTheme()
-  const preset: Preset = new Preset('', '', 1, 2, 1, 1, 1)
+  const preset: Preset = new Preset('', '', 5, 40, 15, 8, 1)
   let _timerId: NodeJS.Timeout
   let _executionCount: number = 0
 
@@ -37,6 +38,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       //     `${tickedPreset.cycleCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
       // )
       // await Sleep(5000)
+      setDisplayNote(`${tickedPreset.cycleCurrentPhase}:${secsLeft}`)
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       clearInterval(_timerId)
@@ -122,6 +124,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
             <TouchableOpacity style={[Common.button.rounded]} onPress={() => startAutoTesting()}>
               <Text style={Fonts.textRegular}>{'Start auto-test'}</Text>
             </TouchableOpacity>
+            <Text style={Fonts.textSmall}>{displayNote}</Text>
           </View>
         </View>
         <View style={styles.actionSection}>
@@ -161,6 +164,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   left: {},

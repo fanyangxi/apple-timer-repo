@@ -1,5 +1,5 @@
 import BackgroundTimer from 'react-native-background-timer'
-import queueMicrotask from 'queue-microtask'
+// import queueMicrotask from 'queue-microtask'
 
 export const sleep = (ms: number): Promise<void> => {
   return new Promise<void>(resolve => {
@@ -17,35 +17,36 @@ export const runAccurateBackgroundCountdownTimer = (
   delayMs: number,
   onTicked: (remainingSecs: number, rawRemainingMs: number, diff: number) => Promise<void>,
 ): number => {
-  const miniIntervalMs = 10
+  // Tried: 10ms / 100ms / 200ms / 500ms, seems like all works fine.
+  const miniIntervalMs = 500
   let remainingMs: number = countdownSecs * 1000 + delayMs
   let previousRemaining = remainingMs
 
   let counter: number = countdownSecs
   const timerId = BackgroundTimer.setInterval(() => {
-    queueMicrotask(() => {
-      const now = Date.now()
-      const diff = now - previous
-      previous = now
+    // queueMicrotask(() => {
+    const now = Date.now()
+    const diff = now - previous
+    previous = now
 
-      remainingMs = remainingMs - diff
-      // logger.info(`>>> remainingMs:${remainingMs}; counterMs:${counter * 1000}; diff:${diff}`)
-      if (remainingMs <= -1 * 1000) {
-        BackgroundTimer.clearInterval(timerId)
-        return
-      }
-      if (remainingMs < counter * 1000) {
-        const result = Math.round(remainingMs / 1000)
-        const actualElapsedMs = previousRemaining - remainingMs
-        onTicked(result, remainingMs, actualElapsedMs).catch(() => {})
-        counter--
-        previousRemaining = remainingMs
-        // logger.info(
-        //   `>>> ${format(toDTime(result))} remainingMs:${remainingMs}; diff:${diff}; ` +
-        //     `remainingDiff:${previousRemaining - remainingMs};`,
-        // )
-      }
-    })
+    remainingMs = remainingMs - diff
+    // logger.info(`>>> remainingMs:${remainingMs}; counterMs:${counter * 1000}; diff:${diff}`)
+    if (remainingMs <= -1 * 1000) {
+      BackgroundTimer.clearInterval(timerId)
+      return
+    }
+    if (remainingMs < counter * 1000) {
+      const result = Math.round(remainingMs / 1000)
+      const actualElapsedMs = previousRemaining - remainingMs
+      onTicked(result, remainingMs, actualElapsedMs).catch(() => {})
+      counter--
+      previousRemaining = remainingMs
+      // logger.info(
+      //   `>>> ${format(toDTime(result))} remainingMs:${remainingMs}; diff:${diff}; ` +
+      //     `remainingDiff:${previousRemaining - remainingMs};`,
+      // )
+    }
+    // })
   }, miniIntervalMs)
   let previous = Date.now()
   return timerId

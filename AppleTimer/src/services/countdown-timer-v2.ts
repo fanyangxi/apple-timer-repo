@@ -113,7 +113,7 @@ export class CountdownTimerV2 {
           // logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
           this._secsCounter = remainingSecs
           this.reduceRemainingMs(remainingSecs, diff, 'run-slices')
-          if (remainingSecs === 0) {
+          if (remainingSecs <= 0) {
             this.stopAndReset()
             resolve()
           }
@@ -129,11 +129,11 @@ export class CountdownTimerV2 {
     const oldRemaining = this._remainingCountdownMilliSecs
     this._remainingCountdownMilliSecs -= elapsedMs
     this._remainingMsLastUpdatedAt = Date.now()
-    logger.info(
-      `[reduce-remainingMs][${hint}]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
-        `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
-        `old-remaining:${oldRemaining}`,
-    )
+    // logger.info(
+    //   `[reduce-remainingMs][${hint}]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
+    //     `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
+    //     `old-remaining:${oldRemaining}`,
+    // )
     // When oldSecs != newSecs, then trigger the Ticked event
     const oldSecs = Math.floor(oldRemaining / this.INTERVAL)
     const newSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
@@ -145,7 +145,7 @@ export class CountdownTimerV2 {
   private triggerCallback(secsLeft: number, rawRemainingMs?: number, hint?: string) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
     this.OnTicked && this.OnTicked(secsLeft).catch(e => this.handleErr('TICK', e))
-    logger.info(`[(${secsLeft} secs)] Ticked, rawRemainingMs:${rawRemainingMs}, [${hint}]`)
+    // logger.info(`[(${secsLeft} secs)] Ticked, rawRemainingMs:${rawRemainingMs}, [${hint}]`)
   }
 
   // noinspection JSMethodCanBeStatic
