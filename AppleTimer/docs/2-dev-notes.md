@@ -15,6 +15,7 @@ https://github.com/perymimon/Timer/blob/master/src/timer.js
 react-native-background-timer (Github 1.3k)
 \- https://github.com/ocetnik/react-native-background-timer, https://www.npmjs.com/package/react-native-background-timer
 
+
 ### Action sheet bottom popup:
 https://www.npmjs.com/package/react-native-modalize
 https://github.com/jeremybarbet/react-native-modalize
@@ -27,6 +28,7 @@ https://www.npmjs.com/package/@gorhom/bottom-sheet
 ### react-native modals / popup / confirmation-dialog:
 https://www.npmjs.com/package/react-native-modals
 https://www.npmjs.com/package/react-native-simple-dialogs
+
 
 ### scroll/wheel picker:
 https://www.npmjs.com/package/react-native-dynamically-selected-picker ++++

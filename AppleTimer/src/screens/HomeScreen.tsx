@@ -166,7 +166,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   const onStopPressed = async () => {
     timerServiceRef.current?.stop()
-    notificationServiceRef.current?.stopSounds()
   }
 
   return (
@@ -313,6 +312,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         <PresetSelectionPopup
           onSelectionChanged={selectedPreset => {
             DataService.setActivePreset(selectedPreset.Id).then(() => {
+              onStopPressed().catch(() => {})
               setActivePreset(selectedPreset)
               modalizeRef.current?.close()
             })
