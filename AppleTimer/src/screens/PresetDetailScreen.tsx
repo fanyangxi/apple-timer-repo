@@ -32,7 +32,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const [newTitle, setNewTitle] = useState<string>(currentPreset.Name)
   const [isModifyingTitle, setIsModifyingTitle] = useState<boolean>(false)
   const [current, setCurrent] = useState<Preset>(currentPreset)
-  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false)
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
   const workoutSecsDurationPickerRef = useRef<Modalize>(null)
@@ -81,7 +81,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
     const original = JSON.stringify(thePreset)
     const updated = JSON.stringify(current)
     if (original !== updated) {
-      setShowConfirmationDialog(true)
+      setShowConfirmDialog(true)
     } else {
       goBack()
     }
@@ -359,8 +359,8 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         }}
       />
       <Modal
-        visible={showConfirmationDialog}
-        modalAnimation={new ScaleAnimation(500)}
+        visible={showConfirmDialog}
+        modalAnimation={new ScaleAnimation(100)}
         modalTitle={<ModalTitle title="Confirmation" />}
         width={0.7}
         footer={
@@ -369,7 +369,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               style={styles.confirmationLeftButton}
               text="Discard!"
               onPress={() => {
-                setShowConfirmationDialog(false)
+                setShowConfirmDialog(false)
                 goBack()
               }}
             />
@@ -377,7 +377,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               style={styles.confirmationRightButton}
               text="Keep Editing"
               onPress={() => {
-                setShowConfirmationDialog(false)
+                setShowConfirmDialog(false)
               }}
             />
           </ModalFooter>

@@ -23,12 +23,14 @@ import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
 import { useHomeScreenEffect } from '@/common/use-home-screen-effect'
 import { SettingsButton } from '@/components/button/SettingsButton'
+import Modal, { FadeAnimation, ModalButton, ModalContent, ModalFooter, ModalTitle } from 'react-native-modals'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
   const [activePreset, setActivePreset] = useState<Preset>()
   const [tickedPreset, setTickedPreset] = useState<TickedPreset>()
   const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
@@ -293,7 +295,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                 </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
-                <AwesomeButtonMy raiseLevel={2} type="pinterest" stretch={true} onPress={onStopPressed}>
+                <AwesomeButtonMy
+                  raiseLevel={2}
+                  type="pinterest"
+                  stretch={true}
+                  onPress={() => setShowConfirmDialog(true)}
+                >
                   {'Stop'}
                 </AwesomeButtonMy>
               </View>
@@ -316,6 +323,36 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           onAddClicked={() => navigate(Screens.PresetDetail, { current: undefined })}
         />
       </Modalize>
+
+      <Modal
+        visible={showConfirmDialog}
+        modalAnimation={new FadeAnimation(100)}
+        modalTitle={<ModalTitle title="Confirm deletion" />}
+        width={0.7}
+        footer={
+          <ModalFooter>
+            <ModalButton
+              style={styles.confirmationLeftButton}
+              text="Cancel"
+              onPress={() => setShowConfirmDialog(false)}
+            />
+            <ModalButton
+              style={styles.confirmationRightButton}
+              text="Stop!"
+              onPress={() => {
+                setShowConfirmDialog(false)
+                onStopPressed().catch(() => {})
+              }}
+            />
+          </ModalFooter>
+        }
+      >
+        <ModalContent style={styles.confirmationContent}>
+          <Text style={[Fonts.textRegular, styles.confirmationText]}>
+            Stop current workout timer ({`${format(toDTime(secsLeftInCurrentWorkout ?? 0))} seconds left`})?
+          </Text>
+        </ModalContent>
+      </Modal>
     </ScreenContainer>
   )
 }
@@ -430,5 +467,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
+  },
+  confirmationContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmationText: {
+    textAlign: 'center',
+  },
+  confirmationLeftButton: {
+    alignSelf: 'flex-start',
+  },
+  confirmationRightButton: {
+    alignSelf: 'flex-end',
   },
 })

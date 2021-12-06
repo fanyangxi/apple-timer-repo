@@ -28,7 +28,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
 }) => {
   const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
   const [deletingPreset, setDeletingPreset] = useState<Preset | undefined>()
-  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false)
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
   useEffect(() => {
     console.log('>>>> Preset selection-popup loaded')
@@ -99,7 +99,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             style={styles.actionButton}
             onPress={() => {
               setDeletingPreset(preset)
-              setShowConfirmationDialog(true)
+              setShowConfirmDialog(true)
             }}
           >
             <Text style={Fonts.textRegular}>Delete</Text>
@@ -135,8 +135,8 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         />
       </ScrollView>
       <Modal
-        visible={showConfirmationDialog}
-        modalAnimation={new ScaleAnimation(500)}
+        visible={showConfirmDialog}
+        modalAnimation={new ScaleAnimation(100)}
         modalTitle={<ModalTitle title="Confirm deletion" />}
         width={0.7}
         footer={
@@ -144,13 +144,13 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             <ModalButton
               style={styles.confirmationLeftButton}
               text="Cancel"
-              onPress={() => setShowConfirmationDialog(false)}
+              onPress={() => setShowConfirmDialog(false)}
             />
             <ModalButton
               style={styles.confirmationRightButton}
               text="Yes"
               onPress={() => {
-                setShowConfirmationDialog(false)
+                setShowConfirmDialog(false)
                 if (deletingPreset) {
                   deletePreset(deletingPreset.Id)
                   onDeleteItemClicked && onDeleteItemClicked(deletingPreset)
