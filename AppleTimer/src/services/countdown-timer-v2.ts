@@ -2,6 +2,9 @@ import { logger } from '@/utils/logger'
 import { PositiveOr0 } from '@/utils/common-util'
 import BackgroundTimer from 'react-native-background-timer'
 import queueMicrotask from 'queue-microtask'
+import { runAccurateBackgroundCountdownTimer, sleep } from '@/utils/timer-util'
+import { format, toDTime } from '@/utils/date-util'
+import { Sounds } from '@/services/notification-service'
 
 // Actions: Start, Pause + Resume, StopAndReset
 // Statuses: IDLE, PAUSED, TICKING
@@ -16,7 +19,7 @@ export class CountdownTimerV2 {
   private readonly _initialCountdownSecs: number
   private _remainingCountdownMilliSecs: number = 0
   private _timerId?: number
-  private _delayTimerId?: number
+  // private _delayTimerId?: number
   private _runStartedAt: number = 0
 
   public Status: TimerStatus = TimerStatus.IDLE
@@ -105,8 +108,8 @@ export class CountdownTimerV2 {
   }
 
   private clear() {
-    this._delayTimerId && BackgroundTimer.clearTimeout(this._delayTimerId)
-    this._delayTimerId = undefined
+    // this._delayTimerId && BackgroundTimer.clearTimeout(this._delayTimerId)
+    // this._delayTimerId = undefined
     this._timerId && BackgroundTimer.clearInterval(this._timerId)
     this._timerId = undefined
   }
@@ -119,43 +122,56 @@ export class CountdownTimerV2 {
 
   private async runSlices(countdownSecs: number, delayMilliSecs?: number): Promise<void> {
     return new Promise(resolve => {
-      this.runIntervalTimer(countdownSecs, delayMilliSecs || 0, async (tickedIndex: number, hint: string) => {
-        // logger.info(`>>> ${tickedIndex}:${hint}`)
-        this.triggerCallback(tickedIndex, delayMilliSecs, hint)
-        if (tickedIndex === 0) {
-          this.stopAndReset()
-          resolve()
-        }
-      })
+      // this.runIntervalTimer(countdownSecs, delayMilliSecs || 0, async (tickedIndex: number, hint: string) => {
+      //   // logger.info(`>>> ${tickedIndex}:${hint}`)
+      //   this.triggerCallback(tickedIndex, delayMilliSecs, hint)
+      //   if (tickedIndex === 0) {
+      //     this.stopAndReset()
+      //     resolve()
+      //   }
+      // })
+      this._timerId = runAccurateBackgroundCountdownTimer(
+        countdownSecs,
+        delayMilliSecs || 0,
+        async (remainingSecs: number, rawRemainingMs: number, diff: number) => {
+          // logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
+          this.triggerCallback(remainingSecs, delayMilliSecs, 'hint')
+          if (remainingSecs === 0) {
+            this.stopAndReset()
+            resolve()
+          }
+        },
+      )
+      this._runStartedAt = new Date().getTime()
     })
   }
 
-  private runIntervalTimer(
-    countdownSecs: number,
-    delayMs: number,
-    onTicked: (index: number, hint: string) => Promise<void>,
-  ): void {
-    let counter: number = countdownSecs
-    const trigger = (hint: string) => {
-      console.log(`>>>>>>>>>>>>>> ${counter}/${delayMs}:${hint}`)
-      onTicked(counter, hint).catch(() => {})
-      if (counter <= 0) {
-        this.clear()
-        return
-      }
-      counter--
-    }
-
-    this._delayTimerId = BackgroundTimer.setTimeout(() => {
-      trigger('ticked-after-delay')
-      if (counter > 0) {
-        this._timerId = BackgroundTimer.setInterval(() => {
-          trigger('ticket-at-interval')
-        }, this.INTERVAL)
-      }
-    }, delayMs)
-    this._runStartedAt = new Date().getTime()
-  }
+  // private runIntervalTimer(
+  //   countdownSecs: number,
+  //   delayMs: number,
+  //   onTicked: (index: number, hint: string) => Promise<void>,
+  // ): void {
+  //   let counter: number = countdownSecs
+  //   const trigger = (hint: string) => {
+  //     console.log(`>>>>>>>>>>>>>> ${counter}/${delayMs}:${hint}`)
+  //     onTicked(counter, hint).catch(() => {})
+  //     if (counter <= 0) {
+  //       this.clear()
+  //       return
+  //     }
+  //     counter--
+  //   }
+  //
+  //   this._delayTimerId = BackgroundTimer.setTimeout(() => {
+  //     trigger('ticked-after-delay')
+  //     if (counter > 0) {
+  //       this._timerId = BackgroundTimer.setInterval(() => {
+  //         trigger('ticket-at-interval')
+  //       }, this.INTERVAL)
+  //     }
+  //   }, delayMs)
+  //   this._runStartedAt = new Date().getTime()
+  // }
 
   private triggerCallback(secsLeft: number, beforeStartDelayMilliSecs?: number, hint?: string) {
     // trigger this call asynchronously, to make sure the "onTicked" call-back can be invoked on time.
