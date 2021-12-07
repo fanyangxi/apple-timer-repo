@@ -14,13 +14,13 @@ export const sleep = (ms: number): Promise<void> => {
 // a 3rd-party stopwatch (e.g.: iPhone) to run 60 seconds at the same time, you will see BackgroundTimer ends early.
 export const runAccurateBackgroundCountdownTimer = (
   countdownSecs: number,
-  delayMs: number,
+  delayBeforeStartMs: number,
   onTicked: (remainingSecs: number, rawRemainingMs: number, diff: number) => Promise<void>,
 ): number => {
-  // Tried: 10ms / 100ms / 200ms / 500ms, seems like all works fine.
-  // Confirmed that, even with 50ms, running for 7minutes, the phone is not gettng hot.
+  // Tried: 10ms / 20ms / 50ms / 100ms / 200ms / 500ms, seems like all works fine.
+  // Confirmed that, even with 50ms, running for 7minutes, and the performance is fine.
   const miniIntervalMs = 50
-  let remainingMs: number = countdownSecs * 1000 + delayMs
+  let remainingMs: number = countdownSecs * 1000 + delayBeforeStartMs
   let previousRemaining = remainingMs
 
   let counter: number = countdownSecs
