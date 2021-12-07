@@ -56,6 +56,7 @@ export class CountdownTimerV2 {
     const pausedAt = new Date().getTime()
     this.clear()
     this.changeStatusTo(TimerStatus.PAUSED)
+    this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
     // Why add the `compensation-ms`?: add this compensation to make sure, we can resume closely from where we
     // paused. Otherwise, if the user clicks the pause/resume many times, some of the ms will be lost.
     // Why number `13`?: it's a empiric-value, get it via the `auto-test`. With this value, the auto-test can click
@@ -63,9 +64,7 @@ export class CountdownTimerV2 {
     const compensationMs = 13
     const timeElapsedMs = PositiveOr0(pausedAt - compensationMs - this._remainingMsLastUpdatedAt)
     // console.log(`>>> countdown-timer-v2:pause: [${this._secsCounter}]: ${timeElapsedMs},`)
-    this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE')
-    // Trigger Event:
-    this.OnPaused && this.OnPaused(this._remainingCountdownMilliSecs).catch(e => this.handleErr('PAUSE', e))
+    this.reduceRemainingMs(this._secsCounter - 1, timeElapsedMs, 'PAUSE', async () => {})
   }
 
   async resume(): Promise<void> {
@@ -110,13 +109,10 @@ export class CountdownTimerV2 {
         countdownSecs,
         delayMilliSecs || 0,
         async (remainingSecs: number, rawRemainingMs: number, diff: number) => {
-          // logger.info(`>>> ${format(toDTime(remainingSecs))}; remainingMs:${rawRemainingMs}; diff:${diff}`)
           this._secsCounter = remainingSecs
-          this.reduceRemainingMs(remainingSecs, diff, 'run-slices')
-          if (remainingSecs <= 0) {
-            this.stopAndReset()
+          this.reduceRemainingMs(remainingSecs, diff, 'run-slices', async () => {
             resolve()
-          }
+          })
         },
       )
       // For New-Start or Resume, we should consider it as `new remainingMs accepted`, so need to update this field.
@@ -125,20 +121,31 @@ export class CountdownTimerV2 {
     })
   }
 
-  private reduceRemainingMs = (secsCounter: number, elapsedMs: number, hint: string) => {
+  private reduceRemainingMs = (
+    secsCounter: number,
+    elapsedMs: number,
+    hint: string,
+    onTimerCompletedCallback: () => Promise<void>,
+  ) => {
     const oldRemaining = this._remainingCountdownMilliSecs
     this._remainingCountdownMilliSecs -= elapsedMs
     this._remainingMsLastUpdatedAt = Date.now()
     // logger.info(
     //   `[reduce-remainingMs][${hint}]: elapsedMs:${elapsedMs}, secsCounter:${secsCounter}, ` +
-    //     `updated-remaining:${this._remainingCountdownMilliSecs}, ` +
-    //     `old-remaining:${oldRemaining}`,
+    //     `old-remaining-ms:${oldRemaining}, ` +
+    //     `updated-remaining-ms:${this._remainingCountdownMilliSecs}`,
     // )
     // When oldSecs != newSecs, then trigger the Ticked event
     const oldSecs = Math.floor(oldRemaining / this.INTERVAL)
-    const newSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
-    if (newSecs !== oldSecs) {
+    const updatedSecs = Math.floor(this._remainingCountdownMilliSecs / this.INTERVAL)
+    if (updatedSecs !== oldSecs) {
       this.triggerCallback(oldSecs, this._remainingCountdownMilliSecs, 'hint')
+    }
+    // If we use the `auto-test, in the `Debugger` screen` with 20ms, then can trigger this scenario.
+    // Need to ensure the ms between 1s-0s can be properly elapsed also.
+    if (oldSecs <= 0 && this._remainingCountdownMilliSecs <= 0) {
+      this.stopAndReset()
+      onTimerCompletedCallback().catch(() => {})
     }
   }
 

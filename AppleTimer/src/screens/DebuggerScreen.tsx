@@ -67,7 +67,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
         timerServiceRef.current && timerServiceRef.current.resume().then(() => {})
       }
       flag = !flag
-    }, 200) // Minimum acceptable Resume->Pause interval is 20ms.
+    }, 20) // Resume->Pause interval, tried with 20ms(Ideal minimal interval)/50ms/90ms/100ms/500ms/900ms/1310ms.
     logger.info(`start-auto-testing: interval-run-at: ${Date.now()}`)
   }
 
