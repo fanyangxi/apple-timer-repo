@@ -24,6 +24,24 @@ export interface WorkoutDetailViewProps {
   tickedPreset?: TickedPreset
 }
 
+/**
+ * The animation handling follows bellow pattern:
+ *
+ * -- on-timer-started
+ * -- #A-cycle:
+ * --     prepare-started/cycle-started (resetCycleAnim, startOrResumePreparePhaseAnim)
+ * --     #1
+ * --     workout-started/set-stared (resetSetAnim, startOrResumeWorkoutPhaseAnim)
+ * --     rest-started (startOrResumeSetPhaseAnim)
+ * --     #2
+ * --     workout-started/set-stared (resetSetAnim, startOrResumeWorkoutPhaseAnim)
+ * --     rest-started (startOrResumeSetPhaseAnim)
+ * --     #3
+ * --     ...
+ * -- #B-cycle:
+ * --     ......
+ * -- on-timer-completed
+ * */
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forwardRef((props, ref) => {
   const { activePreset, tickedPreset } = props
   const prepareSliderRef = useRef<CircularSliderRefObject>()
