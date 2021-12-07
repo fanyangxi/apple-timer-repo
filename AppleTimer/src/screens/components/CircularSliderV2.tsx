@@ -2,6 +2,12 @@ import React, { useImperativeHandle, useRef, useState } from 'react'
 import { Animated, Easing, StyleProp, View, ViewStyle } from 'react-native'
 import Svg, { Path, Circle, G, Text } from 'react-native-svg'
 
+export type CircularSliderRefObject = {
+  startOrResumeAnim: () => void
+  pauseAnim: () => void
+  stopAndResetAnim: () => void
+}
+
 export type CircularSliderProps = {
   /** Radius of Circular Slider */
   trackRadius?: number
@@ -76,7 +82,6 @@ const CircularSliderV2: React.FC<CircularSliderProps> = React.forwardRef((props,
   const location = React.useRef({ x: 0, y: 0 })
   const viewRef = React.useRef<View>(null)
 
-  const initialStartFrom = minValue
   const trackPathRef = React.useRef()
   const trackThumbRef = React.useRef()
   const currentValueRef = useRef<number>(value)
@@ -187,8 +192,8 @@ const CircularSliderV2: React.FC<CircularSliderProps> = React.forwardRef((props,
   const _stopAndResetAnim = () => {
     theAnimValue.stopAnimation(() => {
       console.log('IN:stopAndResetAnim:')
-      theAnimValue.setValue(initialStartFrom)
-      currentValueRef.current = initialStartFrom
+      theAnimValue.setValue(minValue)
+      currentValueRef.current = minValue
     })
   }
 
