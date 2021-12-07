@@ -10,12 +10,15 @@ import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import { logger } from '@/utils/logger'
+import { CircularSliderRefObject } from '@/screens/components/CircularSliderV2'
+import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 
 export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
   const isStartedRef = useRef<boolean>(false)
   const isPausedRef = useRef<boolean>(false)
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
+  const childRef = useRef<CircularSliderRefObject>()
   const [displayNote, setDisplayNote] = useState<string>('...')
 
   const { Common } = useTheme()
@@ -127,6 +130,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
             <Text style={Fonts.textSmall}>{displayNote}</Text>
           </View>
         </View>
+
         <View style={styles.actionSection}>
           <Text style={Fonts.textRegular}>{'Manual-Test: Click to start, then pause/resume'}</Text>
           <View style={[styles.buttons]}>
@@ -137,6 +141,42 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
               <Text style={Fonts.textRegular}>{'Reset'}</Text>
             </TouchableOpacity>
           </View>
+        </View>
+
+        <View style={styles.actionSection}>
+          <TouchableOpacity
+            style={[Common.button.rounded]}
+            onPress={() => {
+              childRef.current?.startOrResumeAnim()
+            }}
+          >
+            <Text style={Fonts.textRegular}>{'Start Animation'}</Text>
+          </TouchableOpacity>
+          {/*<CircularSliderV2*/}
+          {/*  // @ts-ignore*/}
+          {/*  ref={childRef}*/}
+          {/*  value={0}*/}
+          {/*  minValue={0}*/}
+          {/*  maxValue={100}*/}
+          {/*  minAngle={0}*/}
+          {/*  maxAngle={179.9}*/}
+          {/*  // style={{ position: 'absolute' }}*/}
+          {/*  thumbRadius={4}*/}
+          {/*  trackRadius={90}*/}
+          {/*  trackWidth={36}*/}
+          {/*  trackColor={'#3C3C3C'}*/}
+          {/*  trackTintColor={'lightgreen'}*/}
+          {/*  animationDurationMs={3000}*/}
+          {/*/>*/}
+          <CircleVerticalSlider
+            // @ts-ignore
+            ref={childRef}
+            value={0}
+            // style={styles.absolute}
+            trackRadius={71}
+            trackStrokeWidth={1}
+            animationDurationMs={2000}
+          />
         </View>
       </View>
     </ScreenContainer>

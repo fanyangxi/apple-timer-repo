@@ -20,8 +20,7 @@ import { DataService } from '@/services/data-service'
 import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
-import { WorkoutDetailView } from '@/screens/components/WorkoutDetailView'
-import { useHomeScreenEffect } from '@/common/use-home-screen-effect'
+import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/components/WorkoutDetailView'
 import { SettingsButton } from '@/components/button/SettingsButton'
 import Modal, { FadeAnimation, ModalButton, ModalContent, ModalFooter, ModalTitle } from 'react-native-modals'
 
@@ -34,22 +33,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
+  const workoutDetailViewRef = useRef<WorkoutDetailViewRefObject>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
   const TAG = '$$[HOME]$$'
-
-  const {
-    startOrResumePreparePhaseAnim,
-    startOrResumeWorkoutPhaseAnim,
-    startOrResumeSetPhaseAnim,
-    startOrResumeCycleAnim,
-    pauseAnim,
-    resetCycleAnim,
-    resetSetAnim,
-    animValue0: animValue0,
-    animValue1: animValue1,
-    animValue2: animValue2,
-  } = useHomeScreenEffect({ activePreset: activePreset, ticked: tickedPreset })
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
@@ -67,7 +54,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
       timerServiceRef.current = initTimerServiceRef(activePreset)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePreset])
 
   const initTimerServiceRef = (thePreset: Preset): TimerService => {
@@ -88,23 +74,23 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnTimerStarted = async () => {}
     timerSvc.OnPaused = async () => {
       logger.info(`${TAG}: timerSvc.OnPaused`)
-      pauseAnim()
+      workoutDetailViewRef.current?.pauseAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerPaused])
     }
     timerSvc.OnResumed = async () => {
       logger.info(`${TAG}: timerSvc.OnResumed`)
-      startOrResumeCycleAnim()
+      workoutDetailViewRef.current?.startOrResumeCycleAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
       // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
-      resetCycleAnim()
+      workoutDetailViewRef.current?.resetCycleAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
-      resetCycleAnim()
+      workoutDetailViewRef.current?.resetCycleAnim()
       setTickedPreset(getRawTickedPreset(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
@@ -112,11 +98,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     //
     timerSvc.OnCycleStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnCycleStarted`)
-      resetCycleAnim()
+      workoutDetailViewRef.current?.resetCycleAnim()
     }
     timerSvc.OnPreparePhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnPreparePhaseStarted`)
-      startOrResumePreparePhaseAnim()
+      workoutDetailViewRef.current?.startOrResumePreparePhaseAnim()
     }
     timerSvc.OnPreparePhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
@@ -128,18 +114,18 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerSvc.OnSetStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnSetStarted`)
-      resetSetAnim()
+      workoutDetailViewRef.current?.resetSetAnim()
     }
     timerSvc.OnWorkoutPhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnWorkoutPhaseStarted`)
-      startOrResumeWorkoutPhaseAnim()
+      workoutDetailViewRef.current?.startOrResumeWorkoutPhaseAnim()
     }
     timerSvc.OnWorkoutPhaseClosing = async () => {
       notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
     }
     timerSvc.OnRestPhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnRestPhaseStarted`)
-      startOrResumeSetPhaseAnim()
+      workoutDetailViewRef.current?.startOrResumeRestPhaseAnim()
     }
     timerSvc.OnRestPhaseClosing = async (cycleSetsRemainingCount: number) => {
       notificationServiceRef.current?.playSounds([
@@ -231,10 +217,10 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         {/* @details-section: */}
         <View style={styles.row}>
           <WorkoutDetailView
+            // @ts-ignore
+            ref={workoutDetailViewRef}
+            activePreset={activePreset}
             tickedPreset={tickedPreset}
-            preparePhaseAnimValue={animValue0}
-            workoutPhaseAnimValue={animValue1}
-            restPhaseAnimValue={animValue2}
           />
         </View>
 

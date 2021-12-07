@@ -1,73 +1,104 @@
-import React, { useRef, useState } from 'react'
-import { Animated, StyleSheet, Text, View } from 'react-native'
+import React, { useImperativeHandle, useRef } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { FontColors, Fonts, Spacings } from '@/theme/Variables'
-import { TickedPreset } from '@/models/preset'
-import CircularSlider from '@/screens/components/CircularSlider'
+import { Preset, TickedPreset } from '@/models/preset'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 import { format, toDTime } from '@/utils/date-util'
+import CircularSliderV2, { CircularSliderRefObject } from '@/screens/components/CircularSliderV2'
+import { getCurrentPhaseRemainingSecs } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
-import { toDecimal } from '@/utils/common-util'
 
-export interface WorkoutDetailViewProps {
-  tickedPreset?: TickedPreset
-  preparePhaseAnimValue?: Animated.Value
-  workoutPhaseAnimValue?: Animated.Value
-  restPhaseAnimValue?: Animated.Value
+export type WorkoutDetailViewRefObject = {
+  startOrResumePreparePhaseAnim: () => void
+  startOrResumeWorkoutPhaseAnim: () => void
+  startOrResumeRestPhaseAnim: () => void
+  startOrResumeCycleAnim: () => void
+  pauseAnim: () => void
+  resetCycleAnim: () => void
+  resetSetAnim: () => void
 }
 
-export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
-  tickedPreset,
-  preparePhaseAnimValue,
-  workoutPhaseAnimValue,
-  restPhaseAnimValue,
-}) => {
-  const [preparePhaseRawValue, setPreparePhaseRawValue] = useState<number>(0)
-  const preparePhaseRawValueRef = useRef<number>(0)
-  preparePhaseAnimValue?.addListener(({ value }) => {
-    const aaa = toDecimal(preparePhaseRawValueRef.current)
-    const bbb = toDecimal(value)
-    if (aaa !== bbb) {
-      // console.log(`>>> prepare-phase-anim: preparePhaseRawValue:${aaa}, value:${bbb}`)
-      preparePhaseRawValueRef.current = bbb
-      setPreparePhaseRawValue(value)
-    }
-  })
+export interface WorkoutDetailViewProps {
+  activePreset?: Preset
+  tickedPreset?: TickedPreset
+}
 
-  const [workoutPhaseRawValue, setWorkoutPhaseRawValue] = useState<number>(0)
-  const workoutPhaseRawValueRef = useRef<number>(0)
-  workoutPhaseAnimValue?.addListener(({ value }) => {
-    const aaa = toDecimal(workoutPhaseRawValueRef.current)
-    const bbb = toDecimal(value)
-    if (aaa !== bbb) {
-      // console.log(`>>> workout-phase-anim: workoutPhaseRawValue:${aaa}, value:${bbb}`)
-      workoutPhaseRawValueRef.current = bbb
-      setWorkoutPhaseRawValue(value)
-    }
-  })
+export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forwardRef((props, ref) => {
+  const { activePreset, tickedPreset } = props
+  const prepareSliderRef = useRef<CircularSliderRefObject>()
+  const workoutSliderRef = useRef<CircularSliderRefObject>()
+  const restSliderRef = useRef<CircularSliderRefObject>()
 
-  const [restPhaseRawValue, setRestPhaseRawValue] = useState<number>(0)
-  const restPhaseRawValueRef = useRef<number>(0)
-  restPhaseAnimValue?.addListener(({ value }) => {
-    const aaa = toDecimal(restPhaseRawValueRef.current)
-    const bbb = toDecimal(value)
-    if (aaa !== bbb) {
-      // console.log(`>>> rest-phase-anim: restPhaseRawValue:${aaa}, value:${bbb}`)
-      restPhaseRawValueRef.current = bbb
-      setRestPhaseRawValue(value)
-    }
-  })
+  useImperativeHandle(ref, () => ({
+    startOrResumePreparePhaseAnim() {
+      _startOrResumePreparePhaseAnim()
+    },
+    startOrResumeWorkoutPhaseAnim() {
+      _startOrResumeWorkoutPhaseAnim()
+    },
+    startOrResumeRestPhaseAnim() {
+      _startOrResumeRestPhaseAnim()
+    },
+    startOrResumeCycleAnim() {
+      _startOrResumeCycleAnim()
+    },
+    pauseAnim() {
+      _pauseAnim()
+    },
+    resetCycleAnim() {
+      _resetCycleAnim()
+    },
+    resetSetAnim() {
+      _resetSetAnim()
+    },
+  }))
 
-  const getCurrentPhaseRemainingSecs = (ticked?: TickedPreset): number => {
-    if (!ticked) {
-      return 0
-    }
+  const _startOrResumePreparePhaseAnim = () => {
+    prepareSliderRef.current?.startOrResumeAnim()
+  }
+
+  const _startOrResumeWorkoutPhaseAnim = () => {
+    workoutSliderRef.current?.startOrResumeAnim()
+  }
+
+  const _startOrResumeRestPhaseAnim = () => {
+    restSliderRef.current?.startOrResumeAnim()
+  }
+
+  const _startOrResumeCycleAnim = () => {
+    console.log(`>>> startOrResumeCycleAnim: ${tickedPreset?.cycleCurrentPhase}`)
     const theMap = {
-      [`${TimerPhase.Prepare}`]: ticked.prepareRemainingSecs,
-      [`${TimerPhase.Workout}`]: ticked.workoutRemainingSecs,
-      [`${TimerPhase.Rest}`]: ticked.restRemainingSecs,
+      [`${TimerPhase.Prepare}`]: _startOrResumePreparePhaseAnim,
+      [`${TimerPhase.Workout}`]: _startOrResumeWorkoutPhaseAnim,
+      [`${TimerPhase.Rest}`]: _startOrResumeRestPhaseAnim,
     }
-    return theMap[`${ticked.cycleCurrentPhase}`] ?? 0
+    const resultFunc = theMap[`${tickedPreset?.cycleCurrentPhase}`] ?? _startOrResumePreparePhaseAnim
+    return resultFunc()
+  }
+
+  const _pauseAnim = () => {
+    console.log(`>>> pauseAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    const theMap = {
+      [`${TimerPhase.Prepare}`]: prepareSliderRef.current?.pauseAnim,
+      [`${TimerPhase.Workout}`]: workoutSliderRef.current?.pauseAnim,
+      [`${TimerPhase.Rest}`]: restSliderRef.current?.pauseAnim,
+    }
+    const resultFunc = theMap[`${tickedPreset?.cycleCurrentPhase}`] ?? prepareSliderRef.current?.pauseAnim
+    return resultFunc && resultFunc()
+  }
+
+  const _resetCycleAnim = () => {
+    console.log(`>>> resetCycleAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    prepareSliderRef.current?.stopAndResetAnim()
+    workoutSliderRef.current?.stopAndResetAnim()
+    restSliderRef.current?.stopAndResetAnim()
+  }
+
+  const _resetSetAnim = () => {
+    console.log(`>>> resetSetAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    workoutSliderRef.current?.stopAndResetAnim()
+    restSliderRef.current?.stopAndResetAnim()
   }
 
   return (
@@ -81,37 +112,46 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
       }}
     >
       <View style={styles.detailsSection}>
-        <CircularSlider
-          value={workoutPhaseRawValue}
+        <CircularSliderV2
+          // @ts-ignore
+          ref={workoutSliderRef}
+          value={0}
           minValue={0}
           maxValue={100}
           minAngle={0}
           maxAngle={179.9}
-          style={{ position: 'absolute' }}
+          style={styles.absolute}
           thumbRadius={4}
           trackRadius={90}
           trackWidth={36}
           trackColor={'#3C3C3C'}
           trackTintColor={'lightgreen'}
+          animationDurationMs={(activePreset?.WorkoutSecs ?? 0) * 1000}
         />
-        <CircularSlider
-          value={restPhaseRawValue}
+        <CircularSliderV2
+          // @ts-ignore
+          ref={restSliderRef}
+          value={0}
           minValue={0}
           maxValue={100}
           minAngle={180}
           maxAngle={359.9}
-          style={{ position: 'absolute' }}
+          style={styles.absolute}
           thumbRadius={4}
           trackRadius={90}
           trackWidth={36}
           trackColor={'#3C3C3C'}
           trackTintColor={'red'}
+          animationDurationMs={(activePreset?.RestSecs ?? 0) * 1000}
         />
         <CircleVerticalSlider
-          style={{ position: 'absolute' }}
+          // @ts-ignore
+          ref={prepareSliderRef}
+          value={0}
+          style={styles.absolute}
           trackRadius={71}
-          value={preparePhaseRawValue}
           trackStrokeWidth={0}
+          animationDurationMs={(activePreset?.PrepareSecs ?? 0) * 1000}
         />
         <View style={styles.hintContainer}>
           <View style={styles.itemsContainer}>
@@ -122,7 +162,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({
       </View>
     </Neomorph>
   )
-}
+})
 
 const styles = StyleSheet.create({
   phase1: {
@@ -218,4 +258,42 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     ...Fonts.textLarge,
   },
+  absolute: {
+    position: 'absolute',
+  },
 })
+// const [preparePhaseRawValue, setPreparePhaseRawValue] = useState<number>(0)
+// const preparePhaseRawValueRef = useRef<number>(0)
+// preparePhaseAnimValue?.addListener(({ value }) => {
+//   const aaa = toDecimal(preparePhaseRawValueRef.current)
+//   const bbb = toDecimal(value)
+//   if (aaa !== bbb) {
+//     // console.log(`>>> prepare-phase-anim: preparePhaseRawValue:${aaa}, value:${bbb}`)
+//     preparePhaseRawValueRef.current = bbb
+//     setPreparePhaseRawValue(value)
+//   }
+// })
+//
+// const [workoutPhaseRawValue, setWorkoutPhaseRawValue] = useState<number>(0)
+// const workoutPhaseRawValueRef = useRef<number>(0)
+// workoutPhaseAnimValue?.addListener(({ value }) => {
+//   const aaa = toDecimal(workoutPhaseRawValueRef.current)
+//   const bbb = toDecimal(value)
+//   if (aaa !== bbb) {
+//     // console.log(`>>> workout-phase-anim: workoutPhaseRawValue:${aaa}, value:${bbb}`)
+//     workoutPhaseRawValueRef.current = bbb
+//     setWorkoutPhaseRawValue(value)
+//   }
+// })
+//
+// const [restPhaseRawValue, setRestPhaseRawValue] = useState<number>(0)
+// const restPhaseRawValueRef = useRef<number>(0)
+// restPhaseAnimValue?.addListener(({ value }) => {
+//   const aaa = toDecimal(restPhaseRawValueRef.current)
+//   const bbb = toDecimal(value)
+//   if (aaa !== bbb) {
+//     // console.log(`>>> rest-phase-anim: restPhaseRawValue:${aaa}, value:${bbb}`)
+//     restPhaseRawValueRef.current = bbb
+//     setRestPhaseRawValue(value)
+//   }
+// })

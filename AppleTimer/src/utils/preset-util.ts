@@ -89,3 +89,15 @@ export const getTotalPresetDurationSecs = (item?: Preset): number => {
   }
   return (item.PrepareSecs + (item.WorkoutSecs + item.RestSecs) * item.SetsCount) * item.CyclesCount
 }
+
+export const getCurrentPhaseRemainingSecs = (ticked?: TickedPreset): number => {
+  if (!ticked) {
+    return 0
+  }
+  const theMap = {
+    [`${TimerPhase.Prepare}`]: ticked.prepareRemainingSecs,
+    [`${TimerPhase.Workout}`]: ticked.workoutRemainingSecs,
+    [`${TimerPhase.Rest}`]: ticked.restRemainingSecs,
+  }
+  return theMap[`${ticked.cycleCurrentPhase}`] ?? 0
+}

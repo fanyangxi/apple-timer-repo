@@ -233,4 +233,32 @@ React native svg arc path - Stack Overflow
 {/*</View>*/}
 ```
 
+```
+const anims = Animated.loop(
+  Animated.sequence([
+    Animated.timing(theAnimValue, {
+      toValue: maxValue,
+      duration: animationDurationMs * remainingPercentage,
+      easing: Easing.linear,
+      // Config to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+      useNativeDriver: false,
+    }),
+    Animated.timing(theAnimValue, {
+      toValue: minValue,
+      duration: animationDurationMs * remainingPercentage,
+      easing: Easing.linear,
+      // Config to 'False', to suppress the warning: `Sending "onAnimatedValueUpdate" with no listeners registered.`
+      useNativeDriver: false,
+    }),
+  ]),
+  { iterations: 3000 },
+)
+anims.start(result => {
+  if (result.finished) {
+    onAnimationFinished && onAnimationFinished()
+  }
+})
+```
+
+
 +
