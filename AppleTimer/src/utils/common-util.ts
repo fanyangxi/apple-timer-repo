@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export const Sleep = (dely: number): Promise<void> => {
   return new Promise<void>(resolve => setTimeout(() => resolve(), dely))
 }
@@ -30,7 +32,12 @@ export const hashCode = (input: string): number => {
   return hash
 }
 
-export const toDecimal = (input: number) => {
-  // return Math.round(input)
-  return Math.round(input * 10) / 10
+export const toDecimal = (rawInput: number) => {
+  // For ios: render 5 pixels per point
+  // For android: render 2 pixels per point
+  const resolution = Platform.select({ ios: 0.2, android: 0.5 }) ?? 0.2
+  const intPart = Math.floor(rawInput)
+  const decimalPart = rawInput - intPart
+  const interpolatedDecimalPart = Math.floor(decimalPart / resolution) * resolution
+  return intPart + interpolatedDecimalPart
 }
