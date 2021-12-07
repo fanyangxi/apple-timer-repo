@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
 import { Animated, Easing, StyleProp, View, ViewStyle } from 'react-native'
 import Svg, { Path, Circle, G, Text } from 'react-native-svg'
+import { toDecimal } from '@/utils/common-util'
 
 export type CircularSliderRefObject = {
   startOrResumeAnim: () => void
@@ -84,6 +85,7 @@ const CircularSliderV2: React.FC<CircularSliderProps> = React.forwardRef((props,
 
   const trackPathRef = React.useRef()
   const trackThumbRef = React.useRef()
+  const preparePhaseRawValueRef = React.useRef<number>(0)
   const currentValueRef = useRef<number>(value)
   const [theAnimValue] = useState(new Animated.Value(value))
 
@@ -143,7 +145,15 @@ const CircularSliderV2: React.FC<CircularSliderProps> = React.forwardRef((props,
   const [initialValueAngle, initialEndCoord] = calculate(value)
   const _startOrResumeAnim = () => {
     theAnimValue.addListener(theValue => {
-      const [valueAngle, endCoord] = calculate(theValue.value)
+      // Ensure the resolution to be 0.1
+      const old = toDecimal(preparePhaseRawValueRef.current)
+      const updated = toDecimal(theValue.value)
+      if (old === updated) {
+        return
+      }
+      // console.log(`>>> CircularSliderV2 Anim: old-Value:${old}, updated-value:${updated}`)
+      preparePhaseRawValueRef.current = updated
+      const [valueAngle, endCoord] = calculate(updated)
       // @ts-ignore
       trackPathRef.current?.setNativeProps({
         d: [

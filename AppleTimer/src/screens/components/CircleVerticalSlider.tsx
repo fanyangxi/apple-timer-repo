@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
 import { Animated, Easing, StyleProp, View, ViewStyle } from 'react-native'
 import Svg, { Path, Circle } from 'react-native-svg'
+import { toDecimal } from '@/utils/common-util'
 
 export type CircleVerticalSliderRefObject = {
   startOrResumeAnim: () => void
@@ -96,6 +97,7 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = React.forwardR
   const viewRef = React.useRef<View>(null)
 
   const trackPathRef = React.useRef()
+  const preparePhaseRawValueRef = React.useRef<number>(0)
   const currentValueRef = useRef<number>(value)
   const [theAnimValue] = useState(new Animated.Value(value))
 
@@ -142,7 +144,15 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = React.forwardR
 
   const _startOrResumeAnim = () => {
     theAnimValue.addListener(theValue => {
-      const [valuePercentage, startCoord, endCoord] = calculate(theValue.value)
+      // Ensure the resolution to be 0.1
+      const old = toDecimal(preparePhaseRawValueRef.current)
+      const updated = toDecimal(theValue.value)
+      if (old === updated) {
+        return
+      }
+      // console.log(`>>> CircleVerticalSlider Anim: old-Value:${old}, updated-value:${updated}`)
+      preparePhaseRawValueRef.current = updated
+      const [valuePercentage, startCoord, endCoord] = calculate(updated)
       // @ts-ignore
       trackPathRef.current?.setNativeProps({
         d: [
