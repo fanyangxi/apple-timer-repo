@@ -9,7 +9,7 @@ import { ElementList } from '@/components/ElementList'
 import { DataService } from '@/services/data-service'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
-import Modal, { ModalButton, ModalContent, ModalFooter, ModalTitle, ScaleAnimation } from 'react-native-modals'
+import { ConfirmDialog } from 'react-native-simple-dialogs'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -134,38 +134,26 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           items={cachedPresets && cachedPresets.map(preset => renderItem(preset))}
         />
       </ScrollView>
-      <Modal
+      <ConfirmDialog
         visible={showConfirmDialog}
-        modalAnimation={new ScaleAnimation(100)}
-        modalTitle={<ModalTitle title="Confirm deletion" />}
-        width={0.7}
-        footer={
-          <ModalFooter>
-            <ModalButton
-              style={styles.confirmationLeftButton}
-              text="Cancel"
-              onPress={() => setShowConfirmDialog(false)}
-            />
-            <ModalButton
-              style={styles.confirmationRightButton}
-              text="Yes"
-              onPress={() => {
-                setShowConfirmDialog(false)
-                if (deletingPreset) {
-                  deletePreset(deletingPreset.Id)
-                  onDeleteItemClicked && onDeleteItemClicked(deletingPreset)
-                }
-              }}
-            />
-          </ModalFooter>
-        }
-      >
-        <ModalContent style={styles.confirmationContent}>
-          <Text style={[Fonts.textRegular, styles.confirmationText]}>
-            Are you sure to delete preset ({`${deletingPreset?.Name}`})?
-          </Text>
-        </ModalContent>
-      </Modal>
+        title={'Confirm deletion'}
+        message={'Data has been changed. Do you want to discard the changes?'}
+        onTouchOutside={() => setShowConfirmDialog(false)}
+        negativeButton={{
+          title: 'Cancel',
+          onPress: () => setShowConfirmDialog(false),
+        }}
+        positiveButton={{
+          title: 'Yes, delete it',
+          onPress: () => {
+            setShowConfirmDialog(false)
+            if (deletingPreset) {
+              deletePreset(deletingPreset.Id)
+              onDeleteItemClicked && onDeleteItemClicked(deletingPreset)
+            }
+          },
+        }}
+      />
     </View>
   )
 }

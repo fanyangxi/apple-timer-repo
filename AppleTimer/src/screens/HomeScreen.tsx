@@ -22,7 +22,7 @@ import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/components/WorkoutDetailView'
 import { SettingsButton } from '@/components/button/SettingsButton'
-import Modal, { FadeAnimation, ModalButton, ModalContent, ModalFooter, ModalTitle } from 'react-native-modals'
+import { ConfirmDialog } from 'react-native-simple-dialogs'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -310,35 +310,23 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         />
       </Modalize>
 
-      <Modal
+      <ConfirmDialog
         visible={showConfirmDialog}
-        modalAnimation={new FadeAnimation(100)}
-        modalTitle={<ModalTitle title="Confirm deletion" />}
-        width={0.7}
-        footer={
-          <ModalFooter>
-            <ModalButton
-              style={styles.confirmationLeftButton}
-              text="Cancel"
-              onPress={() => setShowConfirmDialog(false)}
-            />
-            <ModalButton
-              style={styles.confirmationRightButton}
-              text="Stop!"
-              onPress={() => {
-                setShowConfirmDialog(false)
-                onStopPressed().catch(() => {})
-              }}
-            />
-          </ModalFooter>
-        }
-      >
-        <ModalContent style={styles.confirmationContent}>
-          <Text style={[Fonts.textRegular, styles.confirmationText]}>
-            Stop current workout timer ({`${format(toDTime(secsLeftInCurrentWorkout ?? 0))} seconds left`})?
-          </Text>
-        </ModalContent>
-      </Modal>
+        title={'Confirm stopping'}
+        message={`Stop current workout timer (${format(toDTime(secsLeftInCurrentWorkout ?? 0))} seconds left)?`}
+        onTouchOutside={() => setShowConfirmDialog(false)}
+        negativeButton={{
+          title: 'Cancel',
+          onPress: () => setShowConfirmDialog(false),
+        }}
+        positiveButton={{
+          title: 'Stop!',
+          onPress: () => {
+            setShowConfirmDialog(false)
+            onStopPressed().catch(() => {})
+          },
+        }}
+      />
     </ScreenContainer>
   )
 }

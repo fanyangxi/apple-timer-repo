@@ -4,7 +4,6 @@ import { ApplicationNavigator } from '@/navigators'
 import './translations'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
-import { ModalPortal } from 'react-native-modals'
 
 const App = () => (
   <>
@@ -12,7 +11,6 @@ const App = () => (
       <ApplicationNavigator />
     </SafeAreaProvider>
     <Toast ref={(ref: any) => Toast.setRef(ref)} />
-    <ModalPortal />
   </>
 )
 

@@ -18,7 +18,7 @@ import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import Toast from 'react-native-toast-message'
-import Modal, { ModalButton, ModalContent, ModalFooter, ModalTitle, ScaleAnimation } from 'react-native-modals'
+import { ConfirmDialog } from 'react-native-simple-dialogs'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -358,37 +358,25 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           )
         }}
       />
-      <Modal
+      <ConfirmDialog
         visible={showConfirmDialog}
-        modalAnimation={new ScaleAnimation(100)}
-        modalTitle={<ModalTitle title="Confirmation" />}
-        width={0.7}
-        footer={
-          <ModalFooter>
-            <ModalButton
-              style={styles.confirmationLeftButton}
-              text="Discard!"
-              onPress={() => {
-                setShowConfirmDialog(false)
-                goBack()
-              }}
-            />
-            <ModalButton
-              style={styles.confirmationRightButton}
-              text="Keep Editing"
-              onPress={() => {
-                setShowConfirmDialog(false)
-              }}
-            />
-          </ModalFooter>
-        }
-      >
-        <ModalContent style={styles.confirmationContent}>
-          <Text style={[Fonts.textRegular, styles.confirmationText]}>
-            Data has been changed. Do you want to discard the changes?
-          </Text>
-        </ModalContent>
-      </Modal>
+        title={'Confirmation'}
+        message={'Data has been changed. Do you want to discard the changes?'}
+        onTouchOutside={() => setShowConfirmDialog(false)}
+        negativeButton={{
+          title: 'Discard!',
+          onPress: () => {
+            setShowConfirmDialog(false)
+            goBack()
+          },
+        }}
+        positiveButton={{
+          title: 'Keep Editing',
+          onPress: () => {
+            setShowConfirmDialog(false)
+          },
+        }}
+      />
     </ScreenContainer>
   )
 }
