@@ -180,6 +180,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               ...styles.neomorphContainer,
               width: DeviceScreen.width - Spacings.s_48,
               height: 116,
+              zIndex: 0,
             }}
           >
             <View style={styles.summarySection}>
@@ -215,7 +216,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
         </View>
 
         {/* @details-section: */}
-        <View style={styles.row}>
+        <View style={styles.workoutDetailsSection}>
           <WorkoutDetailView
             // @ts-ignore
             ref={workoutDetailViewRef}
@@ -231,7 +232,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             style={{
               ...styles.neomorphContainer,
               width: DeviceScreen.width - Spacings.s_48,
-              height: 88,
+              height: 80,
+              zIndex: 0,
             }}
           >
             <View style={styles.summarySection}>
@@ -266,7 +268,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                 </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
-                <AwesomeButtonMy raiseLevel={2} type="pinterest" stretch={true} onPress={onStopPressed}>
+                <AwesomeButtonMy
+                  raiseLevel={2}
+                  type="pinterest"
+                  stretch={true}
+                  onPress={() => setShowConfirmDialog(true)}
+                >
                   {'Stop'}
                 </AwesomeButtonMy>
               </View>
@@ -411,11 +418,19 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     ...Fonts.textLarge,
   },
+  workoutDetailsSection: {
+    // marginTop: 50,
+    // backgroundColor: 'lightgrey',
+    flexDirection: 'column',
+    alignItems: 'center',
+    zIndex: 1,
+  },
   // @action-section:
   actionSection: {
     flexDirection: 'row',
     paddingHorizontal: Spacings.s_16,
     paddingVertical: Spacings.s_4,
+    marginTop: Spacings.s_16,
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 2,
