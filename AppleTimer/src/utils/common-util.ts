@@ -41,3 +41,11 @@ export const toDecimal = (rawInput: number) => {
   const interpolatedDecimalPart = Math.floor(decimalPart / resolution) * resolution
   return intPart + interpolatedDecimalPart
 }
+
+// 32.9689389752 -> 32.97
+export const toFixedNumber = (rawInput: number): number => {
+  if (isNaN(rawInput) || rawInput === 0) {
+    return 0
+  }
+  return Math.floor(rawInput * 100) / 100
+}

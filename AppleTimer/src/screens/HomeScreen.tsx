@@ -23,6 +23,8 @@ import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/compone
 import { SettingsButton } from '@/components/button/SettingsButton'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
 import LinearGradient from 'react-native-linear-gradient'
+import * as Progress from 'react-native-progress'
+import { toFixedNumber } from '@/utils/common-util'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -30,6 +32,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [tickedContext, setTickedContext] = useState<TickedContext>()
   const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
+  const [presetTotalDurationSecs, setPresetTotalDurationSecs] = useState<number>(0)
 
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
@@ -50,7 +53,9 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   useEffect(() => {
     if (activePreset) {
       console.log(`>>> Current active-preset is: ${JSON.stringify(activePreset)}`)
+      const totalDurationSecs = getTotalPresetDurationSecs(activePreset)
       const theUnpackedPresetMap: UnpackedPresetMap = getUnpackedPresetMap(activePreset)
+      setPresetTotalDurationSecs(totalDurationSecs)
       setTickedContext(getRawTickedContext(activePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
       timerServiceRef.current = initTimerServiceRef(activePreset, theUnpackedPresetMap)
@@ -284,13 +289,24 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           >
             <View style={styles.footerSummaryContent}>
               <View style={styles.summaryDetail}>
-                <View style={styles.timeRemainingContainer}>
+                <View style={styles.cyclesLeftContainer}>
                   <Text style={styles.itemValue}>{tickedContext?.cyclesRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Cycles left'}</Text>
                 </View>
-                <View style={styles.totalTimeContainer}>
+                <View style={styles.setsLeftContainer}>
                   <Text style={styles.itemValue}>{tickedContext?.cycleSetsRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Sets left'}</Text>
+                </View>
+                <View style={styles.overallProgressBar}>
+                  <Progress.Bar
+                    style={{
+                      alignSelf: 'center',
+                    }}
+                    color={'#5ea8f6'}
+                    height={8}
+                    progress={toFixedNumber(1 - (secsLeftInCurrentWorkout ?? 0) / presetTotalDurationSecs)}
+                    indeterminate={false}
+                  />
                 </View>
               </View>
             </View>
@@ -438,7 +454,21 @@ const styles = StyleSheet.create({
   },
   totalTimeContainer: {
     alignItems: 'flex-end',
-    ...Fonts.textLarge,
+  },
+  cyclesLeftContainer: {
+    alignItems: 'flex-start',
+  },
+  setsLeftContainer: {
+    alignItems: 'flex-end',
+  },
+  overallProgressBar: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'lightgreen',
   },
   itemLabel: {
     ...Fonts.textSmall,
