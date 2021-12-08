@@ -104,7 +104,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       logger.info(`${TAG}: timerSvc.OnPreparePhaseStarted`)
       workoutDetailViewRef.current?.startOrResumePreparePhaseAnim()
     }
-    timerSvc.OnPreparePhaseClosing = async (cycleSetsRemainingCount: number) => {
+    timerSvc.OnPreparePhaseClosing = async (secsLeft: number, ticked: TickedContext) => {
+      const cycleSetsRemainingCount: number = ticked.cycleSetsRemainingCount
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${cycleSetsRemainingCount}.mp3`,
@@ -127,10 +128,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       logger.info(`${TAG}: timerSvc.OnRestPhaseStarted`)
       workoutDetailViewRef.current?.startOrResumeRestPhaseAnim()
     }
-    timerSvc.OnRestPhaseClosing = async (cycleSetsRemainingCount: number) => {
+    timerSvc.OnRestPhaseClosing = async (secsLeft: number, ticked: TickedContext) => {
+      // By the time `RestPhaseClosing` event is triggered, the current Set is not finished yet. So, to tell
+      // exactly how many sets left after this, we need to do '-1' here.
+      const cycleSetsLeft: number = ticked.cycleSetsRemainingCount
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
-        `num_${cycleSetsRemainingCount}.mp3`,
+        `num_${cycleSetsLeft}.mp3`,
         Sounds.RepetitionsToGo,
         Sounds.Workout,
       ])
