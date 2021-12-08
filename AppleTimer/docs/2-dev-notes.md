@@ -99,6 +99,12 @@ React native svg arc path - Stack Overflow
 \- https://stackoverflow.com/questions/53714250/react-native-svg-arc-path
 
 
+### react native progress bar:
+\- https://www.npmjs.com/package/react-native-progress
+
+
+
+
 ```
 {/*<ActionSheet*/}
 {/*  // @ts-ignore*/}

@@ -20,6 +20,7 @@ import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import Toast from 'react-native-toast-message'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
 import { DEFAULT_NEW_PRESET } from '@/common/constants'
+import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -38,8 +39,6 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const restSecsDurationPickerRef = useRef<Modalize>(null)
   const setsPickerRef = useRef<Modalize>(null)
   const cyclesPickerRef = useRef<Modalize>(null)
-
-  const { Common } = useTheme()
 
   useEffect(() => {
     console.log('>>>> PresetDetailScreen loaded')
@@ -91,7 +90,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   return (
     <ScreenContainer
       backgroundComponent={() => (
-        <Image source={assets.images.darkBackground} style={{ flex: 1, width: undefined, height: undefined }} />
+        <Image
+          source={assets.images.darkBackground}
+          resizeMode={'repeat'}
+          style={{ flex: 1, width: undefined, height: undefined }}
+        />
       )}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
@@ -260,12 +263,17 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
           </View>
         </View>
         <View style={styles.actionsSection}>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => cancel()}>
-            <Text style={Fonts.textRegular}>{'Cancel'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[Common.button.rounded]} onPress={() => saveChanges()}>
-            <Text style={Fonts.textRegular}>{'Save'}</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonLeft}>
+            <AwesomeButtonMy raiseLevel={1} type="secondary" stretch={true} onPress={() => cancel()}>
+              {'Cancel'}
+            </AwesomeButtonMy>
+          </View>
+          <View style={styles.buttonSeparator} />
+          <View style={styles.buttonRight}>
+            <AwesomeButtonMy raiseLevel={1} type="whatsapp" stretch={true} onPress={() => saveChanges()}>
+              {'Save'}
+            </AwesomeButtonMy>
+          </View>
         </View>
       </View>
 
@@ -489,5 +497,16 @@ const styles = StyleSheet.create({
   },
   confirmationRightButton: {
     alignSelf: 'flex-end',
+  },
+  buttonLeft: {
+    flexGrow: 2,
+    marginRight: 10,
+  },
+  buttonSeparator: {
+    flexGrow: 1,
+  },
+  buttonRight: {
+    flexGrow: 2,
+    marginLeft: 10,
   },
 })
