@@ -228,7 +228,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   // inner // <- enable inner shadow
                   // useArt // <- set this prop to use non-native shadow on ios
                   style={{
-                    width: 200,
+                    width: 240,
                     height: 1,
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 1,
@@ -243,7 +243,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                     angle={45}
                     style={{
                       // padding: 8,
-                      width: 200,
+                      width: 240,
                       height: 2,
                       // borderTopLeftRadius: 10,
                       flexDirection: 'row',
