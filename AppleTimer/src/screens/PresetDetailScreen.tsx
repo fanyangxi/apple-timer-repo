@@ -19,15 +19,14 @@ import SvgFinish from '@/assets/icons/Finish'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import Toast from 'react-native-toast-message'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
+import { DEFAULT_NEW_PRESET } from '@/common/constants'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
   const thePreset: Preset = _.get(route.params, 'current', undefined)
   const isCreatingNewMode = thePreset === undefined
-  const currentPreset = isCreatingNewMode
-    ? new Preset('NEW-ID-PLACE-HOLDER', 'New Workout 4', 1, 1, 1, 1, 1)
-    : thePreset
+  const currentPreset = isCreatingNewMode ? DEFAULT_NEW_PRESET : thePreset
 
   const [newTitle, setNewTitle] = useState<string>(currentPreset.Name)
   const [isModifyingTitle, setIsModifyingTitle] = useState<boolean>(false)
@@ -78,9 +77,11 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   }
 
   function cancel() {
-    const original = JSON.stringify(thePreset)
     const updated = JSON.stringify(current)
-    if (original !== updated) {
+    const shouldWarn = isCreatingNewMode
+      ? updated !== JSON.stringify(DEFAULT_NEW_PRESET)
+      : updated !== JSON.stringify(thePreset)
+    if (shouldWarn) {
       setShowConfirmDialog(true)
     } else {
       goBack()

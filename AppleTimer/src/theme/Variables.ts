@@ -100,6 +100,7 @@ export const FontSizes = {
   f16: 16,
   f18: 18,
   f20: 20,
+  f24: 24,
   f30: 30,
   f40: 40,
 }
@@ -112,6 +113,9 @@ export const FontColors = {
   } as TextStyle,
   black: {
     color: 'black',
+  } as TextStyle,
+  grey: {
+    color: Colors.silverChalice,
   } as TextStyle,
 }
 
@@ -156,17 +160,16 @@ export const Fonts = {
     fontWeight: 'normal',
   } as TextStyle,
   titleSmall: {
-    fontSize: FontSizes.f16 * 2,
+    fontSize: FontSizes.f16,
     fontWeight: 'bold',
   } as TextStyle,
   titleRegular: {
-    fontSize: FontSizes.f20 * 2,
-    fontWeight: 'bold',
-  } as TextStyle,
-  //
-  titleNormal: {
     fontSize: FontSizes.f18,
     fontStyle: 'normal',
+    fontWeight: 'bold',
+  } as TextStyle,
+  titleLarge: {
+    fontSize: FontSizes.f24,
     fontWeight: 'bold',
   } as TextStyle,
 }

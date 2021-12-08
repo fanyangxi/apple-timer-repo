@@ -88,10 +88,13 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             style={styles.card}
             onPress={() => onSelectionChanged && onSelectionChanged(preset)}
           >
-            <Text style={Fonts.textRegular}>{preset.Name}</Text>
-            <Text style={[Fonts.textSmall, FontColors.white]}>Prepare: {preset.PrepareSecs}</Text>
-            <Text style={[Fonts.textSmall, FontColors.white]}>Workout: {preset.WorkoutSecs}</Text>
-            <Text style={[Fonts.textSmall, FontColors.white]}>Rest: {preset.RestSecs}</Text>
+            <Text style={[Fonts.titleSmall, FontColors.white]}>{preset.Name}</Text>
+            <Text style={[Fonts.textSmall, FontColors.grey]}>
+              Prepare:{preset.PrepareSecs} / Workout:{preset.WorkoutSecs} / Rest:{preset.RestSecs}
+            </Text>
+            <Text style={[Fonts.textSmall, FontColors.grey]}>
+              Cycles:{preset.CyclesCount} / Sets:{preset.SetsCount}
+            </Text>
           </TouchableOpacity>
           <View style={styles.actionButton}>
             {!isManagingList && (
@@ -133,7 +136,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         <View style={styles.leftButtonContainer}>
           {isManagingList && <AddButton onPress={() => onAddClicked && onAddClicked()} />}
         </View>
-        <Text style={[Fonts.textRegular, FontColors.white]}>Select an item</Text>
+        <Text style={[Fonts.titleRegular, FontColors.white]}>My Presets</Text>
         <View style={styles.rightButtonContainer}>
           {!isManagingList ? (
             <ListButton onPress={() => setIsManagingList(true)} />
@@ -239,15 +242,12 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     paddingHorizontal: Spacings.s_12,
-    marginRight: Spacings.s_8,
     // backgroundColor: '#434343',
   },
   actionButton: {
-    // width: 64,
-    marginLeft: Spacings.s_4,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacings.s_8,
+    paddingHorizontal: Spacings.s_4,
     // backgroundColor: 'grey',
   },
   separator: {
