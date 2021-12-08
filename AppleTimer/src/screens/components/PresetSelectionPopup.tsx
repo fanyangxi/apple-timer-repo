@@ -28,6 +28,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
 }) => {
   const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
   const [deletingPreset, setDeletingPreset] = useState<Preset | undefined>()
+  const [isManagingList, setIsManagingList] = useState<boolean>(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         style={{
           ...styles.neomorphContainer,
           width: DeviceScreen.width - Spacings.s_48,
-          height: 90,
+          height: 80,
         }}
       >
         <View style={styles.rowContent}>
@@ -87,14 +88,16 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             <Text style={[Fonts.textSmall, FontColors.white]}>Workout: {preset.WorkoutSecs}</Text>
             <Text style={[Fonts.textSmall, FontColors.white]}>Rest: {preset.RestSecs}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            key={`${preset.Name}-edit-container`}
-            style={styles.actionButton}
-            onPress={() => onEditItemClicked && onEditItemClicked(preset)}
-          >
-            <Text style={Fonts.textRegular}>Edit</Text>
-          </TouchableOpacity>
-          {!preset.IsActive && (
+          {!isManagingList && (
+            <TouchableOpacity
+              key={`${preset.Name}-edit-container`}
+              style={styles.actionButton}
+              onPress={() => onEditItemClicked && onEditItemClicked(preset)}
+            >
+              <Text style={Fonts.textRegular}>Edit</Text>
+            </TouchableOpacity>
+          )}
+          {isManagingList && (
             <TouchableOpacity
               key={`${preset.Name}-delete-container`}
               style={styles.actionButton}
@@ -125,8 +128,17 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         />
       </View>
       <View style={styles.actionButtonsBar}>
-        <Text>Your Presets</Text>
-        <Button title={'ADD'} onPress={() => onAddClicked && onAddClicked()} />
+        <View style={styles.leftButtonContainer}>
+          {!isManagingList && <Button title={'ADD'} onPress={() => onAddClicked && onAddClicked()} />}
+        </View>
+        <Text style={[Fonts.textRegular, FontColors.white]}>Select an item</Text>
+        <View style={styles.rightButtonContainer}>
+          {!isManagingList ? (
+            <Button title={'Manage'} onPress={() => setIsManagingList(true)} />
+          ) : (
+            <Button title={'Done'} onPress={() => setIsManagingList(false)} />
+          )}
+        </View>
       </View>
       <ScrollView style={styles.itemsScroll}>
         {/*{presets && presets.map(preset => renderItem(preset))}*/}
@@ -195,9 +207,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 12,
-    paddingHorizontal: Spacings.s_8,
-    // backgroundColor: 'yellow',
+    borderTopLeftRadius: RadiusSizes.r12,
+    borderTopRightRadius: RadiusSizes.r12,
+    paddingHorizontal: Spacings.s_16,
+    paddingTop: Spacings.s_12,
+    backgroundColor: '#434343',
   },
   itemsScroll: {
     marginVertical: Spacings.s_8,
@@ -236,18 +250,13 @@ const styles = StyleSheet.create({
     height: 4,
     backgroundColor: 'lightblue',
   },
-  confirmationContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  leftButtonContainer: {
+    width: 80,
+    backgroundColor: 'lightblue',
   },
-  confirmationText: {
-    textAlign: 'center',
-  },
-  confirmationLeftButton: {
-    alignSelf: 'flex-start',
-  },
-  confirmationRightButton: {
-    alignSelf: 'flex-end',
+  rightButtonContainer: {
+    width: 90,
+    backgroundColor: 'lightblue',
   },
 })
 
