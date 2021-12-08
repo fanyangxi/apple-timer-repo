@@ -211,7 +211,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   style={{
                     ...Platform.select({ ios: {}, android: { marginTop: 4 } }),
                     height: 48,
-                    padding: 10,
+                    padding: 2,
                     flexDirection: 'row',
                     justifyContent: 'center',
                   }}
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
   },
   presetSelectionButton: {
     paddingHorizontal: 32,
-    paddingVertical: 4,
+    paddingVertical: 12,
   },
   summaryDivider: {
     flex: 1,

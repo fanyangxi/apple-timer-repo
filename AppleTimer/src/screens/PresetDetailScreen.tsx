@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
     // shadowColor: 'red',
     // shadowOffset: { width: 6, height: 6 },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: 2,
     borderRadius: RadiusSizes.r8,
     backgroundColor: '#4E4E4E', // 434343, 4E4E4E, 3C3C3C, 3E3E3E
     flexDirection: 'column',
