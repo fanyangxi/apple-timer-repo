@@ -136,8 +136,8 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       </ScrollView>
       <ConfirmDialog
         visible={showConfirmDialog}
-        title={'Confirm deletion'}
-        message={'Data has been changed. Do you want to discard the changes?'}
+        title={'Confirm Deletion'}
+        message={`Are you sure to delete preset (${deletingPreset?.Name})?`}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
           title: 'Cancel',
