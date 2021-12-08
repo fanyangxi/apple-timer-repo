@@ -74,10 +74,10 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = React.forwardR
     value = 10,
     minValue = 0,
     maxValue = 100,
-    trackTintColor = '#3C3C3C',
-    trackTintStrokeColor = '#3C3C3C',
-    trackColor = '#E5D996',
-    trackStrokeColor = '#E5D996',
+    trackTintColor = '#E5D996',
+    trackTintStrokeColor = '#E5D996',
+    trackColor = '#3C3C3C',
+    trackStrokeColor = '#3C3C3C',
     // minAngle = 179.9,
     // maxAngle = 359.9, // 359.9, 179.9
     // onChange,
@@ -220,13 +220,13 @@ const CircleVerticalSlider: React.FC<CircleVerticalSliderProps> = React.forwardR
           cx={centerCoord.x}
           cy={centerCoord.y}
           r={trackRadius}
-          fill={trackTintColor}
-          stroke={trackTintStrokeColor}
+          fill={trackColor}
+          stroke={trackStrokeColor}
           strokeWidth={trackStrokeWidth}
         />
         <Path
-          fill={trackColor}
-          stroke={trackStrokeColor}
+          fill={trackTintColor}
+          stroke={trackTintStrokeColor}
           strokeWidth={trackStrokeWidth}
           d={[
             'M',

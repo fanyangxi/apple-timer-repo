@@ -143,7 +143,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
           trackRadius={90}
           trackWidth={36}
           trackColor={'#3C3C3C'}
-          trackTintColor={'lightgreen'}
+          trackTintColor={'#50C823'}
           animationDurationMs={(activePreset?.WorkoutSecs ?? 0) * 1000}
         />
         <CircularSliderV2
@@ -159,7 +159,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
           trackRadius={90}
           trackWidth={36}
           trackColor={'#3C3C3C'}
-          trackTintColor={'red'}
+          trackTintColor={'#C62238'}
           animationDurationMs={(activePreset?.RestSecs ?? 0) * 1000}
         />
         <CircleVerticalSlider
@@ -169,6 +169,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
           style={styles.absolute}
           trackRadius={71}
           trackStrokeWidth={0}
+          trackTintColor={'#e3c94b'}
           animationDurationMs={(activePreset?.PrepareSecs ?? 0) * 1000}
         />
         <View style={styles.hintContainer}>
