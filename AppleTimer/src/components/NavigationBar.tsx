@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     color: Colors.lightGray,
-    ...Fonts.titleNormal,
+    ...Fonts.titleRegular,
   } as TextStyle,
 })

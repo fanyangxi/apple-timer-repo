@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
-import { LinkButton, LinkButtonTheme } from '@/components/button/LinkButton'
 import { Preset, TickedPreset } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
 import { TimerService } from '@/services/timer-service'
@@ -13,7 +12,7 @@ import { assets } from '@/assets'
 import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
-import { Neomorph } from 'react-native-neomorph-shadows'
+import { Neomorph, Shadow, ShadowFlex } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
@@ -23,6 +22,7 @@ import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/components/WorkoutDetailView'
 import { SettingsButton } from '@/components/button/SettingsButton'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
+import LinearGradient from 'react-native-linear-gradient'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -157,7 +157,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   return (
     <ScreenContainer
       backgroundComponent={() => (
-        <Image source={assets.images.darkBackground} style={{ flex: 1, width: undefined, height: undefined }} />
+        <Image
+          source={assets.images.darkBackground}
+          resizeMode={'repeat'}
+          style={{ flex: 1, width: undefined, height: undefined }}
+        />
       )}
       // style={{ backgroundColor: '#434343' }}
       topInsetBackgroundColor={Colors.mineShaft}
@@ -172,7 +176,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
       {/* @summary-section: */}
       <View style={styles.rootContainer}>
-        <View style={styles.row}>
+        {/* @summary-section: */}
+        <View style={styles.summarySection}>
           <Neomorph
             inner={false} // <- enable shadow inside of neomorph
             swapShadows // <- change zIndex of each shadow color
@@ -183,25 +188,62 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               zIndex: 0,
             }}
           >
-            <View style={styles.summarySection}>
+            <View style={styles.summaryContent}>
               <View style={styles.title}>
-                {/*<TouchableOpacity style={[Common.button.rounded]} onPress={() => {}}>*/}
-                {/*  <Text style={Fonts.textRegular}>{'Change-Preset'}</Text>*/}
-                {/*</TouchableOpacity>*/}
-                <LinkButton
-                  theme={LinkButtonTheme.Normal}
-                  text={`Change-Preset: ${activePreset?.Name}`}
-                  textColor={'white'}
-                  onPress={() => {
-                    // setIsActionsheetOpen(true)
-                    // @ts-ignore
-                    // actionSheetRef.current?.show()
-                    modalizeRef.current.open()
+                <LinearGradient
+                  colors={['#4E4E4E', '#3C3C3C', '#3C3C3C', '#3C3C3C', '#4E4E4E']}
+                  useAngle={true}
+                  angle={45}
+                  style={{
+                    padding: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
                   }}
-                />
+                >
+                  <TouchableOpacity
+                    style={{
+                      paddingHorizontal: 32,
+                      paddingVertical: 4,
+                    }}
+                    onPress={() => {
+                      // @ts-ignore
+                      modalizeRef.current.open()
+                    }}
+                  >
+                    <Text style={[Fonts.titleSmall, FontColors.white]}>{`:${activePreset?.Name}`}</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
               </View>
-              {/*<Divider style={styles.summaryDivider} />*/}
-              <View style={styles.summaryContent}>
+              <View style={styles.summaryDivider}>
+                <ShadowFlex
+                  // inner // <- enable inner shadow
+                  // useArt // <- set this prop to use non-native shadow on ios
+                  style={{
+                    width: 200,
+                    height: 1,
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 1,
+                    shadowColor: 'black',
+                    shadowRadius: 16,
+                    borderRadius: 40,
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#4E4E4E', '#AEACAC', '#4E4E4E']}
+                    useAngle={true}
+                    angle={45}
+                    style={{
+                      // padding: 8,
+                      width: 200,
+                      height: 2,
+                      // borderTopLeftRadius: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  />
+                </ShadowFlex>
+              </View>
+              <View style={styles.summaryDetail}>
                 <View style={styles.timeRemainingContainer}>
                   <Text style={styles.itemValue}>{`${format(toDTime(secsLeftInCurrentWorkout ?? 0))}`}</Text>
                   <Text style={styles.itemLabel}>{'Time remaining'}</Text>
@@ -225,7 +267,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
           />
         </View>
 
-        <View style={styles.row}>
+        <View style={styles.footerSummarySection}>
           <Neomorph
             inner={false}
             swapShadows
@@ -236,8 +278,8 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
               zIndex: 0,
             }}
           >
-            <View style={styles.summarySection}>
-              <View style={styles.summaryContent}>
+            <View style={styles.footerSummaryContent}>
+              <View style={styles.summaryDetail}>
                 <View style={styles.timeRemainingContainer}>
                   <Text style={styles.itemValue}>{tickedPreset?.cyclesRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Cycles left'}</Text>
@@ -348,8 +390,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.s_8,
     paddingVertical: Spacings.s_16,
   },
-  row: {
-    // marginTop: 50,
+  summarySection: {
     // backgroundColor: 'lightgrey',
     flexDirection: 'column',
     alignItems: 'center',
@@ -365,27 +406,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   // @summary-section:
-  summarySection: {
+  summaryContent: {
     flexGrow: 1,
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
-    paddingVertical: Spacings.s_8,
+    paddingBottom: Spacings.s_8,
     // alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3C3C3C', // '#202021',
+    // backgroundColor: '#3C3C3C', // '#202021',
     borderRadius: RadiusSizes.r8,
   },
-  summaryContent: {
+  summaryDetail: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   title: {
     alignItems: 'center',
-    paddingBottom: Spacings.s_4,
   },
   summaryDivider: {
-    marginTop: Spacings.s_4,
-    marginBottom: Spacings.s_12,
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    // backgroundColor: 'green',
   },
   timeRemainingContainer: {
     alignItems: 'flex-start',
@@ -401,6 +443,20 @@ const styles = StyleSheet.create({
   itemValue: {
     ...Fonts.textCaption30,
     ...FontColors.white,
+  },
+  footerSummarySection: {
+    flexDirection: 'column',
+    paddingHorizontal: Spacings.s_16,
+  },
+  footerSummaryContent: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    paddingHorizontal: Spacings.s_16,
+    paddingBottom: Spacings.s_8,
+    // alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: '#3C3C3C', // '#202021',
+    borderRadius: RadiusSizes.r8,
   },
   // @details-section:
   detailsSection: {

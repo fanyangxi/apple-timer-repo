@@ -9,6 +9,11 @@
 - Workout terms, PRs, Sets, Cycles, ...
 - Fix issue: when pause by closely enough to the second, it will not display on screen, e.g.: 4s, 2s,
 
+
+### Icons:
+https://www.iconfinder.com/search?q=Delete&price=free
+
+
 ### Timer(s), (react-native background timer):
 https://www.npmjs.com/package/timer-node
 https://github.com/perymimon/Timer/blob/master/src/timer.js
