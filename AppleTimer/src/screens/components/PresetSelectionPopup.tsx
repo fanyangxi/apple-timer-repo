@@ -86,6 +86,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           <TouchableOpacity
             key={preset.Name}
             style={styles.card}
+            disabled={isManagingList}
             onPress={() => onSelectionChanged && onSelectionChanged(preset)}
           >
             <Text style={[Fonts.titleSmall, FontColors.white]}>{preset.Name}</Text>
@@ -107,6 +108,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
               <DeleteButton
                 key={`${preset.Name}-delete-container`}
                 color={Colors.error}
+                disabled={preset.IsActive}
                 onPress={() => {
                   setDeletingPreset(preset)
                   setShowConfirmDialog(true)

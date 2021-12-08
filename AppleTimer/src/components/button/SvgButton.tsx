@@ -11,11 +11,13 @@ export interface BarItemProps extends DefaultProps {
 export const SvgButton: React.FC<{
   onPress: () => void
   icon: Element
+  disabled?: boolean
   testID?: string
   style?: StyleProp<ViewStyle>
-}> = ({ onPress, icon, style }): ReactElement => {
+}> = ({ onPress, icon, disabled, style }): ReactElement => {
+  const disablingStyle = disabled ? { opacity: 0.3 } : {}
   return (
-    <TouchableOpacity style={[styles.barItem, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.barItem, style, disablingStyle]} onPress={onPress} disabled={disabled}>
       {icon}
     </TouchableOpacity>
   )

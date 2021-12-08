@@ -7,12 +7,14 @@ import BackArrow from '@/assets/icons/BackArrow'
 
 export const GoBackButton: React.FC<{
   onPress?: () => void
+  disabled?: boolean
   testID?: string
-}> = ({ onPress }): ReactElement => {
+}> = ({ onPress, disabled }): ReactElement => {
   const { goBack } = useNavigation()
   return (
     <SvgButton
       style={{ width: 40, height: 40 }}
+      disabled={disabled}
       icon={<BackArrow color={Colors.white} style={{ margin: 8 }} />}
       onPress={() => {
         onPress ? onPress() : goBack()

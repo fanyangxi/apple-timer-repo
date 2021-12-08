@@ -7,11 +7,13 @@ import { Color } from 'react-native-svg'
 export const ListButton: React.FC<{
   color?: Color
   onPress?: () => void
+  disabled?: boolean
   testID?: string
-}> = ({ color, onPress }) => {
+}> = ({ color, onPress, disabled }) => {
   return (
     <SvgButton
       style={{ width: 40, height: 40 }}
+      disabled={disabled}
       icon={<SvgList color={color ?? Colors.white} width={24} height={24} style={{ margin: 8 }} />}
       onPress={() => {
         onPress && onPress()

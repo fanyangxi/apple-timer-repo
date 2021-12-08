@@ -7,11 +7,13 @@ import SvgBrowser from '@/assets/icons/Browser'
 export const EditButton: React.FC<{
   color?: Color
   onPress?: () => void
+  disabled?: boolean
   testID?: string
-}> = ({ color, onPress }) => {
+}> = ({ color, onPress, disabled }) => {
   return (
     <SvgButton
       style={{ width: 40, height: 40 }}
+      disabled={disabled}
       icon={<SvgBrowser color={color ?? Colors.white} width={21} height={21} style={{ margin: 8 }} />}
       onPress={() => {
         onPress && onPress()
