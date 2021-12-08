@@ -139,7 +139,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       </View>
       <View style={styles.actionButtonsBar}>
         <View style={styles.leftButtonContainer}>
-          {isManagingList && <AddButton onPress={() => onAddClicked && onAddClicked()} />}
+          <AddButton onPress={() => onAddClicked && onAddClicked()} />
         </View>
         <Text style={[Fonts.titleRegular, FontColors.white]}>My Presets</Text>
         <View style={styles.rightButtonContainer}>
