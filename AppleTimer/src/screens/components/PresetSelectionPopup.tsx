@@ -90,7 +90,9 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             disabled={isManagingList}
             onPress={() => onSelectionChanged && onSelectionChanged(preset)}
           >
-            <Text style={[Fonts.titleSmall, FontColors.white]}>{preset.Name}</Text>
+            <Text style={[Fonts.titleSmall, preset.IsActive ? FontColors.clickable : FontColors.white]}>
+              {preset.Name}
+            </Text>
             <Text style={[Fonts.textSmall, FontColors.grey]}>
               Prepare:{preset.PrepareSecs} / Workout:{preset.WorkoutSecs} / Rest:{preset.RestSecs}
             </Text>
