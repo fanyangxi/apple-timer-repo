@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -21,6 +21,7 @@ import Toast from 'react-native-toast-message'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
 import { DEFAULT_NEW_PRESET } from '@/common/constants'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
+import { formatSecs } from '@/utils/date-util'
 
 export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -105,7 +106,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
         showBackButton={true}
         backButtonAction={() => cancel()}
       />
-      <View style={styles.rootContainer}>
+      <ScrollView contentContainerStyle={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
             <View style={styles.titleContainer}>
@@ -169,8 +170,8 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textSmall, FontColors.white]}>Prepare Secs:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{current.PrepareSecs}</Text>
+                <Text style={[Fonts.textSmall, FontColors.white]}>Prepare:</Text>
+                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.PrepareSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -191,7 +192,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             >
               <View style={styles.barItemContent}>
                 <Text style={[Fonts.textSmall, FontColors.white]}>Workout Secs:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{current.WorkoutSecs}</Text>
+                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.WorkoutSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -212,7 +213,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             >
               <View style={styles.barItemContent}>
                 <Text style={[Fonts.textSmall, FontColors.white]}>Rest Secs:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{current.RestSecs}</Text>
+                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.RestSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -275,7 +276,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
             </AwesomeButtonMy>
           </View>
         </View>
-      </View>
+      </ScrollView>
 
       <BottomDurationPickerPopup
         popupRef={prepareSecsDurationPickerRef}
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 2,
-    marginBottom: Spacings.s_40,
+    marginVertical: Spacings.s_24,
     // backgroundColor: 'lightgreen', // '#202021',
   },
   saveButton: {

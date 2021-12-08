@@ -15,3 +15,7 @@ export const format = (dTime: DTime, alwaysFull?: false): string => {
   const isHoursEmpty = dTime.hours === 0
   return isHoursEmpty && !alwaysFull ? `${subContent}` : `${`${dTime.hours}`.padStart(2, '0')}:${subContent}`
 }
+
+export const formatSecs = (seconds: number, alwaysFull?: false): string => {
+  return format(toDTime(seconds), alwaysFull)
+}
