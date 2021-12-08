@@ -6,7 +6,7 @@
  */
 
 import { ThemeMetricsSizes, ThemeNavigationColors } from '@/theme/theme.type'
-import { TextStyle } from 'react-native'
+import { Platform, TextStyle } from 'react-native'
 
 /**
  * Colors
@@ -135,6 +135,7 @@ export const FontColors = {
 // fontWeight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 // letterSpacing?: number;
 // lineHeight?: number;
+export const FixedWidthFontFamily = Platform.select({ ios: 'Courier New', android: 'monospace' })
 export const Fonts = {
   textCaption30: {
     fontSize: FontSizes.f30,

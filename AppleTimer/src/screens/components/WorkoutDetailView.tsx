@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
-import { FontColors, Fonts, Spacings } from '@/theme/Variables'
+import { FixedWidthFontFamily, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { Preset, TickedPreset } from '@/models/preset'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 import { format, toDTime } from '@/utils/date-util'
@@ -173,7 +173,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
         />
         <View style={styles.hintContainer}>
           <View style={styles.itemsContainer}>
-            <Text style={styles.time}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedPreset)))}</Text>
+            <Text style={styles.timeCountdown}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedPreset)))}</Text>
             <Text style={styles.hint}>{tickedPreset?.cycleCurrentPhase}</Text>
           </View>
         </View>
@@ -246,13 +246,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  hint: {
-    ...Fonts.textSmall,
-    ...FontColors.white,
-  },
-  time: {
+  timeCountdown: {
     ...Fonts.textCaption30,
     ...FontColors.white,
+    fontFamily: FixedWidthFontFamily,
+    fontWeight: 'bold',
+  },
+  hint: {
+    ...Fonts.textRegular,
+    ...FontColors.white,
+    fontFamily: FixedWidthFontFamily,
+    fontWeight: 'bold',
   },
   // @details-section:
   detailsSection: {
