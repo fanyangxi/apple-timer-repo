@@ -191,7 +191,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             <View style={styles.summaryContent}>
               <View style={styles.title}>
                 <LinearGradient
-                  colors={['#4E4E4E', '#3C3C3C', '#3C3C3C', '#3C3C3C', '#4E4E4E']}
+                  colors={['#4E4E4E', '#3C3C3C', '#2f2e2e', '#3C3C3C', '#4E4E4E']}
                   useAngle={true}
                   angle={45}
                   style={{
@@ -210,7 +210,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                       modalizeRef.current.open()
                     }}
                   >
-                    <Text style={[Fonts.titleSmall, FontColors.white]}>{`:${activePreset?.Name}`}</Text>
+                    <Text style={[Fonts.titleSmall, FontColors.clickable]}>{`${activePreset?.Name}`}</Text>
                   </TouchableOpacity>
                 </LinearGradient>
               </View>

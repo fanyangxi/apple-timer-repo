@@ -120,6 +120,9 @@ export const FontColors = {
   warn: {
     color: Colors.burntSienna,
   } as TextStyle,
+  clickable: {
+    color: '#7fde13',
+  } as TextStyle,
 }
 
 // - text-display-64,
