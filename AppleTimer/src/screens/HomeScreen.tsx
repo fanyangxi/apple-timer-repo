@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
-import { Preset, TickedContext } from '@/models/preset'
+import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
@@ -12,11 +12,11 @@ import { assets } from '@/assets'
 import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
-import { Neomorph, Shadow, ShadowFlex } from 'react-native-neomorph-shadows'
+import { Neomorph, ShadowFlex } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
-import { getRawTickedContext, getTotalPresetDurationSecs } from '@/utils/preset-util'
+import { getRawTickedContext, getTotalPresetDurationSecs, getUnpackedPresetMap } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/components/WorkoutDetailView'
@@ -49,15 +49,16 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   useEffect(() => {
     if (activePreset) {
-      console.log(`>>> active-preset: ${JSON.stringify(activePreset)}`)
+      console.log(`>>> Current active-preset is: ${JSON.stringify(activePreset)}`)
+      const theUnpackedPresetMap: UnpackedPresetMap = getUnpackedPresetMap(activePreset)
       setTickedContext(getRawTickedContext(activePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
-      timerServiceRef.current = initTimerServiceRef(activePreset)
+      timerServiceRef.current = initTimerServiceRef(activePreset, theUnpackedPresetMap)
     }
   }, [activePreset])
 
-  const initTimerServiceRef = (thePreset: Preset): TimerService => {
-    const timerSvc = new TimerService(thePreset)
+  const initTimerServiceRef = (thePreset: Preset, unpackedPresetMap: UnpackedPresetMap): TimerService => {
+    const timerSvc = new TimerService(thePreset, unpackedPresetMap)
     //
     timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
       setTimerStatus(newStatus)
@@ -81,7 +82,6 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       logger.info(`${TAG}: timerSvc.OnResumed`)
       workoutDetailViewRef.current?.startOrResumeCycleAnim()
       notificationServiceRef.current?.playSounds([Sounds.TimerResumed])
-      // notificationServiceRef.current?.playSounds([Sounds._3_secs_countdown, Sounds._start, Sounds._bell])
     }
     timerSvc.OnTimerStopped = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()

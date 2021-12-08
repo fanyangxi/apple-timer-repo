@@ -1,23 +1,24 @@
-import { Preset, TickedContext } from '@/models/preset'
-import { getTotalPresetDurationSecs, getUpdatedContext } from '@/utils/preset-util'
-import { TimerPhase } from '@/models/timer-phase'
+import { Preset, TickedContext, TickingEvent, UnpackedPresetMap } from '@/models/preset'
+import { getTotalPresetDurationSecs } from '@/utils/preset-util'
 import { logger } from '@/utils/logger'
 import { CountdownTimerV2, TimerStatus } from '@/services/countdown-timer-v2'
 
 export class TimerService {
   private readonly TAG = '[TIMER-SERVICE]'
   private readonly _preset: Preset
+  private readonly _theUnpackedPresetMap: UnpackedPresetMap
   private _countdownTimer?: CountdownTimerV2
 
   public Status: TimerStatus = TimerStatus.IDLE
-  public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
-  public OnTicked?: (secsLeft: number, tickedContext: TickedContext) => Promise<void>
   //
+  public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
   public OnTimerStarted?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnResumed?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnTimerStopped?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnTimerCompleted?: (milliSecsLeft: number) => Promise<void>
+  //
+  public OnTicked?: (secsLeft: number, tickedContext: TickedContext) => Promise<void>
   //
   public OnCycleStarted?: (cycleIndex: number) => Promise<void>
   public OnPreparePhaseStarted?: () => Promise<void>
@@ -29,60 +30,61 @@ export class TimerService {
   public OnRestPhaseStarted?: () => Promise<void>
   public OnRestPhaseClosing?: (cycleSetsRemainingCount: number) => Promise<void>
 
-  private CLOSING_SECS = 3
-  private REST_PHASE_CLOSING_SECS = 3
-
-  constructor(preset: Preset) {
+  constructor(preset: Preset, unpackedPresetMap: UnpackedPresetMap) {
     this._preset = preset
+    this._theUnpackedPresetMap = unpackedPresetMap
   }
 
   runPreset = async () => {
     this._countdownTimer = new CountdownTimerV2(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
-      const ticked = getUpdatedContext(this._preset, secsLeft)
+      const ticked = this._theUnpackedPresetMap[`${secsLeft}s`]
+      console.log('>>> ticked:', ticked)
       this.OnTicked && this.OnTicked(secsLeft, ticked).catch(this.handle)
 
-      if (ticked.cycleCurrentPhase === TimerPhase.Prepare) {
-        // Started
-        if (ticked.prepareRemainingSecs === this._preset.PrepareSecs) {
-          logger.info(`${this.TAG}: OnCycleStarted: ${ticked.cyclesRemainingCount} left`)
-          this.OnCycleStarted && this.OnCycleStarted(ticked.cyclesRemainingCount).catch(this.handle)
-          this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
+      ticked.events.forEach(event => {
+        switch (event) {
+          //
+          case TickingEvent.CycleStarted:
+            logger.info(`${this.TAG}: OnCycleStarted: ${ticked.cyclesRemainingCount} left`)
+            this.OnCycleStarted && this.OnCycleStarted(ticked.cyclesRemainingCount).catch(this.handle)
+            break
+          case TickingEvent.PreparePhaseStarted:
+            this.OnPreparePhaseStarted && this.OnPreparePhaseStarted().catch(this.handle)
+            break
+          //
+          case TickingEvent.PreparePhaseClosing:
+            logger.info(`${this.TAG}: ============================================================== OnPreparePhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
+            this.OnPreparePhaseClosing && this.OnPreparePhaseClosing(ticked.cycleSetsRemainingCount).catch(this.handle)
+            break
+          //
+          case TickingEvent.SetStarted:
+            logger.info(`${this.TAG}: OnSetStarted: ${ticked.cycleSetsRemainingCount} left`)
+            this.OnSetStarted && this.OnSetStarted(ticked.cycleSetsRemainingCount).catch(this.handle)
+            break
+          case TickingEvent.WorkoutPhaseStarted:
+            this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
+            break
+          //
+          case TickingEvent.WorkoutPhaseClosing:
+            logger.info(`${this.TAG}: ============================================================== OnWorkoutPhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
+            this.OnWorkoutPhaseClosing && this.OnWorkoutPhaseClosing().catch(this.handle)
+            break
+          //
+          case TickingEvent.RestPhaseStarted:
+            this.OnRestPhaseStarted && this.OnRestPhaseStarted().catch(this.handle)
+            break
+          //
+          case TickingEvent.RestPhaseClosing:
+            // Since we're still in current Set, so we do '-1' here.
+            const cycleSetsLeft = ticked.cycleSetsRemainingCount - 1
+            logger.info(`${this.TAG}: ============================================================== OnRestPhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
+            this.OnRestPhaseClosing && this.OnRestPhaseClosing(cycleSetsLeft).catch(this.handle)
+            break
+          default:
+            break
         }
-        // IsClosing
-        const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
-        if (ticked.prepareRemainingSecs === minClosingSecs) {
-          this.OnPreparePhaseClosing && this.OnPreparePhaseClosing(ticked.cycleSetsRemainingCount).catch(this.handle)
-        }
-      }
-
-      if (ticked.cycleCurrentPhase === TimerPhase.Workout) {
-        // Started
-        if (ticked.workoutRemainingSecs === this._preset.WorkoutSecs) {
-          logger.info(`${this.TAG}: OnSetStarted: ${ticked.cycleSetsRemainingCount} left`)
-          this.OnSetStarted && this.OnSetStarted(ticked.cycleSetsRemainingCount).catch(this.handle)
-          this.OnWorkoutPhaseStarted && this.OnWorkoutPhaseStarted().catch(this.handle)
-        }
-        // IsClosing
-        const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.WorkoutSecs)
-        if (ticked.workoutRemainingSecs === minClosingSecs) {
-          this.OnWorkoutPhaseClosing && this.OnWorkoutPhaseClosing().catch(this.handle)
-        }
-      }
-
-      if (ticked.cycleCurrentPhase === TimerPhase.Rest) {
-        // Started
-        if (ticked.restRemainingSecs === this._preset.RestSecs) {
-          this.OnRestPhaseStarted && this.OnRestPhaseStarted().catch(this.handle)
-        }
-        // IsClosing
-        const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
-        if (ticked.restRemainingSecs === minClosingSecs) {
-          // Since we're still in current Set, so we do '-1' here.
-          const cycleSetsLeft = ticked.cycleSetsRemainingCount - 1
-          this.OnRestPhaseClosing && this.OnRestPhaseClosing(cycleSetsLeft).catch(this.handle)
-        }
-      }
+      })
     }
 
     this._countdownTimer.OnStarted = async (milliSecsLeft: number): Promise<void> => {
