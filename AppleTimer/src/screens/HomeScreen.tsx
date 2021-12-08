@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
@@ -163,6 +163,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current?.stop()
   }
 
+  const onPresetSelectionClicked = () => {
+    // @ts-ignore
+    modalizeRef.current.open()
+  }
+
   return (
     <ScreenContainer
       backgroundComponent={() => (
@@ -204,21 +209,14 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
                   useAngle={true}
                   angle={45}
                   style={{
+                    ...Platform.select({ ios: {}, android: { marginTop: 4 } }),
+                    height: 48,
                     padding: 10,
                     flexDirection: 'row',
                     justifyContent: 'center',
                   }}
                 >
-                  <TouchableOpacity
-                    style={{
-                      paddingHorizontal: 32,
-                      paddingVertical: 4,
-                    }}
-                    onPress={() => {
-                      // @ts-ignore
-                      modalizeRef.current.open()
-                    }}
-                  >
+                  <TouchableOpacity style={styles.presetSelectionButton} onPress={() => onPresetSelectionClicked()}>
                     <Text style={[Fonts.titleSmall, FontColors.clickable]}>{`${activePreset?.Name}`}</Text>
                   </TouchableOpacity>
                 </LinearGradient>
@@ -442,6 +440,10 @@ const styles = StyleSheet.create({
   },
   title: {
     alignItems: 'center',
+  },
+  presetSelectionButton: {
+    paddingHorizontal: 32,
+    paddingVertical: 4,
   },
   summaryDivider: {
     flex: 1,
