@@ -1,5 +1,5 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import React, { useEffect, useState } from 'react'
 import { Preset } from '@/models/preset'
 import { DeviceScreen } from '@/common/device'
@@ -10,6 +10,11 @@ import { DataService } from '@/services/data-service'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
+import { ListButton } from '@/components/button/ListButton'
+import { AddButton } from '@/components/button/AddButton'
+import { FinishButton } from '@/components/button/FinishButton'
+import { EditButton } from '@/components/button/EditButton'
+import { DeleteButton } from '@/components/button/DeleteButton'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -88,27 +93,24 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             <Text style={[Fonts.textSmall, FontColors.white]}>Workout: {preset.WorkoutSecs}</Text>
             <Text style={[Fonts.textSmall, FontColors.white]}>Rest: {preset.RestSecs}</Text>
           </TouchableOpacity>
-          {!isManagingList && (
-            <TouchableOpacity
-              key={`${preset.Name}-edit-container`}
-              style={styles.actionButton}
-              onPress={() => onEditItemClicked && onEditItemClicked(preset)}
-            >
-              <Text style={Fonts.textRegular}>Edit</Text>
-            </TouchableOpacity>
-          )}
-          {isManagingList && (
-            <TouchableOpacity
-              key={`${preset.Name}-delete-container`}
-              style={styles.actionButton}
-              onPress={() => {
-                setDeletingPreset(preset)
-                setShowConfirmDialog(true)
-              }}
-            >
-              <Text style={Fonts.textRegular}>Delete</Text>
-            </TouchableOpacity>
-          )}
+          <View style={styles.actionButton}>
+            {!isManagingList && (
+              <EditButton
+                key={`${preset.Name}-edit-container`}
+                onPress={() => onEditItemClicked && onEditItemClicked(preset)}
+              />
+            )}
+            {isManagingList && (
+              <DeleteButton
+                key={`${preset.Name}-delete-container`}
+                color={Colors.error}
+                onPress={() => {
+                  setDeletingPreset(preset)
+                  setShowConfirmDialog(true)
+                }}
+              />
+            )}
+          </View>
         </View>
       </Neomorph>
     </View>
@@ -129,14 +131,14 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       </View>
       <View style={styles.actionButtonsBar}>
         <View style={styles.leftButtonContainer}>
-          {!isManagingList && <Button title={'ADD'} onPress={() => onAddClicked && onAddClicked()} />}
+          {isManagingList && <AddButton onPress={() => onAddClicked && onAddClicked()} />}
         </View>
         <Text style={[Fonts.textRegular, FontColors.white]}>Select an item</Text>
         <View style={styles.rightButtonContainer}>
           {!isManagingList ? (
-            <Button title={'Manage'} onPress={() => setIsManagingList(true)} />
+            <ListButton onPress={() => setIsManagingList(true)} />
           ) : (
-            <Button title={'Done'} onPress={() => setIsManagingList(false)} />
+            <FinishButton onPress={() => setIsManagingList(false)} color={Colors.success} />
           )}
         </View>
       </View>
@@ -211,6 +213,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: RadiusSizes.r12,
     paddingHorizontal: Spacings.s_16,
     paddingTop: Spacings.s_12,
+    paddingBottom: Spacings.s_8,
     backgroundColor: '#434343',
   },
   itemsScroll: {
@@ -240,23 +243,28 @@ const styles = StyleSheet.create({
     // backgroundColor: '#434343',
   },
   actionButton: {
-    width: 64,
+    // width: 64,
     marginLeft: Spacings.s_4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'yellow',
+    paddingHorizontal: Spacings.s_8,
+    // backgroundColor: 'grey',
   },
   separator: {
     height: 4,
     backgroundColor: 'lightblue',
   },
   leftButtonContainer: {
-    width: 80,
-    backgroundColor: 'lightblue',
+    width: 40,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // backgroundColor: 'lightblue',
   },
   rightButtonContainer: {
-    width: 90,
-    backgroundColor: 'lightblue',
+    width: 40,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    // backgroundColor: 'lightblue',
   },
 })
 

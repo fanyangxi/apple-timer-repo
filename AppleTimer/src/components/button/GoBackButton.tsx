@@ -12,7 +12,7 @@ export const GoBackButton: React.FC<{
   const { goBack } = useNavigation()
   return (
     <SvgButton
-      style={{ width: 32, height: 32 }}
+      style={{ width: 40, height: 40 }}
       icon={<BackArrow color={Colors.white} style={{ margin: 8 }} />}
       onPress={() => {
         onPress ? onPress() : goBack()
