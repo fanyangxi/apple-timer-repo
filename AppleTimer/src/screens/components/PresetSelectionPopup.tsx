@@ -49,10 +49,10 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
     })
   }
 
-  function deletePreset(presetId: string) {
-    DataService.deletePreset(presetId)
+  function deletePreset(preset: Preset) {
+    DataService.deletePreset(preset.Id)
       .then(() => {
-        console.log(`Delete preset:${presetId} completed`)
+        console.log(`Delete preset:${preset.Name} completed`)
         reloadItems()
       })
       .catch(e => {
@@ -60,7 +60,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           type: 'error',
           position: 'top',
           text1: 'Delete preset failed:',
-          text2: `Detail: ${e}`,
+          text2: `${e}`,
         })
       })
   }
@@ -94,16 +94,18 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           >
             <Text style={Fonts.textRegular}>Edit</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            key={`${preset.Name}-delete-container`}
-            style={styles.actionButton}
-            onPress={() => {
-              setDeletingPreset(preset)
-              setShowConfirmDialog(true)
-            }}
-          >
-            <Text style={Fonts.textRegular}>Delete</Text>
-          </TouchableOpacity>
+          {!preset.IsActive && (
+            <TouchableOpacity
+              key={`${preset.Name}-delete-container`}
+              style={styles.actionButton}
+              onPress={() => {
+                setDeletingPreset(preset)
+                setShowConfirmDialog(true)
+              }}
+            >
+              <Text style={Fonts.textRegular}>Delete</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Neomorph>
     </View>
@@ -148,7 +150,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           onPress: () => {
             setShowConfirmDialog(false)
             if (deletingPreset) {
-              deletePreset(deletingPreset.Id)
+              deletePreset(deletingPreset)
               onDeleteItemClicked && onDeleteItemClicked(deletingPreset)
             }
           },

@@ -89,7 +89,7 @@ const deletePreset = async (presetId: string): Promise<void> => {
   }
 
   if (entity.isActive) {
-    throw new Error(`Active preset:id:${presetId} does not allowed to be deleted`)
+    throw new Error(`Delete is not allowed on active preset:id:${presetId}`)
   }
 
   // Only keep target item as `Active`:
