@@ -51,7 +51,7 @@ export class TimerService {
     this._countdownTimer = new CountdownTimerV2(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
       const ticked = this._theUnpackedPresetMap[`${secsLeft}s`]
-      console.log('>>> ticked:', ticked)
+      // console.log('>>> ticked:', ticked)
       this.OnTicked && this.OnTicked(secsLeft, ticked).catch(this.handle)
       ticked.events.forEach(event => {
         const eventHandler = theEventsMap[event]

@@ -80,6 +80,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           ...styles.neomorphContainer,
           width: DeviceScreen.width - Spacings.s_48,
           height: 80,
+          ...(isManagingList ? { shadowRadius: 1, backgroundColor: '#5f5e5e' } : {}),
         }}
       >
         <View style={styles.rowContent}>
