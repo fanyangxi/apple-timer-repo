@@ -55,21 +55,9 @@ export interface TickedContext {
   restRemainingSecs: number
 }
 
-// {
-//   463s: { totalRemainingSeconds: 463, events: [CycleStarted, PreparePhaseStarted], ticked: TickedPreset },
-//   462s: { totalRemainingSeconds: 463, events: [Started], ticked: TickedPreset },
-//   461s: { totalRemainingSeconds: 463, events: [Started], ticked: TickedPreset },
-// }
 export interface UnpackedPresetMap {
   [key: string]: TickedContext
 }
-
-// export interface SecondDescriptor {
-//   totalRemainingSeconds: number
-//   // The ticking-events to be triggered at this specific second.
-//   events: TickingEvent[]
-//   ticked: TickedContext
-// }
 
 export enum TickingEvent {
   // Ticked = 1,

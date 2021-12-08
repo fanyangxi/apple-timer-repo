@@ -63,10 +63,7 @@ export const getUpdatedContext = (preset: Preset, remainingDurationSecs: number)
     }
     return []
   }
-  // const thePrepareEventMap = {
-  //   [`${-PHASE_CLOSING_SECS}`]: [TickingEvent.PreparePhaseClosing],
-  //   [`${-preset.PrepareSecs}`]: [TickingEvent.CycleStarted, TickingEvent.PreparePhaseStarted],
-  // }
+
   const getWorkoutPhaseEvents = (elapsedSecsDiff: number): TickingEvent[] => {
     if (elapsedSecsDiff === -preset.WorkoutSecs && elapsedSecsDiff < 0 && elapsedSecsDiff >= -PHASE_CLOSING_SECS) {
       return [TickingEvent.SetStarted, TickingEvent.WorkoutPhaseStarted, TickingEvent.WorkoutPhaseClosing]
@@ -79,10 +76,7 @@ export const getUpdatedContext = (preset: Preset, remainingDurationSecs: number)
     }
     return []
   }
-  // const theWorkoutEventMap = {
-  //   [`${-PHASE_CLOSING_SECS}`]: [TickingEvent.WorkoutPhaseClosing],
-  //   [`${-preset.WorkoutSecs}`]: [TickingEvent.SetStarted, TickingEvent.WorkoutPhaseStarted],
-  // }
+
   const getRestPhaseEvents = (elapsedSecsDiff: number): TickingEvent[] => {
     if (elapsedSecsDiff === -preset.RestSecs && elapsedSecsDiff < 0 && elapsedSecsDiff >= -PHASE_CLOSING_SECS) {
       return [TickingEvent.RestPhaseStarted, TickingEvent.RestPhaseClosing]
@@ -95,16 +89,11 @@ export const getUpdatedContext = (preset: Preset, remainingDurationSecs: number)
     }
     return []
   }
-  // const theRestEventMap = {
-  //   [`${-PHASE_CLOSING_SECS}`]: [TickingEvent.RestPhaseClosing],
-  //   [`${-preset.RestSecs}`]: [TickingEvent.RestPhaseStarted],
-  // }
+
   let tempElapsedSecs = elapsedSecs
   for (let cycleIndex = preset.CyclesCount; cycleIndex > 0; cycleIndex--) {
-    const old = tempElapsedSecs
     tempElapsedSecs = Math.abs(tempElapsedSecs) - preset.PrepareSecs
     if (tempElapsedSecs < 0) {
-      console.log(`=========================> old:${old} -> tempElapsedSecs:${tempElapsedSecs}, ${preset.PrepareSecs}`)
       result = {
         ...result,
         events: getPreparePhaseEvents(tempElapsedSecs),
@@ -172,24 +161,3 @@ export const getCurrentPhaseRemainingSecs = (ticked?: TickedContext): number => 
   }
   return theMap[`${ticked.cycleCurrentPhase}`] ?? 0
 }
-
-// PHASE: Rest
-// PHASE: Workout
-// SetsCount * X:
-// PHASE: Prepare
-// CyclesCount * Y:
-
-// const minClosingSecs = Math.min(this.CLOSING_SECS, this._preset.PrepareSecs)
-// const minClosingSecs = Math.min(this.REST_PHASE_CLOSING_SECS, this._preset.RestSecs)
-// const aaa = {
-//   '463s': {
-//     totalRemainingSeconds: 463,
-//     events: [TickingEvent.CycleStarted, TickingEvent.PreparePhaseStarted],
-//     ticked: {} as TickedContext,
-//   },
-//   '462s': {
-//     totalRemainingSeconds: 462,
-//     events: [TickingEvent.CycleStarted, TickingEvent.PreparePhaseStarted],
-//     ticked: {} as TickedContext,
-//   },
-// }

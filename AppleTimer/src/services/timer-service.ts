@@ -54,7 +54,6 @@ export class TimerService {
             break
           //
           case TickingEvent.PreparePhaseClosing:
-            logger.info(`${this.TAG}: ============================================================== OnPreparePhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
             this.OnPreparePhaseClosing && this.OnPreparePhaseClosing(ticked.cycleSetsRemainingCount).catch(this.handle)
             break
           //
@@ -67,7 +66,6 @@ export class TimerService {
             break
           //
           case TickingEvent.WorkoutPhaseClosing:
-            logger.info(`${this.TAG}: ============================================================== OnWorkoutPhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
             this.OnWorkoutPhaseClosing && this.OnWorkoutPhaseClosing().catch(this.handle)
             break
           //
@@ -78,7 +76,6 @@ export class TimerService {
           case TickingEvent.RestPhaseClosing:
             // Since we're still in current Set, so we do '-1' here.
             const cycleSetsLeft = ticked.cycleSetsRemainingCount - 1
-            logger.info(`${this.TAG}: ============================================================== OnRestPhaseClosing: ${ticked.cycleSetsRemainingCount} left`)
             this.OnRestPhaseClosing && this.OnRestPhaseClosing(cycleSetsLeft).catch(this.handle)
             break
           default:
