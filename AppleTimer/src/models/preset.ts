@@ -38,7 +38,7 @@ export class Preset {
   }
 }
 
-export interface TickedPreset {
+export interface TickedContext {
   // In Preset:
   cyclesRemainingCount: number
   // In Current-Cycle:

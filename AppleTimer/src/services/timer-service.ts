@@ -1,5 +1,5 @@
-import { Preset, TickedPreset } from '@/models/preset'
-import { getTotalPresetDurationSecs, getUpdatedPreset } from '@/utils/preset-util'
+import { Preset, TickedContext } from '@/models/preset'
+import { getTotalPresetDurationSecs, getUpdatedContext } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
 import { logger } from '@/utils/logger'
 import { CountdownTimerV2, TimerStatus } from '@/services/countdown-timer-v2'
@@ -11,7 +11,7 @@ export class TimerService {
 
   public Status: TimerStatus = TimerStatus.IDLE
   public OnStatusChanged?: (oldStatus: TimerStatus, newStatus: TimerStatus) => Promise<void>
-  public OnTicked?: (secsLeft: number, tickedPreset: TickedPreset) => Promise<void>
+  public OnTicked?: (secsLeft: number, tickedContext: TickedContext) => Promise<void>
   //
   public OnTimerStarted?: (milliSecsLeft: number) => Promise<void> // Manually
   public OnPaused?: (milliSecsLeft: number) => Promise<void> // Manually
@@ -39,7 +39,7 @@ export class TimerService {
   runPreset = async () => {
     this._countdownTimer = new CountdownTimerV2(getTotalPresetDurationSecs(this._preset))
     this._countdownTimer.OnTicked = async (secsLeft: number): Promise<void> => {
-      const ticked = getUpdatedPreset(this._preset, secsLeft)
+      const ticked = getUpdatedContext(this._preset, secsLeft)
       this.OnTicked && this.OnTicked(secsLeft, ticked).catch(this.handle)
 
       if (ticked.cycleCurrentPhase === TimerPhase.Prepare) {

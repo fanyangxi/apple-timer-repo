@@ -1,11 +1,11 @@
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset, TickedContext } from '@/models/preset'
 import { TimerPhase } from '@/models/timer-phase'
 
-export const getRawTickedPreset = (originalPreset: Preset) => {
-  return getUpdatedPreset(originalPreset, getTotalPresetDurationSecs(originalPreset))
+export const getRawTickedContext = (originalPreset: Preset) => {
+  return getUpdatedContext(originalPreset, getTotalPresetDurationSecs(originalPreset))
 }
 
-export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedPreset => {
+export const getUpdatedContext = (originalPreset: Preset, remainingPresetDurationSecs: number): TickedContext => {
   if (remainingPresetDurationSecs === 0) {
     return {
       cyclesRemainingCount: 0,
@@ -26,7 +26,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
     )
   }
 
-  let result: TickedPreset = {
+  let result: TickedContext = {
     cyclesRemainingCount: originalPreset.CyclesCount,
     cycleSetsRemainingCount: originalPreset.SetsCount,
     cycleCurrentPhase: undefined,
@@ -78,7 +78,7 @@ export const getUpdatedPreset = (originalPreset: Preset, remainingPresetDuration
   }
 
   throw new Error(
-    `Failed to get TickedPreset from remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
+    `Failed to get TickedContext from remaining-preset-duration-secs: ${remainingPresetDurationSecs}, ` +
       `for preset with total: ${originalPresetDurationSecs}. The ` +
       `original-preset is: ${JSON.stringify(originalPreset)}`,
   )
@@ -91,7 +91,7 @@ export const getTotalPresetDurationSecs = (item?: Preset): number => {
   return (item.PrepareSecs + (item.WorkoutSecs + item.RestSecs) * item.SetsCount) * item.CyclesCount
 }
 
-export const getCurrentPhaseRemainingSecs = (ticked?: TickedPreset): number => {
+export const getCurrentPhaseRemainingSecs = (ticked?: TickedContext): number => {
   if (!ticked) {
     return 0
   }

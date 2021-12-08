@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import { Preset } from '@/models/preset'
 import { TimerPhase } from '@/models/timer-phase'
-import { getUpdatedPreset } from '@/utils/preset-util'
+import { getUpdatedContext } from '@/utils/preset-util'
 
-describe('getUpdatedPreset', () => {
+describe('getUpdatedContext', () => {
   const presetMock: Preset = new Preset('', 'name', 3, 4, 2, 2, 2)
 
   it.each`
@@ -40,7 +40,7 @@ describe('getUpdatedPreset', () => {
     ${1}          | ${{ cyclesRemainingCount: 1, cycleSetsRemainingCount: 1, prepareRemainingSecs: 0, workoutRemainingSecs: 0, restRemainingSecs: 1, cycleCurrentPhase: TimerPhase.Rest }}
     ${0}          | ${{ cyclesRemainingCount: 0, cycleSetsRemainingCount: 0, prepareRemainingSecs: 0, workoutRemainingSecs: 0, restRemainingSecs: 0, cycleCurrentPhase: undefined }}
   `('should update preset with remaining $remainingSecs, $expected', ({ remainingSecs, expected }) => {
-    const result = getUpdatedPreset(presetMock, remainingSecs)
+    const result = getUpdatedContext(presetMock, remainingSecs)
     expect(result).toEqual(expected)
   })
 })

@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { FixedWidthFontFamily, FontColors, Fonts, Spacings } from '@/theme/Variables'
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset, TickedContext } from '@/models/preset'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
 import { format, toDTime } from '@/utils/date-util'
 import CircularSliderV2, { CircularSliderRefObject } from '@/screens/components/CircularSliderV2'
@@ -21,7 +21,7 @@ export type WorkoutDetailViewRefObject = {
 
 export interface WorkoutDetailViewProps {
   activePreset?: Preset
-  tickedPreset?: TickedPreset
+  tickedContext?: TickedContext
 }
 
 /**
@@ -43,7 +43,7 @@ export interface WorkoutDetailViewProps {
  * -- on-timer-completed
  * */
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forwardRef((props, ref) => {
-  const { activePreset, tickedPreset } = props
+  const { activePreset, tickedContext } = props
   const prepareSliderRef = useRef<CircularSliderRefObject>()
   const workoutSliderRef = useRef<CircularSliderRefObject>()
   const restSliderRef = useRef<CircularSliderRefObject>()
@@ -85,36 +85,36 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
   }
 
   const _startOrResumeCycleAnim = () => {
-    console.log(`>>> startOrResumeCycleAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    console.log(`>>> startOrResumeCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: _startOrResumePreparePhaseAnim,
       [`${TimerPhase.Workout}`]: _startOrResumeWorkoutPhaseAnim,
       [`${TimerPhase.Rest}`]: _startOrResumeRestPhaseAnim,
     }
-    const resultFunc = theMap[`${tickedPreset?.cycleCurrentPhase}`] ?? _startOrResumePreparePhaseAnim
+    const resultFunc = theMap[`${tickedContext?.cycleCurrentPhase}`] ?? _startOrResumePreparePhaseAnim
     return resultFunc()
   }
 
   const _pauseAnim = () => {
-    console.log(`>>> pauseAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    console.log(`>>> pauseAnim: ${tickedContext?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: prepareSliderRef.current?.pauseAnim,
       [`${TimerPhase.Workout}`]: workoutSliderRef.current?.pauseAnim,
       [`${TimerPhase.Rest}`]: restSliderRef.current?.pauseAnim,
     }
-    const resultFunc = theMap[`${tickedPreset?.cycleCurrentPhase}`] ?? prepareSliderRef.current?.pauseAnim
+    const resultFunc = theMap[`${tickedContext?.cycleCurrentPhase}`] ?? prepareSliderRef.current?.pauseAnim
     return resultFunc && resultFunc()
   }
 
   const _resetCycleAnim = () => {
-    console.log(`>>> resetCycleAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    console.log(`>>> resetCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
     prepareSliderRef.current?.stopAndResetAnim()
     workoutSliderRef.current?.stopAndResetAnim()
     restSliderRef.current?.stopAndResetAnim()
   }
 
   const _resetSetAnim = () => {
-    console.log(`>>> resetSetAnim: ${tickedPreset?.cycleCurrentPhase}`)
+    console.log(`>>> resetSetAnim: ${tickedContext?.cycleCurrentPhase}`)
     workoutSliderRef.current?.stopAndResetAnim()
     restSliderRef.current?.stopAndResetAnim()
   }
@@ -174,8 +174,8 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
         />
         <View style={styles.hintContainer}>
           <View style={styles.itemsContainer}>
-            <Text style={styles.timeCountdown}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedPreset)))}</Text>
-            <Text style={styles.hint}>{tickedPreset?.cycleCurrentPhase}</Text>
+            <Text style={styles.timeCountdown}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedContext)))}</Text>
+            <Text style={styles.hint}>{tickedContext?.cycleCurrentPhase}</Text>
           </View>
         </View>
       </View>

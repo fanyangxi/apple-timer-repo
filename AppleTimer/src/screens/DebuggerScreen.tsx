@@ -3,7 +3,7 @@ import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { useTheme } from '@/theme'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/assets/icons/DarkAnd'
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset, TickedContext } from '@/models/preset'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
@@ -35,13 +35,13 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     timerServiceRef.current.OnTimerStarted = async () => {
       console.log(`OnTimerStarted, execution-count: ${_executionCount}`)
     }
-    timerServiceRef.current.OnTicked = async (secsLeft: number, tickedPreset: TickedPreset) => {
+    timerServiceRef.current.OnTicked = async (secsLeft: number, tickedContext: TickedContext) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}] S${currentSet}C${currentRep},` +
-      //     `${tickedPreset.cycleCurrentPhase},${type},${JSON.stringify(tickedPreset)}`,
+      //     `${tickedContext.cycleCurrentPhase},${type},${JSON.stringify(tickedContext)}`,
       // )
       // await Sleep(5000)
-      setDisplayNote(`${tickedPreset.cycleCurrentPhase}:${secsLeft}`)
+      setDisplayNote(`${tickedContext.cycleCurrentPhase}:${secsLeft}`)
     }
     timerServiceRef.current.OnTimerCompleted = async () => {
       clearInterval(_timerId)

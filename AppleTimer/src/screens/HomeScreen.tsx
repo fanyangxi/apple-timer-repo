@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset, TickedContext } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService, Sounds } from '@/services/notification-service'
@@ -16,7 +16,7 @@ import { Neomorph, Shadow, ShadowFlex } from 'react-native-neomorph-shadows'
 import { PresetSelectionPopup } from '@/screens/components/PresetSelectionPopup'
 import { Modalize } from 'react-native-modalize'
 import { DataService } from '@/services/data-service'
-import { getRawTickedPreset, getTotalPresetDurationSecs } from '@/utils/preset-util'
+import { getRawTickedContext, getTotalPresetDurationSecs } from '@/utils/preset-util'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { format, toDTime } from '@/utils/date-util'
 import { WorkoutDetailView, WorkoutDetailViewRefObject } from '@/screens/components/WorkoutDetailView'
@@ -27,7 +27,7 @@ import LinearGradient from 'react-native-linear-gradient'
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
   const [activePreset, setActivePreset] = useState<Preset>()
-  const [tickedPreset, setTickedPreset] = useState<TickedPreset>()
+  const [tickedContext, setTickedContext] = useState<TickedContext>()
   const [timerStatus, setTimerStatus] = useState<TimerStatus | undefined>()
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
@@ -50,7 +50,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
   useEffect(() => {
     if (activePreset) {
       console.log(`>>> active-preset: ${JSON.stringify(activePreset)}`)
-      setTickedPreset(getRawTickedPreset(activePreset))
+      setTickedContext(getRawTickedContext(activePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
       timerServiceRef.current = initTimerServiceRef(activePreset)
     }
@@ -62,12 +62,12 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnStatusChanged = async (oldStatus: TimerStatus, newStatus: TimerStatus) => {
       setTimerStatus(newStatus)
     }
-    timerSvc.OnTicked = async (secsLeft: number, ticked: TickedPreset) => {
+    timerSvc.OnTicked = async (secsLeft: number, ticked: TickedContext) => {
       // logger.info(
       //   `[(${secsLeft} secs)|${moment(Date.now()).format(FULL_TIMESTAMP)}],` +
       //     `${ticked.cycleCurrentPhase},${JSON.stringify(ticked)}`,
       // )
-      setTickedPreset(ticked)
+      setTickedContext(ticked)
       setSecsLeftInCurrentWorkout(secsLeft)
     }
     //
@@ -85,13 +85,13 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     }
     timerSvc.OnTimerStopped = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
-      setTickedPreset(getRawTickedPreset(thePreset))
+      setTickedContext(getRawTickedContext(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
     }
     timerSvc.OnTimerCompleted = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
-      setTickedPreset(getRawTickedPreset(thePreset))
+      setTickedContext(getRawTickedContext(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
@@ -263,7 +263,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             // @ts-ignore
             ref={workoutDetailViewRef}
             activePreset={activePreset}
-            tickedPreset={tickedPreset}
+            tickedContext={tickedContext}
           />
         </View>
 
@@ -281,11 +281,11 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
             <View style={styles.footerSummaryContent}>
               <View style={styles.summaryDetail}>
                 <View style={styles.timeRemainingContainer}>
-                  <Text style={styles.itemValue}>{tickedPreset?.cyclesRemainingCount}</Text>
+                  <Text style={styles.itemValue}>{tickedContext?.cyclesRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Cycles left'}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
-                  <Text style={styles.itemValue}>{tickedPreset?.cycleSetsRemainingCount}</Text>
+                  <Text style={styles.itemValue}>{tickedContext?.cycleSetsRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{'Sets left'}</Text>
                 </View>
               </View>

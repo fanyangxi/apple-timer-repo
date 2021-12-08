@@ -1,5 +1,5 @@
 import { TimerService } from '@/services/timer-service'
-import { Preset, TickedPreset } from '@/models/preset'
+import { Preset, TickedContext } from '@/models/preset'
 
 describe('timer-service', () => {
   it('demo', () => {
@@ -10,8 +10,8 @@ describe('timer-service', () => {
   //
   // it('renders correctly', () => {
   //   const timerService = new TimerService(presetMock)
-  //   timerService.OnTicked = (secsLeft: number, tickedPreset: TickedPreset) => {
-  //     console.log(`${tickedPreset.cycleCurrentPhase},${secsLeft},${tickedPreset}`)
+  //   timerService.OnTicked = (secsLeft: number, tickedContext: TickedContext) => {
+  //     console.log(`${tickedContext.cycleCurrentPhase},${secsLeft},${tickedContext}`)
   //   }
   //   timerService.runPreset()
   // })
