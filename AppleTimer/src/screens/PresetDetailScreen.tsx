@@ -362,6 +362,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
       <ConfirmDialog
         visible={showConfirmDialog}
         title={'Confirmation'}
+        titleStyle={[Fonts.titleRegular, FontColors.warn]}
         message={'Data has been changed. Do you want to discard the changes?'}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{

@@ -117,6 +117,9 @@ export const FontColors = {
   grey: {
     color: Colors.silverChalice,
   } as TextStyle,
+  warn: {
+    color: Colors.burntSienna,
+  } as TextStyle,
 }
 
 // - text-display-64,

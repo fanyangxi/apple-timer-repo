@@ -320,6 +320,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
       <ConfirmDialog
         visible={showConfirmDialog}
         title={'Confirm Stopping'}
+        titleStyle={[Fonts.titleRegular, FontColors.warn]}
         message={'Are you sure to stop current workout timer?'}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
