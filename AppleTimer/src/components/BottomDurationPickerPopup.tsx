@@ -73,7 +73,6 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               initialSelectedIndex={localHours}
               transparentItemRows={3}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
-                // console.log(`OnScroll hours: ${index}, ${JSON.stringify(item)}`)
                 setLocalHours(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}
@@ -92,7 +91,6 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               initialSelectedIndex={localMinutes}
               transparentItemRows={3}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
-                // console.log(`OnScroll minutes: ${index}, ${JSON.stringify(item)}`)
                 setLocalMinutes(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}
@@ -111,7 +109,6 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               initialSelectedIndex={localSeconds}
               transparentItemRows={3}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
-                // console.log(`OnScroll seconds: ${index}, ${JSON.stringify(item)}`)
                 setLocalSeconds(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}

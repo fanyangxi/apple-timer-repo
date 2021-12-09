@@ -103,9 +103,10 @@ export default class DynamicallySelectedPicker extends React.Component<
 
   componentDidMount() {
     const { allItemsColor, fontSize, fontFamily } = this.props
+    const { itemHeight } = this.state
     // This is to pre-load the picker elements to improve performance.
     this.setState({
-      pickerElements: this.getPickerElements(allItemsColor, fontSize, this.state.itemHeight, fontFamily),
+      pickerElements: this.getPickerElements(allItemsColor, fontSize, itemHeight, fontFamily),
     })
   }
 
@@ -222,12 +223,7 @@ export default class DynamicallySelectedPicker extends React.Component<
           allItemsColor={_allItemsColor}
           fontSize={_fontSize ? _fontSize : _itemHeight / 2}
           fontFamily={_fontFamily}
-          style={[
-            styles.listItem,
-            {
-              height: _itemHeight,
-            },
-          ]}
+          style={[styles.listItem, { height: _itemHeight }]}
         />
       )
     })
