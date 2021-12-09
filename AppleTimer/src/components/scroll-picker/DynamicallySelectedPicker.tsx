@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Platform,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  ColorValue,
-} from 'react-native'
+import { StyleSheet, View, ScrollView, Platform, NativeScrollEvent, ColorValue } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import PickerListItem from './PickerListItem'
 
@@ -45,6 +37,8 @@ export default class DynamicallySelectedPicker extends React.Component<
   DynamicallySelectedPickerState
 > {
   private readonly scrollViewRef: React.RefObject<ScrollView>
+  // MomentumScrollEnd
+  private _momentumScrollEndEventTriggerTimerId?: NodeJS.Timeout
 
   // Set default props
   static defaultProps = {
@@ -137,7 +131,7 @@ export default class DynamicallySelectedPicker extends React.Component<
     return this.extendedItems().length - localTransparentItemRows * 2
   }
 
-  onScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  onScroll(event: NativeScrollEvent) {
     const { items, onScroll } = this.props
     const localItems = items || DynamicallySelectedPicker.defaultProps.items
     const tempIndex = this.getItemTemporaryIndex(event)
@@ -147,37 +141,37 @@ export default class DynamicallySelectedPicker extends React.Component<
     }
   }
 
-  // onMomentumScrollBegin(event: NativeSyntheticEvent<NativeScrollEvent>) {
-  //   const { items, onMomentumScrollBegin } = this.props
-  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
-  //   const tempIndex = this.getItemTemporaryIndex(event)
-  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-  //     this.setItemIndex(tempIndex)
-  //     onMomentumScrollBegin && onMomentumScrollBegin({ index: tempIndex, item: localItems[tempIndex] })
-  //   }
-  // }
-  //
-  // onMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
-  //   const { items, onMomentumScrollEnd } = this.props
-  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
-  //   const tempIndex = this.getItemTemporaryIndex(event)
-  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-  //     this.setItemIndex(tempIndex)
-  //     onMomentumScrollEnd && onMomentumScrollEnd({ index: tempIndex, item: localItems[tempIndex] })
-  //   }
-  // }
-  //
-  // onScrollBeginDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
-  //   const { items, onScrollBeginDrag } = this.props
-  //   const localItems = items || DynamicallySelectedPicker.defaultProps.items
-  //   const tempIndex = this.getItemTemporaryIndex(event)
-  //   if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
-  //     this.setItemIndex(tempIndex)
-  //     onScrollBeginDrag && onScrollBeginDrag({ index: tempIndex, item: localItems[tempIndex] })
-  //   }
-  // }
+  onMomentumScrollBegin(event: NativeScrollEvent) {
+    const { items, onMomentumScrollBegin } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
+    const tempIndex = this.getItemTemporaryIndex(event)
+    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+      this.setItemIndex(tempIndex)
+      onMomentumScrollBegin && onMomentumScrollBegin({ index: tempIndex, item: localItems[tempIndex] })
+    }
+  }
 
-  onScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  onMomentumScrollEnd(event: NativeScrollEvent) {
+    const { items, onMomentumScrollEnd } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
+    const tempIndex = this.getItemTemporaryIndex(event)
+    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+      this.setItemIndex(tempIndex)
+      onMomentumScrollEnd && onMomentumScrollEnd({ index: tempIndex, item: localItems[tempIndex] })
+    }
+  }
+
+  onScrollBeginDrag(event: NativeScrollEvent) {
+    const { items, onScrollBeginDrag } = this.props
+    const localItems = items || DynamicallySelectedPicker.defaultProps.items
+    const tempIndex = this.getItemTemporaryIndex(event)
+    if (tempIndex >= 0 && tempIndex < this.allItemsLength()) {
+      this.setItemIndex(tempIndex)
+      onScrollBeginDrag && onScrollBeginDrag({ index: tempIndex, item: localItems[tempIndex] })
+    }
+  }
+
+  onScrollEndDrag(event: NativeScrollEvent) {
     const { items, onScrollEndDrag } = this.props
     const localItems = items || DynamicallySelectedPicker.defaultProps.items
     const tempIndex = this.getItemTemporaryIndex(event)
@@ -187,8 +181,8 @@ export default class DynamicallySelectedPicker extends React.Component<
     }
   }
 
-  getItemTemporaryIndex(event: NativeSyntheticEvent<NativeScrollEvent>) {
-    return Math.round(event.nativeEvent.contentOffset.y / this.state.itemHeight)
+  getItemTemporaryIndex(event: NativeScrollEvent) {
+    return Math.round(event.contentOffset.y / this.state.itemHeight)
   }
 
   setItemIndex(index: number) {
@@ -226,20 +220,28 @@ export default class DynamicallySelectedPicker extends React.Component<
           onLayout={this.scrollToInitialPosition}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          // onMomentumScrollBegin={event => {
-          //   this.onMomentumScrollBegin(event)
-          // }}
-          // onMomentumScrollEnd={event => {
-          //   this.onMomentumScrollEnd(event)
-          // }}
-          // onScrollBeginDrag={event => {
-          //   this.onScrollBeginDrag(event)
-          // }}
-          // onScrollEndDrag={event => {
-          //   this.onScrollEndDrag(event)
-          // }}
+          onMomentumScrollBegin={event => {
+            this.onMomentumScrollBegin(event.nativeEvent)
+          }}
+          onMomentumScrollEnd={event => {
+            // Known-issue: The `onMomentumScrollEnd` being called multiple times.
+            // https://github.com/facebook/react-native/issues/32696
+            const temp = event.nativeEvent
+            // console.log(`${Date.now()}===1: onMomentumScrollEnd`, temp.contentOffset.y)
+            this._momentumScrollEndEventTriggerTimerId && clearTimeout(this._momentumScrollEndEventTriggerTimerId)
+            this._momentumScrollEndEventTriggerTimerId = setTimeout(() => {
+              // console.log(`${Date.now()}===2: onMomentumScrollEnd`, temp.contentOffset.y)
+              this.onMomentumScrollEnd(temp)
+            }, 90)
+          }}
+          onScrollBeginDrag={event => {
+            this.onScrollBeginDrag(event.nativeEvent)
+          }}
+          onScrollEndDrag={event => {
+            this.onScrollEndDrag(event.nativeEvent)
+          }}
           onScroll={event => {
-            this.onScroll(event)
+            this.onScroll(event.nativeEvent)
           }}
           // initialScrollIndex={itemIndex}
           snapToInterval={itemHeight}
