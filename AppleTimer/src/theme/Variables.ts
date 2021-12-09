@@ -149,7 +149,7 @@ export const Fonts = {
     // lineHeight?: number;
   } as TextStyle,
   textCaption24: {
-    fontSize: FontSizes.f30,
+    fontSize: FontSizes.f24,
     fontStyle: 'normal',
     fontWeight: 'normal',
     // fontFamily: '',

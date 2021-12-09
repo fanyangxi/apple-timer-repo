@@ -11,7 +11,6 @@ import { Preset } from '@/models/preset'
 import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
-import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
 import { getTotalPresetDurationSecs } from '@/utils/preset-util'
@@ -191,40 +190,31 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
         <View style={styles.form}>
           <View style={styles.row}>
             <View style={styles.titleContainer}>
-              {isModifyingTitle ? (
-                <>
-                  <View style={styles.titleElementWrapper}>
-                    <TextInput
-                      style={styles.titleInput} // [Layout.fill, Common.textInput]
-                      onChangeText={text => setNewTitle(text)}
-                      editable={true}
-                      keyboardType={'default'}
-                      maxLength={24}
-                      defaultValue={current.Name}
-                    />
-                  </View>
-                  <TouchableOpacity
-                    style={[styles.barItem, styles.modifyTitleButton]}
-                    onPress={() => {
-                      setIsModifyingTitle(false)
-                      changeTitle()
-                    }}
-                  >
-                    <SvgFinish color={Colors.white} />
-                  </TouchableOpacity>
-                </>
-              ) : (
-                <>
-                  <View style={styles.titleElementWrapper}>
-                    <Text style={styles.title}>{current.Name}</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={[styles.barItem, styles.modifyTitleButton]}
-                    onPress={() => setIsModifyingTitle(true)}
-                  >
-                    <SvgBrowser color={Colors.white} />
-                  </TouchableOpacity>
-                </>
+              <View style={[styles.titleInputWrapper, isModifyingTitle ? {} : { backgroundColor: Colors.linenDark }]}>
+                <TextInput
+                  style={[styles.titleInput, isModifyingTitle ? {} : { color: 'white' }]}
+                  onChangeText={text => setNewTitle(text)}
+                  onBlur={() => {
+                    setIsModifyingTitle(false)
+                    changeTitle()
+                  }}
+                  onFocus={() => setIsModifyingTitle(true)}
+                  editable={true}
+                  keyboardType={'default'}
+                  maxLength={24}
+                  defaultValue={current.Name}
+                />
+              </View>
+              {isModifyingTitle && (
+                <TouchableOpacity
+                  style={[styles.modifyTitleButton]}
+                  onPress={() => {
+                    setIsModifyingTitle(false)
+                    changeTitle()
+                  }}
+                >
+                  <SvgFinish color={Colors.white} />
+                </TouchableOpacity>
               )}
             </View>
           </View>
@@ -435,7 +425,7 @@ const styles = StyleSheet.create({
   },
   barItem: {
     // backgroundColor: 'lightgreen', // '#202021',
-    marginVertical: Spacings.s_16,
+    marginTop: Spacings.s_24,
   },
   barItemContent: {
     flexDirection: 'row',
@@ -467,35 +457,26 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     // backgroundColor: 'lightblue', // '#202021',
   },
-  title: {
-    paddingVertical: 8,
-    textAlign: 'center',
-    ...Fonts.textCaption24,
-    ...FontColors.white,
-    backgroundColor: '#b58181',
-  },
   titleInput: {
-    paddingVertical: 8,
+    paddingVertical: Spacings.s_16,
     textAlign: 'center',
     ...Fonts.textCaption24,
-    backgroundColor: Colors.inputBackground,
   },
-  titleElementWrapper: {
+  titleInputWrapper: {
     flexGrow: 1,
-    marginRight: Spacings.s_12,
     flexDirection: 'column',
     justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: Colors.inputBackground,
   },
   modifyTitleButton: {
     width: 24,
     height: 24,
+    marginLeft: Spacings.s_12,
     // backgroundColor: 'lightgreen', // '#202021',
-  },
-  confirmationContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   confirmationText: {
     textAlign: 'center',
