@@ -25,13 +25,13 @@ import { ImageBackground1 } from '@/components/ImageBackground1'
 export const PresetDetailScreen: React.FC = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
-  const thePreset: Preset = _.get(route.params, 'current', undefined)
-  const isCreatingNewMode = thePreset === undefined
-  const currentPreset = isCreatingNewMode ? DEFAULT_NEW_PRESET : thePreset
 
-  const [newTitle, setNewTitle] = useState<string>(currentPreset.Name)
+  const paramPreset: Preset = _.get(route.params, 'current', undefined)
+  const isCreatingNewMode = paramPreset === undefined
+  const [current, setCurrent] = useState<Preset>(isCreatingNewMode ? DEFAULT_NEW_PRESET : paramPreset)
+
+  const [newTitle, setNewTitle] = useState<string>(current.Name)
   const [isModifyingTitle, setIsModifyingTitle] = useState<boolean>(false)
-  const [current, setCurrent] = useState<Preset>(currentPreset)
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
 
   const prepareSecsDurationPickerRef = useRef<Modalize>(null)
@@ -77,12 +77,102 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
     const updated = JSON.stringify(current)
     const shouldWarn = isCreatingNewMode
       ? updated !== JSON.stringify(DEFAULT_NEW_PRESET)
-      : updated !== JSON.stringify(thePreset)
+      : updated !== JSON.stringify(paramPreset)
     if (shouldWarn) {
       setShowConfirmDialog(true)
     } else {
       goBack()
     }
+  }
+
+  const changeTitle = () => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        newTitle,
+        current.PrepareSecs,
+        current.WorkoutSecs,
+        current.RestSecs,
+        current.SetsCount,
+        current.CyclesCount,
+        current.IsActive,
+      ),
+    )
+  }
+
+  const changePrepareSecs = (newDuration: number) => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        current.Name,
+        newDuration,
+        current.WorkoutSecs,
+        current.RestSecs,
+        current.SetsCount,
+        current.CyclesCount,
+        current.IsActive,
+      ),
+    )
+  }
+
+  const changeWorkoutSecs = (newDuration: number) => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        current.Name,
+        current.PrepareSecs,
+        newDuration,
+        current.RestSecs,
+        current.SetsCount,
+        current.CyclesCount,
+        current.IsActive,
+      ),
+    )
+  }
+
+  const changeRestSecs = (newDuration: number) => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        current.Name,
+        current.PrepareSecs,
+        current.WorkoutSecs,
+        newDuration,
+        current.SetsCount,
+        current.CyclesCount,
+        current.IsActive,
+      ),
+    )
+  }
+
+  const changeSetsCount = (newValue: number) => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        current.Name,
+        current.PrepareSecs,
+        current.WorkoutSecs,
+        current.RestSecs,
+        newValue,
+        current.CyclesCount,
+        current.IsActive,
+      ),
+    )
+  }
+
+  const changeCyclesCount = (newValue: number) => {
+    setCurrent(
+      new Preset(
+        current.Id,
+        current.Name,
+        current.PrepareSecs,
+        current.WorkoutSecs,
+        current.RestSecs,
+        current.SetsCount,
+        newValue,
+        current.IsActive,
+      ),
+    )
   }
 
   return (
@@ -104,29 +194,18 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               {isModifyingTitle ? (
                 <>
                   <TextInput
+                    style={styles.titleInput} // [Layout.fill, Common.textInput]
                     onChangeText={text => setNewTitle(text)}
-                    // editable={!fetchOneUserLoading}
+                    editable={true}
                     keyboardType={'default'}
                     maxLength={24}
-                    defaultValue={current.Name}
-                    style={styles.titleInput} // [Layout.fill, Common.textInput]
+                    defaultValue={current.Name + '-x'}
                   />
                   <TouchableOpacity
                     style={[styles.barItem, styles.modifyTitleButton]}
                     onPress={() => {
                       setIsModifyingTitle(false)
-                      setCurrent(
-                        new Preset(
-                          current.Id,
-                          newTitle,
-                          current.PrepareSecs,
-                          current.WorkoutSecs,
-                          current.RestSecs,
-                          current.SetsCount,
-                          current.CyclesCount,
-                          current.IsActive,
-                        ),
-                      )
+                      changeTitle()
                     }}
                   >
                     <SvgFinish color={Colors.white} />
@@ -272,92 +351,27 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
       <BottomDurationPickerPopup
         popupRef={prepareSecsDurationPickerRef}
         duration={current.PrepareSecs}
-        onValueChanged={newDuration => {
-          setCurrent(
-            new Preset(
-              current.Id,
-              current.Name,
-              newDuration,
-              current.WorkoutSecs,
-              current.RestSecs,
-              current.SetsCount,
-              current.CyclesCount,
-              current.IsActive,
-            ),
-          )
-        }}
+        onValueChanged={newDuration => changePrepareSecs(newDuration)}
       />
       <BottomDurationPickerPopup
         popupRef={workoutSecsDurationPickerRef}
         duration={current.WorkoutSecs}
-        onValueChanged={newDuration => {
-          setCurrent(
-            new Preset(
-              current.Id,
-              current.Name,
-              current.PrepareSecs,
-              newDuration,
-              current.RestSecs,
-              current.SetsCount,
-              current.CyclesCount,
-              current.IsActive,
-            ),
-          )
-        }}
+        onValueChanged={newDuration => changeWorkoutSecs(newDuration)}
       />
       <BottomDurationPickerPopup
         popupRef={restSecsDurationPickerRef}
         duration={current.RestSecs}
-        onValueChanged={newDuration => {
-          setCurrent(
-            new Preset(
-              current.Id,
-              current.Name,
-              current.PrepareSecs,
-              current.WorkoutSecs,
-              newDuration,
-              current.SetsCount,
-              current.CyclesCount,
-              current.IsActive,
-            ),
-          )
-        }}
+        onValueChanged={newDuration => changeRestSecs(newDuration)}
       />
       <BottomNumberPickerPopup
         popupRef={setsPickerRef}
         value={current.SetsCount}
-        onValueChanged={newValue => {
-          setCurrent(
-            new Preset(
-              current.Id,
-              current.Name,
-              current.PrepareSecs,
-              current.WorkoutSecs,
-              current.RestSecs,
-              newValue,
-              current.CyclesCount,
-              current.IsActive,
-            ),
-          )
-        }}
+        onValueChanged={newValue => changeSetsCount(newValue)}
       />
       <BottomNumberPickerPopup
         popupRef={cyclesPickerRef}
         value={current.CyclesCount}
-        onValueChanged={newValue => {
-          setCurrent(
-            new Preset(
-              current.Id,
-              current.Name,
-              current.PrepareSecs,
-              current.WorkoutSecs,
-              current.RestSecs,
-              current.SetsCount,
-              newValue,
-              current.IsActive,
-            ),
-          )
-        }}
+        onValueChanged={newValue => changeCyclesCount(newValue)}
       />
       <ConfirmDialog
         visible={showConfirmDialog}
