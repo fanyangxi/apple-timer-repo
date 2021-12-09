@@ -153,7 +153,7 @@ const _toModel = (entity: PresetEntity): Preset => {
 const _validateMaximumAllowedDuration = (entity: PresetEntity): void => {
   const duration = (entity.prepareSecs + (entity.workoutSecs + entity.restSecs) * entity.setsCount) * entity.cyclesCount
   if (duration > MAX_PRESET_DURATION_ALLOWED_SECS) {
-    throw new Error(`Maximum allowed duration (24hrs) exceeded, currently: ${formatSecs(duration)}`)
+    throw new Error(`Maximum allowed duration (72hrs) exceeded, currently: ${formatSecs(duration)}`)
   }
 }
 

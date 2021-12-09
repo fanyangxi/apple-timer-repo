@@ -26,7 +26,7 @@ import * as Progress from 'react-native-progress'
 import { toFixedNumber } from '@/utils/common-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 
-export const HomeScreen: React.FC<{}> = (): ReactElement => {
+export const HomeScreen: React.FC = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
   const [activePreset, setActivePreset] = useState<Preset>()
   const [tickedContext, setTickedContext] = useState<TickedContext>()

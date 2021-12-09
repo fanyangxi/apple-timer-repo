@@ -1,10 +1,5 @@
 import { Preset } from '@/models/preset'
 
-export enum StorageKeys {
-  UNREAD_MESSAGES_COUNT = 'UNREAD_MESSAGES_COUNT',
-  DASHBOARD_DATA = 'DASHBOARD_DATA',
-}
-
 export const Screens = {
   Home: 'Home2',
   Debugger: 'Debugger',
@@ -19,4 +14,4 @@ export const HAPTIC_FEEDBACK_OPTIONS = { enableVibrateFallback: true, ignoreAndr
 // Note: It's for DynamicallySelectedPicker.
 export type ScrollEventArgs = { index: number; item: any }
 
-export const MAX_PRESET_DURATION_ALLOWED_SECS = 86400 // 24hrs,
+export const MAX_PRESET_DURATION_ALLOWED_SECS = 24 * 60 * 60 * 3 // 72hrs
