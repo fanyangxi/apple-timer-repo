@@ -4,9 +4,8 @@ import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { HAPTIC_FEEDBACK_OPTIONS, ScrollEventArgs } from '@/common/constants'
-// @ts-ignore
-import DynamicallySelectedPicker from 'react-native-dynamically-selected-picker'
 import { DeviceScreen } from '@/common/device'
+import DynamicallySelectedPicker from '@/components/scroll-picker/DynamicallySelectedPicker'
 
 const DEFAULT_PICKER_HEIGHT = 340
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
@@ -63,9 +62,9 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
               items={numbersSourceItems}
               initialSelectedIndex={localValue}
               transparentItemRows={3}
-              onScroll={({ index, item }: ScrollEventArgs) => {
-                console.log(`OnScroll: ${index}, ${JSON.stringify(item)}`)
-                setLocalValue(parseInt(item.value, 10))
+              onMomentumScrollEnd={(event: ScrollEventArgs) => {
+                // console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
+                setLocalValue(parseInt(event.item.value, 10))
                 ReactNativeHapticFeedback.trigger(
                   Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
                   HAPTIC_FEEDBACK_OPTIONS,

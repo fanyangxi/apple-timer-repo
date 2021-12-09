@@ -4,10 +4,9 @@ import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { HAPTIC_FEEDBACK_OPTIONS, ScrollEventArgs } from '@/common/constants'
-// @ts-ignore
-import DynamicallySelectedPicker from 'react-native-dynamically-selected-picker'
 import { DeviceScreen } from '@/common/device'
 import { toDTime } from '@/utils/date-util'
+import DynamicallySelectedPicker from '@/components/scroll-picker/DynamicallySelectedPicker'
 
 const DEFAULT_PICKER_HEIGHT = 340
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
@@ -74,9 +73,9 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={hoursDataSourceItems}
               initialSelectedIndex={localHours}
               transparentItemRows={3}
-              onScroll={({ index, item }: ScrollEventArgs) => {
-                console.log(`OnScroll hours: ${index}, ${JSON.stringify(item)}`)
-                setLocalHours(parseInt(item.value, 10))
+              onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                // console.log(`OnScroll hours: ${index}, ${JSON.stringify(item)}`)
+                setLocalHours(parseInt(eventArgs.item.value, 10))
                 ReactNativeHapticFeedback.trigger(
                   Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
                   HAPTIC_FEEDBACK_OPTIONS,
@@ -97,9 +96,9 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={minutesDataSourceItems}
               initialSelectedIndex={localMinutes}
               transparentItemRows={3}
-              onScroll={({ index, item }: ScrollEventArgs) => {
-                console.log(`OnScroll minutes: ${index}, ${JSON.stringify(item)}`)
-                setLocalMinutes(parseInt(item.value, 10))
+              onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                // console.log(`OnScroll minutes: ${index}, ${JSON.stringify(item)}`)
+                setLocalMinutes(parseInt(eventArgs.item.value, 10))
                 ReactNativeHapticFeedback.trigger(
                   Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
                   HAPTIC_FEEDBACK_OPTIONS,
@@ -120,9 +119,9 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={secondsDataSourceItems}
               initialSelectedIndex={localSeconds}
               transparentItemRows={3}
-              onScroll={({ index, item }: ScrollEventArgs) => {
-                console.log(`OnScroll seconds: ${index}, ${JSON.stringify(item)}`)
-                setLocalSeconds(parseInt(item.value, 10))
+              onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                // console.log(`OnScroll seconds: ${index}, ${JSON.stringify(item)}`)
+                setLocalSeconds(parseInt(eventArgs.item.value, 10))
                 ReactNativeHapticFeedback.trigger(
                   Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
                   HAPTIC_FEEDBACK_OPTIONS,

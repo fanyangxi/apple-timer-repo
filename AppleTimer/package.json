@@ -28,7 +28,6 @@
     "react-i18next": "^11.8.10",
     "react-native": "0.64.0",
     "react-native-background-timer": "^2.4.1",
-    "react-native-dynamically-selected-picker": "^2.0.1",
     "react-native-flipper": "^0.75.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-haptic-feedback": "^1.11.0",

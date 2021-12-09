@@ -40,7 +40,6 @@ https://www.npmjs.com/package/react-native-dynamically-selected-picker ++++
 https://www.npmjs.com/package/react-native-wheel-scroll-picker +++
     > Issue: scroll too fast
 https://www.npmjs.com/package/react-native-picker-scrollview
-https://www.npmjs.com/package/react-native-segmented-picker ++
 https://www.npmjs.com/package/react-native-picker
 https://github.com/keiya01/react-simple-wheel-picker (?)
 
@@ -53,6 +52,7 @@ https://www.npmjs.com/package/react-native-wheely ++++
 https://www.npmjs.com/package/react-native-segmented-picker
     > Issue: Contains a popup by default
     > Issue: top grey-out and bottom grey-out is not working on android
+    > https://www.npmjs.com/package/react-native-segmented-picker ++
 https://www.npmjs.com/package/@gregfrench/react-native-wheel-picker
     > Issue: it's not very smooth while scrolling
     > Issue: RNCPicker not found, on iOS
