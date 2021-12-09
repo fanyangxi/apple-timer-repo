@@ -1,4 +1,5 @@
 import { Platform } from 'react-native'
+import { logger } from '@/utils/logger'
 
 export const Sleep = (dely: number): Promise<void> => {
   return new Promise<void>(resolve => setTimeout(() => resolve(), dely))
@@ -48,4 +49,8 @@ export const toFixedNumber = (rawInput: number): number => {
     return 0
   }
   return Math.floor(rawInput * 100) / 100
+}
+
+export const handleErr = (e: Error) => {
+  logger.error('Async callback error: ', e)
 }

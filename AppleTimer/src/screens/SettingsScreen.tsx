@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
@@ -8,6 +8,10 @@ import { DeviceScreen } from '@/common/device'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
+import { UserSettings } from '@/models/common'
+import { UserSettingsDataService } from '@/services/user-settings-data-service'
+import { DEFAULT_USER_SETTINGS } from '@/common/constants'
+import { handleErr } from '@/utils/common-util'
 
 interface ActionButtonProps {
   key?: string
@@ -16,7 +20,11 @@ interface ActionButtonProps {
 }
 
 export const SettingsScreen: React.FC = (): ReactElement => {
-  const [voiceAssistToggle, setVoiceAssistToggle] = useState<boolean>(true)
+  const [userSettings, setUserSettings] = useState<Partial<UserSettings>>(DEFAULT_USER_SETTINGS)
+
+  useEffect(() => {
+    UserSettingsDataService.getUserSettings().then(data => setUserSettings(data))
+  }, [])
 
   const renderActionButton = (buttonProps: ActionButtonProps) => (
     <View style={styles.row}>
@@ -50,10 +58,12 @@ export const SettingsScreen: React.FC = (): ReactElement => {
             <View style={styles.card}>
               <Text style={[Fonts.textRegular, FontColors.white]}>{'Voice Assist'}</Text>
               <SwitchToggleMy
-                switchOn={voiceAssistToggle}
+                switchOn={userSettings.enableVoiceAssist ?? true}
                 onPress={() => {
-                  setVoiceAssistToggle(!voiceAssistToggle)
-                  console.log(`Voice Assist: ${!voiceAssistToggle}`)
+                  const updated = { enableVoiceAssist: !userSettings.enableVoiceAssist }
+                  console.log(`Voice Assist: ${!userSettings.enableVoiceAssist}`)
+                  setUserSettings(updated)
+                  UserSettingsDataService.saveUserSettings(updated).catch(handleErr)
                 }}
               />
             </View>

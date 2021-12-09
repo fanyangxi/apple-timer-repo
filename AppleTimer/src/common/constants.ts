@@ -1,4 +1,5 @@
 import { Preset } from '@/models/preset'
+import { UserSettings } from '@/models/common'
 
 export const Screens = {
   Home: 'Home2',
@@ -15,3 +16,8 @@ export const HAPTIC_FEEDBACK_OPTIONS = { enableVibrateFallback: true, ignoreAndr
 export type ScrollEventArgs = { index: number; item: any }
 
 export const MAX_PRESET_DURATION_ALLOWED_SECS = 24 * 60 * 60 * 3 // 72hrs
+
+export const DEFAULT_USER_SETTINGS: UserSettings = {
+  language: 'english',
+  enableVoiceAssist: true,
+}
