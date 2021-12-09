@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -7,7 +7,7 @@ import { ElementList } from '@/components/ElementList'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import SvgEdit from '@/assets/icons/Edit'
-import { assets } from '@/assets'
+import { ImageBackground1 } from '@/components/ImageBackground1'
 
 interface ActionButtonProps {
   key: string
@@ -45,13 +45,7 @@ export const SettingsScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer
-      backgroundComponent={() => (
-        <Image
-          source={assets.images.darkBackground}
-          resizeMode={'repeat'}
-          style={{ flex: 1, width: undefined, height: undefined }}
-        />
-      )}
+      backgroundComponent={() => <ImageBackground1 />}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >

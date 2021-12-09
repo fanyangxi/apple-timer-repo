@@ -1,18 +1,16 @@
 import _ from 'lodash'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import ScreenContainer from '@/components/ScreenContainer'
-import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { DeviceScreen } from '@/common/device'
 import { Preset } from '@/models/preset'
 import { BottomNumberPickerPopup } from '@/components/BottomNumberPickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { BottomDurationPickerPopup } from '@/components/BottomDurationPickerPopup'
-import { useTheme } from '@/theme'
 import SvgBrowser from '@/assets/icons/Browser'
 import { DataService } from '@/services/data-service'
 import SvgFinish from '@/assets/icons/Finish'
@@ -22,8 +20,9 @@ import { ConfirmDialog } from 'react-native-simple-dialogs'
 import { DEFAULT_NEW_PRESET } from '@/common/constants'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { formatSecs } from '@/utils/date-util'
+import { ImageBackground1 } from '@/components/ImageBackground1'
 
-export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
+export const PresetDetailScreen: React.FC = (): ReactElement => {
   const { goBack } = useNavigation()
   const route = useRoute()
   const thePreset: Preset = _.get(route.params, 'current', undefined)
@@ -43,12 +42,10 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
 
   useEffect(() => {
     console.log('>>>> PresetDetailScreen loaded')
-    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
     console.log(`>>> Current:: ${JSON.stringify(current)}, Total-secs:${getTotalPresetDurationSecs(current)}`)
-    // eslint-disable-next-line
   }, [current])
 
   function saveChanges() {
@@ -90,13 +87,7 @@ export const PresetDetailScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer
-      backgroundComponent={() => (
-        <Image
-          source={assets.images.darkBackground}
-          resizeMode={'repeat'}
-          style={{ flex: 1, width: undefined, height: undefined }}
-        />
-      )}
+      backgroundComponent={() => <ImageBackground1 />}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >

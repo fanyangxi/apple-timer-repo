@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
@@ -8,7 +8,6 @@ import { NotificationService, Sounds } from '@/services/notification-service'
 import { logger } from '@/utils/logger'
 import ScreenContainer from '@/components/ScreenContainer'
 import { NavigationBar } from '@/components/NavigationBar'
-import { assets } from '@/assets'
 import { useNavigation } from '@react-navigation/native'
 import { Screens } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
@@ -25,6 +24,7 @@ import { ConfirmDialog } from 'react-native-simple-dialogs'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Progress from 'react-native-progress'
 import { toFixedNumber } from '@/utils/common-util'
+import { ImageBackground1 } from '@/components/ImageBackground1'
 
 export const HomeScreen: React.FC<{}> = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -170,13 +170,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
 
   return (
     <ScreenContainer
-      backgroundComponent={() => (
-        <Image
-          source={assets.images.darkBackground}
-          resizeMode={'repeat'}
-          style={{ flex: 1, width: undefined, height: undefined }}
-        />
-      )}
+      backgroundComponent={() => <ImageBackground1 />}
       // style={{ backgroundColor: '#434343' }}
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
