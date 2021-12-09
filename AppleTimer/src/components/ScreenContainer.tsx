@@ -37,6 +37,7 @@ const ScreenContainer: React.FC<Props> = ({
 const styles = StyleSheet.create({
   screenRoot: {
     flex: 1,
+    backgroundColor: Colors.defaultDark,
   },
   background: {
     position: 'absolute',

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
-import { ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -20,6 +20,7 @@ import { DEFAULT_NEW_PRESET } from '@/common/constants'
 import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { formatSecs } from '@/utils/date-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export const PresetDetailScreen: React.FC = (): ReactElement => {
   const { goBack } = useNavigation()
@@ -186,7 +187,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
         showBackButton={true}
         backButtonAction={() => cancel()}
       />
-      <ScrollView contentContainerStyle={styles.rootContainer}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.rootContainer}>
         <View style={styles.form}>
           <View style={styles.row}>
             <View style={styles.titleContainer}>
@@ -196,6 +197,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                   onChangeText={text => setNewTitle(text)}
                   onBlur={() => {
                     setIsModifyingTitle(false)
+                    Keyboard.dismiss()
                     changeTitle()
                   }}
                   onFocus={() => setIsModifyingTitle(true)}
@@ -210,6 +212,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                   style={[styles.modifyTitleButton]}
                   onPress={() => {
                     setIsModifyingTitle(false)
+                    Keyboard.dismiss()
                     changeTitle()
                   }}
                 >
@@ -340,7 +343,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
             </AwesomeButtonMy>
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <BottomDurationPickerPopup
         popupRef={prepareSecsDurationPickerRef}
@@ -464,6 +467,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.s_16,
     textAlign: 'center',
     ...Fonts.textCaption24,
+    ...FontColors.black,
   },
   titleInputWrapper: {
     flexGrow: 1,

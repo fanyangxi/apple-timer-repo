@@ -45,6 +45,7 @@ export const Colors = {
   mineShaft: '#221F1F',
   lineDarkest: '#262522',
   linenDark: '#7B7874',
+  defaultDark: '#4E4E4E',
 }
 
 export const NavigationColors: Partial<ThemeNavigationColors> = {
