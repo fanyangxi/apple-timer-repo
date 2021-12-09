@@ -239,8 +239,8 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textSmall, FontColors.white]}>Prepare:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.PrepareSecs)}</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>Prepare:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.PrepareSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -260,8 +260,8 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textSmall, FontColors.white]}>Workout Secs:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.WorkoutSecs)}</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>Workout Secs:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.WorkoutSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -281,8 +281,8 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textSmall, FontColors.white]}>Rest Secs:</Text>
-                <Text style={[Fonts.textSmall, FontColors.white]}>{formatSecs(current.RestSecs)}</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>Rest Secs:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.RestSecs)}</Text>
               </View>
             </Neomorph>
           </TouchableOpacity>
@@ -304,8 +304,8 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 }}
               >
                 <View style={styles.barItemContent}>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>Cycles:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{current.CyclesCount}</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>Cycles:</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>{current.CyclesCount}</Text>
                 </View>
               </Neomorph>
             </TouchableOpacity>
@@ -325,8 +325,8 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 }}
               >
                 <View style={styles.barItemContent}>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>Sets:</Text>
-                  <Text style={[Fonts.textSmall, FontColors.white]}>{current.SetsCount}</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>Sets:</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>{current.SetsCount}</Text>
                 </View>
               </Neomorph>
             </TouchableOpacity>

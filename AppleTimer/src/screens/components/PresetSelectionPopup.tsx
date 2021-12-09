@@ -1,9 +1,8 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import React, { useEffect, useState } from 'react'
 import { Preset } from '@/models/preset'
 import { DeviceScreen } from '@/common/device'
-import { assets } from '@/assets'
 import { Neomorph } from 'react-native-neomorph-shadows'
 import { ElementList } from '@/components/ElementList'
 import { DataService } from '@/services/data-service'
@@ -16,6 +15,7 @@ import { FinishButton } from '@/components/button/FinishButton'
 import { EditButton } from '@/components/button/EditButton'
 import { DeleteButton } from '@/components/button/DeleteButton'
 import { formatSecs } from '@/utils/date-util'
+import { ImageBackground1 } from '@/components/ImageBackground1'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -125,16 +125,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   return (
     <View style={styles.rootContainer}>
       <View style={styles.background}>
-        <Image
-          source={assets.images.darkBackground}
-          style={{
-            flex: 1,
-            width: undefined,
-            height: undefined,
-            borderTopLeftRadius: RadiusSizes.r12,
-            borderTopRightRadius: RadiusSizes.r12,
-          }}
-        />
+        <ImageBackground1 style={{ borderTopLeftRadius: RadiusSizes.r12, borderTopRightRadius: RadiusSizes.r12 }} />
       </View>
       <View style={styles.actionButtonsBar}>
         <View style={styles.leftButtonContainer}>

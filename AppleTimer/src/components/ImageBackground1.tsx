@@ -1,15 +1,17 @@
 import * as React from 'react'
 import { ReactElement } from 'react'
-import { Image } from 'react-native'
+import { Image, ImageStyle, StyleProp } from 'react-native'
 import { assets } from '@/assets'
 
-export const ImageBackground1: React.FC = (): ReactElement => {
+export const ImageBackground1: React.FC<{
+  style?: StyleProp<ImageStyle>
+}> = ({ style }): ReactElement => {
   return (
     <Image
       source={assets.images.darkBackground}
       resizeMode={'repeat'}
       resizeMethod={'resize'}
-      style={{ flex: 1, width: undefined, height: undefined }}
+      style={[{ flex: 1, width: undefined, height: undefined }, style]}
     />
   )
 }
