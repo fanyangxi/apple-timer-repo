@@ -191,22 +191,24 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
         <View style={styles.form}>
           <View style={styles.row}>
             <View style={styles.titleContainer}>
-              <View style={[styles.titleInputWrapper, isModifyingTitle ? {} : { backgroundColor: Colors.linenDark }]}>
-                <TextInput
-                  style={[styles.titleInput, isModifyingTitle ? {} : { color: 'white' }]}
-                  onChangeText={text => setNewTitle(text)}
-                  onBlur={() => {
-                    setIsModifyingTitle(false)
-                    Keyboard.dismiss()
-                    changeTitle()
-                  }}
-                  onFocus={() => setIsModifyingTitle(true)}
-                  editable={true}
-                  keyboardType={'default'}
-                  maxLength={24}
-                  defaultValue={current.Name}
-                />
-              </View>
+              <TextInput
+                autoCorrect={false}
+                style={[
+                  styles.titleInput,
+                  isModifyingTitle ? {} : { backgroundColor: Colors.linenDark, color: 'white' },
+                ]}
+                onChangeText={text => setNewTitle(text)}
+                onBlur={() => {
+                  setIsModifyingTitle(false)
+                  Keyboard.dismiss()
+                  changeTitle()
+                }}
+                onFocus={() => setIsModifyingTitle(true)}
+                editable={true}
+                keyboardType={'default'}
+                maxLength={24}
+                defaultValue={current.Name}
+              />
               {isModifyingTitle && (
                 <TouchableOpacity
                   style={[styles.modifyTitleButton]}
@@ -464,15 +466,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'lightblue', // '#202021',
   },
   titleInput: {
+    flex: 1,
     paddingVertical: Spacings.s_16,
     textAlign: 'center',
     ...Fonts.textCaption24,
     ...FontColors.black,
-  },
-  titleInputWrapper: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
     borderRadius: 4,
     backgroundColor: Colors.inputBackground,
   },
