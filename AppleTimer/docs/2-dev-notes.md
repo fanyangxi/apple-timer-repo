@@ -116,6 +116,8 @@ React native svg arc path - Stack Overflow
 \- https://www.npmjs.com/package/react-native-safe-area-context
 
 
+### switch toggle:
+\- https://www.npmjs.com/package/react-native-switch-toggle
 
 
 
