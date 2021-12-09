@@ -43,7 +43,7 @@ const createPreset = async (model: Preset): Promise<void> => {
     restSecs: model.RestSecs,
     isActive: model.IsActive,
   }
-  _validateMaximumAllowedDuration(entity)
+  _validateInputData(entity)
 
   // checking:
   const items = await _getPresetEntities()
@@ -66,7 +66,7 @@ const createPreset = async (model: Preset): Promise<void> => {
 const updatePreset = async (model: Preset): Promise<void> => {
   // model to entity:
   const entity: PresetEntity = _toEntity(model)
-  _validateMaximumAllowedDuration(entity)
+  _validateInputData(entity)
 
   // checking:
   const items = await _getPresetEntities()
@@ -150,10 +150,22 @@ const _toModel = (entity: PresetEntity): Preset => {
   )
 }
 
-const _validateMaximumAllowedDuration = (entity: PresetEntity): void => {
+const _validateInputData = (entity: PresetEntity): void => {
   const duration = (entity.prepareSecs + (entity.workoutSecs + entity.restSecs) * entity.setsCount) * entity.cyclesCount
   if (duration > MAX_PRESET_DURATION_ALLOWED_SECS) {
     throw new Error(`Maximum allowed duration (72hrs) exceeded, currently: ${formatSecs(duration)}`)
+  }
+  if (_.isEmpty(entity.name)) {
+    throw new Error('Empty preset name is not allowed')
+  }
+  if (
+    entity.prepareSecs === 0 ||
+    entity.workoutSecs === 0 ||
+    entity.restSecs === 0 ||
+    entity.setsCount === 0 ||
+    entity.cyclesCount === 0
+  ) {
+    throw new Error('The prepare/workout/rest/setsCount/cyclesCount of the preset cannot be 0')
   }
 }
 
