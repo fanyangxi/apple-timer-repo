@@ -365,11 +365,13 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
       <BottomNumberPickerPopup
         popupRef={setsPickerRef}
         value={current.SetsCount}
+        pickerTitle={'Sets'}
         onValueChanged={newValue => changeSetsCount(newValue)}
       />
       <BottomNumberPickerPopup
         popupRef={cyclesPickerRef}
         value={current.CyclesCount}
+        pickerTitle={'Cycles'}
         onValueChanged={newValue => changeCyclesCount(newValue)}
       />
       <ConfirmDialog

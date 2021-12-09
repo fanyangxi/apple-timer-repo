@@ -11,13 +11,20 @@ const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
 export interface BottomPickerPopupProps {
   popupRef: React.RefObject<Modalize>
   value?: number
+  pickerTitle?: string
   onValueChanged?: (newValue: number) => void
 }
 
-export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({ popupRef, value, onValueChanged }) => {
+const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
+
+export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
+  popupRef,
+  value,
+  pickerTitle,
+  onValueChanged,
+}) => {
   const [localValue, setLocalValue] = useState<number>(0)
 
-  const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
     'rgba( 166, 166, 166, 0.9 )',
@@ -50,7 +57,7 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({ popu
         <View style={styles.actionButtonsBar} />
         <View style={styles.content}>
           <View style={styles.pickerColumn}>
-            <Text style={styles.pickerColumnTitle}>Hours</Text>
+            <Text style={styles.pickerColumnTitle}>{pickerTitle ?? 'Number'}</Text>
             <DynamicallySelectedPicker
               items={numbersSourceItems}
               initialSelectedIndex={localValue}

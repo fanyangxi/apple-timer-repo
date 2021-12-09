@@ -16,6 +16,8 @@ export interface BottomDurationPickerPopupProps {
   onValueChanged?: (newDuration: number) => void
 }
 
+const rawPickerItems = Array.from(Array(60).keys()).map(item => ({ value: item, label: `${item}` }))
+
 export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps> = ({
   popupRef,
   duration,
@@ -25,9 +27,9 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
   const [localMinutes, setLocalMinutes] = useState<number>(0)
   const [localSeconds, setLocalSeconds] = useState<number>(0)
 
-  const hoursDataSourceItems = Array.from(Array(24).keys()).map(item => ({ value: item, label: `${item}` }))
-  const minutesDataSourceItems = Array.from(Array(59).keys()).map(item => ({ value: item, label: `${item}` }))
-  const secondsDataSourceItems = Array.from(Array(59).keys()).map(item => ({ value: item, label: `${item}` }))
+  const hoursDataSourceItems = rawPickerItems.slice(0, 24)
+  const minutesDataSourceItems = rawPickerItems
+  const secondsDataSourceItems = rawPickerItems
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
     'rgba( 166, 166, 166, 0.9 )',
