@@ -136,7 +136,7 @@ export const HomeScreen: React.FC<{}> = (): ReactElement => {
     timerSvc.OnRestPhaseClosing = async (secsLeft: number, ticked: TickedContext) => {
       // By the time `RestPhaseClosing` event is triggered, the current Set is not finished yet. So, to tell
       // exactly how many sets left after this, we need to do '-1' here.
-      const cycleSetsLeft: number = ticked.cycleSetsRemainingCount
+      const cycleSetsLeft: number = ticked.cycleSetsRemainingCount - 1
       notificationServiceRef.current?.playSounds([
         Sounds.ThreeTwoOne,
         `num_${cycleSetsLeft}.mp3`,
