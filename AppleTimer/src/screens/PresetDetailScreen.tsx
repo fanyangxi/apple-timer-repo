@@ -58,7 +58,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               type: 'error',
               position: 'top',
               text1: 'Create preset failed:',
-              text2: `Detail: ${e}`,
+              text2: `${e}`,
             })
           })
       : DataService.updatePreset(current)
@@ -68,7 +68,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               type: 'error',
               position: 'top',
               text1: 'Update preset failed:',
-              text2: `Detail: ${e}`,
+              text2: `${e}`,
             })
           })
   }

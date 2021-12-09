@@ -3,6 +3,8 @@ import { AsyncStorageUtils } from '@/utils/async-storage-utils'
 import { Preset } from '@/models/preset'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
+import { MAX_PRESET_DURATION_ALLOWED_SECS } from '@/common/constants'
+import { formatSecs } from '@/utils/date-util'
 
 const DATA_TABLE_KEY = 'THE-TIMER-9527'
 
@@ -41,6 +43,7 @@ const createPreset = async (model: Preset): Promise<void> => {
     restSecs: model.RestSecs,
     isActive: model.IsActive,
   }
+  _validateMaximumAllowedDuration(entity)
 
   // checking:
   const items = await _getPresetEntities()
@@ -63,6 +66,7 @@ const createPreset = async (model: Preset): Promise<void> => {
 const updatePreset = async (model: Preset): Promise<void> => {
   // model to entity:
   const entity: PresetEntity = _toEntity(model)
+  _validateMaximumAllowedDuration(entity)
 
   // checking:
   const items = await _getPresetEntities()
@@ -144,6 +148,13 @@ const _toModel = (entity: PresetEntity): Preset => {
     entity.cyclesCount,
     entity.isActive,
   )
+}
+
+const _validateMaximumAllowedDuration = (entity: PresetEntity): void => {
+  const duration = (entity.prepareSecs + (entity.workoutSecs + entity.restSecs) * entity.setsCount) * entity.cyclesCount
+  if (duration > MAX_PRESET_DURATION_ALLOWED_SECS) {
+    throw new Error(`Maximum allowed duration (24hrs) exceeded, currently: ${formatSecs(duration)}`)
+  }
 }
 
 const _validateEntities = (entities: PresetEntity[]): void => {

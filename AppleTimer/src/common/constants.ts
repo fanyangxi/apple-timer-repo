@@ -18,3 +18,5 @@ export const HAPTIC_FEEDBACK_OPTIONS = { enableVibrateFallback: true, ignoreAndr
 
 // Note: It's for DynamicallySelectedPicker.
 export type ScrollEventArgs = { index: number; item: any }
+
+export const MAX_PRESET_DURATION_ALLOWED_SECS = 86400 // 24hrs,
