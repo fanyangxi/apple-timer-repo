@@ -15,6 +15,7 @@ import { AddButton } from '@/components/button/AddButton'
 import { FinishButton } from '@/components/button/FinishButton'
 import { EditButton } from '@/components/button/EditButton'
 import { DeleteButton } from '@/components/button/DeleteButton'
+import { formatSecs } from '@/utils/date-util'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -71,7 +72,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       })
   }
 
-  const renderItem = (preset: Preset) => (
+  const renderItem = (it: Preset) => (
     <View style={styles.row}>
       <Neomorph
         inner={false} // <- enable shadow inside of neomorph
@@ -79,41 +80,39 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         style={{
           ...styles.neomorphContainer,
           width: DeviceScreen.width - Spacings.s_48,
-          height: 80,
+          height: 88,
           ...(isManagingList ? { backgroundColor: '#5f5e5e' } : {}),
         }}
       >
         <View style={styles.rowContent}>
           <TouchableOpacity
-            key={preset.Name}
+            key={it.Name}
             style={styles.card}
             disabled={isManagingList}
-            onPress={() => onSelectionChanged && onSelectionChanged(preset)}
+            onPress={() => onSelectionChanged && onSelectionChanged(it)}
           >
-            <Text style={[Fonts.titleSmall, preset.IsActive ? FontColors.clickable : FontColors.white]}>
-              {preset.Name}
+            <Text style={[Fonts.titleSmall, it.IsActive ? FontColors.clickable : FontColors.white]}>{it.Name}</Text>
+            <Text style={[Fonts.textSmall, FontColors.grey]}>
+              Prepare:{formatSecs(it.PrepareSecs)}, Workout:{formatSecs(it.WorkoutSecs)}, Rest:{formatSecs(it.RestSecs)}
             </Text>
             <Text style={[Fonts.textSmall, FontColors.grey]}>
-              Prepare:{preset.PrepareSecs} / Workout:{preset.WorkoutSecs} / Rest:{preset.RestSecs}
-            </Text>
-            <Text style={[Fonts.textSmall, FontColors.grey]}>
-              Cycles:{preset.CyclesCount} / Sets:{preset.SetsCount}
+              Cycles:{formatSecs(it.CyclesCount)} / Sets:{formatSecs(it.SetsCount)}
             </Text>
           </TouchableOpacity>
           <View style={styles.actionButton}>
             {!isManagingList && (
               <EditButton
-                key={`${preset.Name}-edit-container`}
-                onPress={() => onEditItemClicked && onEditItemClicked(preset)}
+                key={`${it.Name}-edit-container`}
+                onPress={() => onEditItemClicked && onEditItemClicked(it)}
               />
             )}
             {isManagingList && (
               <DeleteButton
-                key={`${preset.Name}-delete-container`}
+                key={`${it.Name}-delete-container`}
                 color={Colors.error}
-                disabled={preset.IsActive}
+                disabled={it.IsActive}
                 onPress={() => {
-                  setDeletingPreset(preset)
+                  setDeletingPreset(it)
                   setShowConfirmDialog(true)
                 }}
               />

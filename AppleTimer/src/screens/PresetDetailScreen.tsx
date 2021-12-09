@@ -206,7 +206,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 onFocus={() => setIsModifyingTitle(true)}
                 editable={true}
                 keyboardType={'default'}
-                maxLength={24}
+                maxLength={20}
                 defaultValue={current.Name}
               />
               {isModifyingTitle && (
