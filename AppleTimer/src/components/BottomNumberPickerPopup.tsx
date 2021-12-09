@@ -1,28 +1,20 @@
-import { Platform, StyleSheet, Text, View } from 'react-native'
-import { Colors, RadiusSizes, Spacings } from '@/theme/Variables'
+import { StyleSheet, Text, View } from 'react-native'
+import { Colors, Spacings } from '@/theme/Variables'
 import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
-import { HAPTIC_FEEDBACK_OPTIONS, ScrollEventArgs } from '@/common/constants'
+import { ScrollEventArgs } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import DynamicallySelectedPicker from '@/components/scroll-picker/DynamicallySelectedPicker'
 
-const DEFAULT_PICKER_HEIGHT = 340
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
 
 export interface BottomPickerPopupProps {
   popupRef: React.RefObject<Modalize>
   value?: number
-  height?: number
   onValueChanged?: (newValue: number) => void
 }
 
-export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
-  popupRef,
-  value,
-  height,
-  onValueChanged,
-}) => {
+export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({ popupRef, value, onValueChanged }) => {
   const [localValue, setLocalValue] = useState<number>(0)
 
   const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
@@ -42,7 +34,10 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
     <Modalize
       ref={popupRef}
       adjustToContentHeight={true}
-      panGestureEnabled={true}
+      modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
+      panGestureEnabled={false}
+      withHandle={false}
+      closeOnOverlayTap={true}
       onOpen={() => {
         setLocalValue(value || 0)
       }}
@@ -51,10 +46,8 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
         onValueChanged && onValueChanged(localValue)
       }}
     >
-      <View style={[styles.rootContainer, { height: height || DEFAULT_PICKER_HEIGHT }]}>
-        <View style={styles.actionButtonsBar}>
-          <Text>Select a number:</Text>
-        </View>
+      <View style={[styles.rootContainer]}>
+        <View style={styles.actionButtonsBar} />
         <View style={styles.content}>
           <View style={styles.pickerColumn}>
             <Text style={styles.pickerColumnTitle}>Hours</Text>
@@ -65,10 +58,6 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
               onMomentumScrollEnd={(event: ScrollEventArgs) => {
                 // console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
                 setLocalValue(parseInt(event.item.value, 10))
-                ReactNativeHapticFeedback.trigger(
-                  Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
-                  HAPTIC_FEEDBACK_OPTIONS,
-                )
               }}
               width={PickerColumnsContainerWidth}
               height={266}
@@ -89,10 +78,10 @@ const styles = StyleSheet.create({
   rootContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    height: DEFAULT_PICKER_HEIGHT,
-    borderTopLeftRadius: RadiusSizes.r12,
-    borderTopRightRadius: RadiusSizes.r12,
-    backgroundColor: '#A6A6A6', // == rgb( 166, 166, 166)
+    // height: DEFAULT_PICKER_HEIGHT,
+    // borderTopLeftRadius: RadiusSizes.r12,
+    // borderTopRightRadius: RadiusSizes.r12,
+    // backgroundColor: '#A6A6A6', // == rgb( 166, 166, 166)
   },
   row: {
     // marginTop: 50,
@@ -103,13 +92,14 @@ const styles = StyleSheet.create({
   },
   actionButtonsBar: {
     flexGrow: 1,
+    height: 4,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Spacings.s_8,
-    borderTopLeftRadius: RadiusSizes.r12,
-    borderTopRightRadius: RadiusSizes.r12,
-    backgroundColor: Colors.linenDark,
+    // paddingHorizontal: Spacings.s_8,
+    // borderTopLeftRadius: RadiusSizes.r12,
+    // borderTopRightRadius: RadiusSizes.r12,
+    // backgroundColor: Colors.linenDark,
   },
   content: {
     flexDirection: 'row',
@@ -121,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pickerColumnTitle: {
-    paddingVertical: Spacings.s_8,
+    paddingTop: Spacings.s_16,
     fontWeight: 'bold',
   },
   background: {

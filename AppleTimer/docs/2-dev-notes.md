@@ -69,7 +69,12 @@ https://github.com/rdhox/react-native-smooth-picker/blob/master/src/SmoothPicker
 react-native-haptic-feedback
 https://www.npmjs.com/package/react-native-haptic-feedback
 https://stackoverflow.com/questions/43760502/enable-haptic-feedback-on-react-native-touchable-view
-
+```
+ReactNativeHapticFeedback.trigger(
+  Platform.select({ ios: 'impactLight', android: 'impactLight', default: 'impactLight' }),
+  HAPTIC_FEEDBACK_OPTIONS,
+)
+```
 
 ### Toast:
 https://www.npmjs.com/package/react-native-toast-message
