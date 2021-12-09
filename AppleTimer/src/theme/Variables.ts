@@ -148,6 +148,14 @@ export const Fonts = {
     // letterSpacing?: number;
     // lineHeight?: number;
   } as TextStyle,
+  textCaption24: {
+    fontSize: FontSizes.f30,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    // fontFamily: '',
+    // letterSpacing?: number;
+    // lineHeight?: number;
+  } as TextStyle,
   textSmall: {
     fontSize: FontSizes.f12,
     fontStyle: 'normal',

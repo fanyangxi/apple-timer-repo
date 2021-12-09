@@ -193,14 +193,16 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
             <View style={styles.titleContainer}>
               {isModifyingTitle ? (
                 <>
-                  <TextInput
-                    style={styles.titleInput} // [Layout.fill, Common.textInput]
-                    onChangeText={text => setNewTitle(text)}
-                    editable={true}
-                    keyboardType={'default'}
-                    maxLength={24}
-                    defaultValue={current.Name + '-x'}
-                  />
+                  <View style={styles.titleElementWrapper}>
+                    <TextInput
+                      style={styles.titleInput} // [Layout.fill, Common.textInput]
+                      onChangeText={text => setNewTitle(text)}
+                      editable={true}
+                      keyboardType={'default'}
+                      maxLength={24}
+                      defaultValue={current.Name}
+                    />
+                  </View>
                   <TouchableOpacity
                     style={[styles.barItem, styles.modifyTitleButton]}
                     onPress={() => {
@@ -213,7 +215,9 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 </>
               ) : (
                 <>
-                  <Text style={styles.title}>{current.Name}</Text>
+                  <View style={styles.titleElementWrapper}>
+                    <Text style={styles.title}>{current.Name}</Text>
+                  </View>
                   <TouchableOpacity
                     style={[styles.barItem, styles.modifyTitleButton]}
                     onPress={() => setIsModifyingTitle(true)}
@@ -411,7 +415,6 @@ const styles = StyleSheet.create({
     // marginTop: 50,
     // backgroundColor: 'lightgrey',
     flexDirection: 'column',
-    alignItems: 'center',
   },
   form: {
     flexDirection: 'column',
@@ -461,30 +464,29 @@ const styles = StyleSheet.create({
   cancelButton: {
     width: 90,
   },
-  background: {
-    backgroundColor: 'lightgreen', // '#202021',
-    position: 'absolute',
-  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     // backgroundColor: 'lightblue', // '#202021',
   },
   title: {
-    ...Fonts.textCaption30,
+    paddingVertical: 8,
+    textAlign: 'center',
+    ...Fonts.textCaption24,
     ...FontColors.white,
-    marginRight: Spacings.s_12,
+    backgroundColor: '#b58181',
   },
   titleInput: {
-    width: 120,
-    borderWidth: 1,
-    borderColor: Colors.text,
-    backgroundColor: Colors.inputBackground,
-    color: Colors.text,
-    minHeight: 50,
+    paddingVertical: 8,
     textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 10,
+    ...Fonts.textCaption24,
+    backgroundColor: Colors.inputBackground,
+  },
+  titleElementWrapper: {
+    flexGrow: 1,
+    marginRight: Spacings.s_12,
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   modifyTitleButton: {
     width: 24,
