@@ -1,3 +1,6 @@
+/**
+ * https://github.com/sosog/react-native-dynamically-selected-picker
+ * **/
 import React, { ReactElement } from 'react'
 import { StyleSheet, View, ScrollView, Platform, NativeScrollEvent, ColorValue } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'

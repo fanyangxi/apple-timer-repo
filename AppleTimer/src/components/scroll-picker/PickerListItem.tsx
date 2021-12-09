@@ -1,3 +1,6 @@
+/**
+ * https://github.com/sosog/react-native-dynamically-selected-picker
+ * **/
 import React from 'react'
 import { View, Text, StyleProp, ViewStyle, ColorValue } from 'react-native'
 
