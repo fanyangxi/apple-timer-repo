@@ -85,7 +85,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
   }
 
   const _startOrResumeCycleAnim = () => {
-    console.log(`>>> startOrResumeCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
+    // console.log(`>>> startOrResumeCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: _startOrResumePreparePhaseAnim,
       [`${TimerPhase.Workout}`]: _startOrResumeWorkoutPhaseAnim,
@@ -96,7 +96,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
   }
 
   const _pauseAnim = () => {
-    console.log(`>>> pauseAnim: ${tickedContext?.cycleCurrentPhase}`)
+    // console.log(`>>> pauseAnim: ${tickedContext?.cycleCurrentPhase}`)
     const theMap = {
       [`${TimerPhase.Prepare}`]: prepareSliderRef.current?.pauseAnim,
       [`${TimerPhase.Workout}`]: workoutSliderRef.current?.pauseAnim,
@@ -107,14 +107,14 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
   }
 
   const _resetCycleAnim = () => {
-    console.log(`>>> resetCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
+    // console.log(`>>> resetCycleAnim: ${tickedContext?.cycleCurrentPhase}`)
     prepareSliderRef.current?.stopAndResetAnim()
     workoutSliderRef.current?.stopAndResetAnim()
     restSliderRef.current?.stopAndResetAnim()
   }
 
   const _resetSetAnim = () => {
-    console.log(`>>> resetSetAnim: ${tickedContext?.cycleCurrentPhase}`)
+    // console.log(`>>> resetSetAnim: ${tickedContext?.cycleCurrentPhase}`)
     workoutSliderRef.current?.stopAndResetAnim()
     restSliderRef.current?.stopAndResetAnim()
   }

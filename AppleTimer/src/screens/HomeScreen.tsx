@@ -211,7 +211,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
                   }}
                 >
                   <TouchableOpacity style={styles.presetSelectionButton} onPress={() => onPresetSelectionClicked()}>
-                    <Text style={[Fonts.titleSmall, FontColors.clickable]}>{`${activePreset?.Name}`}</Text>
+                    <Text style={[Fonts.titleRegular, FontColors.clickable]}>{`${activePreset?.Name}`}</Text>
                   </TouchableOpacity>
                 </LinearGradient>
               </View>
