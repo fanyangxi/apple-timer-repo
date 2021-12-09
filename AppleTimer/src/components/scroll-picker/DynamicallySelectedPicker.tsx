@@ -31,6 +31,7 @@ type DynamicallySelectedPickerState = {
   itemHeight: number
   lastScrollPos: number
   pickerElements: ReactElement[]
+  isScrolling: boolean
 }
 
 export default class DynamicallySelectedPicker extends React.Component<
@@ -88,6 +89,7 @@ export default class DynamicallySelectedPicker extends React.Component<
       itemIndex: localInitialSelectedIndex,
       lastScrollPos: 0,
       pickerElements: [],
+      isScrolling: false,
     }
   }
 
@@ -230,13 +232,15 @@ export default class DynamicallySelectedPicker extends React.Component<
   }
 
   render() {
-    const { itemHeight } = this.state
+    const { itemHeight, isScrolling } = this.state
     const { width, height, topGradientColors, bottomGradientColors, transparentItemRows, selectedItemBorderColor } =
       this.props
     const localTransparentItemRows = transparentItemRows || DynamicallySelectedPicker.defaultProps.transparentItemRows
+    const theSelectedItemBorderColor = isScrolling ? '#858a8d' : selectedItemBorderColor
     return (
       <View style={{ height: height, width: width }}>
         <ScrollView
+          style={{ opacity: isScrolling ? 0.5 : 1 }}
           ref={this.scrollViewRef}
           scrollEventThrottle={0}
           onLayout={this.scrollToInitialPosition}
@@ -253,11 +257,13 @@ export default class DynamicallySelectedPicker extends React.Component<
             this._momentumScrollEndEventTriggerTimerId && clearTimeout(this._momentumScrollEndEventTriggerTimerId)
             this._momentumScrollEndEventTriggerTimerId = setTimeout(() => {
               // console.log(`${Date.now()}===2: onMomentumScrollEnd`, temp.contentOffset.y)
+              this.setState({ isScrolling: false })
               this.onMomentumScrollEnd(temp)
             }, 90)
           }}
           onScrollBeginDrag={event => {
             this.onScrollBeginDrag(event.nativeEvent)
+            this.setState({ isScrolling: true })
           }}
           onScrollEndDrag={event => {
             this.onScrollEndDrag(event.nativeEvent)
@@ -276,7 +282,7 @@ export default class DynamicallySelectedPicker extends React.Component<
             {
               top: 0,
               borderBottomWidth: 1,
-              borderBottomColor: selectedItemBorderColor,
+              borderBottomColor: theSelectedItemBorderColor,
             },
           ]}
           pointerEvents="none"
@@ -297,7 +303,7 @@ export default class DynamicallySelectedPicker extends React.Component<
             {
               bottom: 0,
               borderTopWidth: 1,
-              borderTopColor: selectedItemBorderColor,
+              borderTopColor: theSelectedItemBorderColor,
             },
           ]}
           pointerEvents="none"
