@@ -41,14 +41,14 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
   const cyclesPickerRef = useRef<Modalize>(null)
 
   useEffect(() => {
-    console.log('>>>> PresetDetailScreen loaded')
+    console.log('Preset-detail-screen loaded')
   }, [])
 
   useEffect(() => {
-    console.log(`>>> Current:: ${JSON.stringify(current)}, Total-secs:${getTotalPresetDurationSecs(current)}`)
+    console.log(`>>> Target preset: ${JSON.stringify(current)}, Total-secs:${getTotalPresetDurationSecs(current)}`)
   }, [current])
 
-  function saveChanges() {
+  const saveChanges = () => {
     console.log(current)
     isCreatingNewMode
       ? DataService.createPreset(current)
@@ -73,7 +73,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
           })
   }
 
-  function cancel() {
+  const cancel = () => {
     const updated = JSON.stringify(current)
     const shouldWarn = isCreatingNewMode
       ? updated !== JSON.stringify(DEFAULT_NEW_PRESET)
