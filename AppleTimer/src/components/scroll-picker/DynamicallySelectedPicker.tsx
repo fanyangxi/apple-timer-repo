@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { StyleSheet, View, ScrollView, Platform, NativeScrollEvent, ColorValue } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import PickerListItem from './PickerListItem'
@@ -30,6 +30,7 @@ type DynamicallySelectedPickerState = {
   itemIndex: number
   itemHeight: number
   lastScrollPos: number
+  pickerElements: ReactElement[]
 }
 
 export default class DynamicallySelectedPicker extends React.Component<
@@ -86,6 +87,7 @@ export default class DynamicallySelectedPicker extends React.Component<
       itemHeight: itemHeight,
       itemIndex: localInitialSelectedIndex,
       lastScrollPos: 0,
+      pickerElements: [],
     }
   }
 
@@ -97,6 +99,14 @@ export default class DynamicallySelectedPicker extends React.Component<
     return {
       itemIndex: nextProps.initialSelectedIndex,
     }
+  }
+
+  componentDidMount() {
+    const { allItemsColor, fontSize, fontFamily } = this.props
+    // This is to pre-load the picker elements to improve performance.
+    this.setState({
+      pickerElements: this.getPickerElements(allItemsColor, fontSize, this.state.itemHeight, fontFamily),
+    })
   }
 
   scrollToInitialPosition = () => {
@@ -197,20 +207,36 @@ export default class DynamicallySelectedPicker extends React.Component<
     return [...this.fakeItems(transparentItemRows), ...localItems, ...this.fakeItems(transparentItemRows)]
   }
 
+  private getPickerElements(
+    _allItemsColor: string | undefined,
+    _fontSize: number | undefined,
+    _itemHeight: number,
+    _fontFamily: string | undefined,
+  ): ReactElement[] {
+    return this.extendedItems().map((item, index) => {
+      return (
+        <PickerListItem
+          key={index}
+          label={item.label}
+          itemColor={item.itemColor}
+          allItemsColor={_allItemsColor}
+          fontSize={_fontSize ? _fontSize : _itemHeight / 2}
+          fontFamily={_fontFamily}
+          style={[
+            styles.listItem,
+            {
+              height: _itemHeight,
+            },
+          ]}
+        />
+      )
+    })
+  }
+
   render() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { itemIndex, itemHeight } = this.state
-    const {
-      width,
-      height,
-      topGradientColors,
-      bottomGradientColors,
-      transparentItemRows,
-      allItemsColor,
-      fontSize,
-      fontFamily,
-      selectedItemBorderColor,
-    } = this.props
+    const { itemHeight } = this.state
+    const { width, height, topGradientColors, bottomGradientColors, transparentItemRows, selectedItemBorderColor } =
+      this.props
     const localTransparentItemRows = transparentItemRows || DynamicallySelectedPicker.defaultProps.transparentItemRows
     return (
       <View style={{ height: height, width: width }}>
@@ -246,24 +272,7 @@ export default class DynamicallySelectedPicker extends React.Component<
           // initialScrollIndex={itemIndex}
           snapToInterval={itemHeight}
         >
-          {this.extendedItems().map((item, index) => {
-            return (
-              <PickerListItem
-                key={index}
-                label={item.label}
-                itemColor={item.itemColor}
-                allItemsColor={allItemsColor}
-                fontSize={fontSize ? fontSize : itemHeight / 2}
-                fontFamily={fontFamily}
-                style={[
-                  styles.listItem,
-                  {
-                    height: itemHeight,
-                  },
-                ]}
-              />
-            )
-          })}
+          {this.state.pickerElements}
         </ScrollView>
         <View
           style={[
