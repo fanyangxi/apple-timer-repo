@@ -280,8 +280,6 @@ const styles = StyleSheet.create({
   itemsContainer: {
     // flex: 1,
     alignItems: 'center',
-    color: '#FFFFFF',
-    ...Fonts.textLarge,
   },
   absolute: {
     position: 'absolute',

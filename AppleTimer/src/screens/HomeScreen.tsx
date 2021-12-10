@@ -380,11 +380,12 @@ export const HomeScreen: React.FC = (): ReactElement => {
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
           title: t('confirmStopping.cancel'),
+          titleStyle: { ...Fonts.textLarge },
           onPress: () => setShowConfirmDialog(false),
         }}
         positiveButton={{
           title: t('confirmStopping.stop'),
-          titleStyle: { color: Colors.primary },
+          titleStyle: { ...Fonts.titleRegular, color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
             onStopPressed().catch(() => {})
@@ -506,12 +507,6 @@ const styles = StyleSheet.create({
   },
   contentDivider: {
     marginVertical: Spacings.s_16,
-  },
-  itemsContainer: {
-    flex: 1,
-    alignItems: 'flex-start',
-    color: '#FFFFFF',
-    ...Fonts.textLarge,
   },
   workoutDetailsSection: {
     // marginTop: 50,

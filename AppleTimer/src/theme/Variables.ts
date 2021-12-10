@@ -171,7 +171,7 @@ export const Fonts = {
     fontWeight: 'normal',
   } as TextStyle,
   textLarge: {
-    fontSize: FontSizes.f40,
+    fontSize: FontSizes.f20,
     fontStyle: 'normal',
     fontWeight: 'normal',
   } as TextStyle,

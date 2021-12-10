@@ -384,13 +384,14 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
           title: t('confirmDiscarding.cancel'),
+          titleStyle: { ...Fonts.textLarge },
           onPress: () => {
             setShowConfirmDialog(false)
           },
         }}
         positiveButton={{
           title: t('confirmDiscarding.discard'),
-          titleStyle: { color: Colors.primary },
+          titleStyle: { ...Fonts.titleRegular, color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
             goBack()
