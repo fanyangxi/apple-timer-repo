@@ -13,11 +13,11 @@ const getUserSettings = async (): Promise<UserSettings> => {
 }
 
 const saveUserSettings = async (settings: Partial<UserSettings>): Promise<void> => {
-  const existing = getUserSettings()
+  const existing = await getUserSettings()
   const merged: UserSettings = { ...existing, ...settings }
 
   // saving/update:
-  console.log('Update user settings to:', merged)
+  console.log('Update user-settings to:', merged)
   await AsyncStorageUtils.setObject(USER_SETTINGS_DATA_TABLE_KEY, merged)
 }
 

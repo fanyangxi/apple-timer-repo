@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
@@ -12,6 +12,8 @@ import { UserSettings } from '@/models/common'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
 import { handleErr } from '@/utils/common-util'
+import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
+import { Modalize } from 'react-native-modalize'
 
 interface ActionButtonProps {
   key?: string
@@ -21,6 +23,7 @@ interface ActionButtonProps {
 
 export const SettingsScreen: React.FC = (): ReactElement => {
   const [userSettings, setUserSettings] = useState<Partial<UserSettings>>(DEFAULT_USER_SETTINGS)
+  const languagePickerRef = useRef<Modalize>(null)
 
   useEffect(() => {
     UserSettingsDataService.getUserSettings().then(data => setUserSettings(data))
@@ -51,7 +54,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
           <Text style={[Fonts.titleRegular, FontColors.white]}>General</Text>
         </View>
         {/*Choose Language*/}
-        {renderActionButton({ title: 'Choose Language', onPress: () => {} })}
+        {renderActionButton({ title: 'Choose Language', onPress: () => languagePickerRef.current?.open() })}
         {/*Voice Assist*/}
         <View style={styles.row}>
           <NeomorphContainer>
@@ -62,7 +65,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
                 onPress={() => {
                   const updated = { enableVoiceAssist: !userSettings.enableVoiceAssist }
                   console.log(`Voice Assist: ${!userSettings.enableVoiceAssist}`)
-                  setUserSettings(updated)
+                  setUserSettings({ ...userSettings, ...updated })
                   UserSettingsDataService.saveUserSettings(updated).catch(handleErr)
                 }}
               />
@@ -77,6 +80,18 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         {renderActionButton({ title: 'Share with friends', onPress: () => {} })}
         {renderActionButton({ title: 'Send feedback', onPress: () => {} })}
       </ScrollView>
+      {/* misc(s) */}
+      <BottomLanguagePickerPopup
+        popupRef={languagePickerRef}
+        value={userSettings.language ?? DEFAULT_USER_SETTINGS.language}
+        pickerTitle={'Language'}
+        onValueChanged={newValue => {
+          console.log(`Language: ${newValue}`)
+          const updated = { language: newValue }
+          setUserSettings({ ...userSettings, ...updated })
+          UserSettingsDataService.saveUserSettings(updated).catch(handleErr)
+        }}
+      />
     </ScreenContainer>
   )
 }

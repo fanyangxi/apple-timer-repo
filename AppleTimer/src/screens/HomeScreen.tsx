@@ -23,8 +23,10 @@ import { SettingsButton } from '@/components/button/SettingsButton'
 import { ConfirmDialog } from 'react-native-simple-dialogs'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Progress from 'react-native-progress'
-import { toFixedNumber } from '@/utils/common-util'
+import { handleErr, toFixedNumber } from '@/utils/common-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
+import { UserSettings } from '@/models/common'
+import { UserSettingsDataService } from '@/services/user-settings-data-service'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
@@ -34,6 +36,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
   const [presetTotalDurationSecs, setPresetTotalDurationSecs] = useState<number>(0)
 
+  const userSettingsRef = useRef<Partial<UserSettings>>()
   const timerServiceRef = useRef<TimerService>()
   const notificationServiceRef = useRef<NotificationService>()
   const workoutDetailViewRef = useRef<WorkoutDetailViewRefObject>()
@@ -43,6 +46,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
 
   useEffect(() => {
     notificationServiceRef.current = new NotificationService()
+    reloadUserSettings().catch(handleErr)
     DataService.getActivePreset().then(cachedPreset => {
       setActivePreset(cachedPreset)
     })
@@ -156,6 +160,13 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const onPresetSelectionClicked = () => {
     // @ts-ignore
     modalizeRef.current.open()
+  }
+
+  const reloadUserSettings = async () => {
+    await UserSettingsDataService.getUserSettings().then(data => {
+      console.log(`Loaded user-settings: ${JSON.stringify(data)}`)
+      userSettingsRef.current = data
+    })
   }
 
   return (

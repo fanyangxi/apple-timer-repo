@@ -5,6 +5,11 @@ export interface DTime {
 }
 
 export interface UserSettings {
-  language?: 'english' | 'chinese'
+  language?: Languages
   enableVoiceAssist?: boolean
+}
+
+export enum Languages {
+  English = 'english',
+  ChineseSimplified = 'chinese-simplified',
 }
