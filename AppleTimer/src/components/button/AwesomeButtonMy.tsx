@@ -94,11 +94,12 @@ const AwesomeButtonMy: React.FC<AwesomeButtonMyProps> = (props: any): ReactEleme
     size: null,
   }
   const { disabled, type, size } = props || defaultProps
+  const defaultTextSize = { textSize: 18 }
   // @ts-ignore
   const styles = disabled ? BUTTONS.disabled : BUTTONS[type]
   // @ts-ignore
   const sizeObj = size ? SIZE[size] : {}
-  return <AwesomeButton {...styles} {...sizeObj} {...props} />
+  return <AwesomeButton {...styles} {...defaultTextSize} {...sizeObj} {...props} />
 }
 
 export default AwesomeButtonMy
