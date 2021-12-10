@@ -162,12 +162,12 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
           title: t('confirmDeletion.cancel'),
-          titleStyle: { ...Fonts.textLarge },
+          titleStyle: { ...Fonts.textRegular },
           onPress: () => setShowConfirmDialog(false),
         }}
         positiveButton={{
           title: t('confirmDeletion.delete'),
-          titleStyle: { ...Fonts.titleRegular, color: Colors.primary },
+          titleStyle: { ...Fonts.titleSmall, color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
             if (deletingPreset) {

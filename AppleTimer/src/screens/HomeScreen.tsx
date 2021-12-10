@@ -380,12 +380,12 @@ export const HomeScreen: React.FC = (): ReactElement => {
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
           title: t('confirmStopping.cancel'),
-          titleStyle: { ...Fonts.textLarge },
+          titleStyle: { ...Fonts.textRegular },
           onPress: () => setShowConfirmDialog(false),
         }}
         positiveButton={{
           title: t('confirmStopping.stop'),
-          titleStyle: { ...Fonts.titleRegular, color: Colors.primary },
+          titleStyle: { ...Fonts.titleSmall, color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
             onStopPressed().catch(() => {})
