@@ -203,13 +203,13 @@ export const HomeScreen: React.FC = (): ReactElement => {
             <View style={styles.summaryContent}>
               <View style={styles.title}>
                 <LinearGradient
-                  colors={['#4E4E4E', '#3C3C3C', '#2f2e2e', '#3C3C3C', '#4E4E4E']}
+                  colors={['#4E4E4E', '#4E4E4E', '#3C3C3C', '#2f2e2e', '#3C3C3C', '#4E4E4E', '#4E4E4E']}
                   useAngle={true}
-                  angle={45}
+                  angle={90}
                   style={{
-                    ...Platform.select({ ios: {}, android: { marginTop: 4 } }),
+                    ...Platform.select({ ios: {}, android: { marginTop: 2 } }),
                     height: 48,
-                    padding: 2,
+                    paddingHorizontal: 24,
                     flexDirection: 'row',
                     justifyContent: 'center',
                   }}
@@ -425,12 +425,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
     paddingBottom: Spacings.s_8,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     // backgroundColor: '#3C3C3C', // '#202021',
     borderRadius: RadiusSizes.r8,
   },
   title: {
-    backgroundColor: 'green', // '#202021',
     alignItems: 'center',
   },
   summaryDivider: {
@@ -441,11 +440,11 @@ const styles = StyleSheet.create({
   summaryDetail: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: Spacings.s_4,
+    marginTop: 6,
   },
   presetSelectionButton: {
     paddingHorizontal: 32,
-    paddingVertical: 12,
+    justifyContent: 'center',
   },
   timeRemainingContainer: {
     alignItems: 'flex-start',
