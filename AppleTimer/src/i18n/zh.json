@@ -1,70 +1,70 @@
 {
   "translation": {
     "home": {
-      "screenHeader": "苹果计时器-1",
-      "timeRemaining": "剩余时间-1",
-      "totalTime": "总共时间-1",
-      "cyclesLeft": "剩余周期-1",
-      "setsLeft": "剩余组-1",
-      "start": "开始-1",
-      "pause": "暂停-1",
-      "resume": "继续-1",
-      "stop": "停止-1"
+      "screenHeader": "苹果计时器",
+      "timeRemaining": "剩余时间",
+      "totalTime": "总共时间",
+      "cyclesLeft": "剩余周期",
+      "setsLeft": "剩余组",
+      "start": "开始",
+      "pause": "暂停",
+      "resume": "继续",
+      "stop": "停止"
     },
     "workoutDetail": {
-      "prepare": "准备-1",
-      "workout": "运动-1",
-      "rest": "休息-1",
-      "cycles": "周期-1",
-      "sets": "组-1"
+      "prepare": "准备",
+      "workout": "运动",
+      "rest": "休息",
+      "cycles": "周期",
+      "sets": "组"
     },
     "confirmStopping": {
-      "title": "确认停止-1",
-      "description": "确认要停止当前的运动计时器吗？-1",
-      "cancel": "取消-1",
-      "stop": "停止！-1"
+      "title": "确认停止",
+      "description": "确认要停止当前的运动计时器吗？",
+      "cancel": "取消",
+      "stop": "停止！"
     },
     "presetsSelection": {
-      "title": "管理我的预设-1",
+      "title": "管理我的预设",
       "deletePresetFailed": "删除预设失败"
     },
     "confirmDeletion": {
-      "title": "确认删除-1",
-      "description": "确认要删除这个预设吗-1",
-      "cancel": "取消-1",
-      "delete": "是的, 删除它-1"
+      "title": "确认删除",
+      "description": "确认要删除这个预设吗",
+      "cancel": "取消",
+      "delete": "是的, 删除它"
     },
     "presetDetail": {
-      "creatingTitle": "创建新的预设-1",
-      "editingTitle": "编辑预设信息-1",
-      "prepare": "准备时长-1",
-      "workout": "活动时长-1",
-      "rest": "休息时长-1",
-      "cycles": "周期数-1",
-      "sets": "组数-1",
-      "cancel": "取消-1",
-      "save": "保存-1"
+      "creatingTitle": "创建新的预设",
+      "editingTitle": "编辑预设信息",
+      "prepare": "准备时长",
+      "workout": "活动时长",
+      "rest": "休息时长",
+      "cycles": "周期数",
+      "sets": "组数",
+      "cancel": "取消",
+      "save": "保存"
     },
     "confirmDiscarding": {
-      "title": "确认放弃更改-1",
-      "description": "数据已经被更改，确认要丢弃这些更改吗？-1",
-      "cancel": "继续编辑-1",
-      "discard": "丢弃！-1"
+      "title": "确认放弃更改",
+      "description": "数据已经被更改，确认要丢弃这些更改吗？",
+      "cancel": "继续编辑",
+      "discard": "丢弃！"
     },
     "durationPicker": {
-      "hours": "小时-1",
-      "minutes": "分钟-1",
-      "seconds": "秒-1"
+      "hours": "小时",
+      "minutes": "分钟",
+      "seconds": "秒"
     },
     "settings": {
-      "screenHeader": "设置-1",
-      "general": "通用-1",
-      "language": "语言-1",
-      "voiceAssist": "语音提示-1",
+      "screenHeader": "设置",
+      "general": "通用",
+      "language": "语言",
+      "voiceAssist": "语音提示",
       "shareAndFeedback": "分享和反馈",
-      "rateUs": "给我们评分-1",
-      "shareWithFriends": "分享给朋友-1",
-      "sendFeedback": "发送反馈-1"
+      "rateUs": "给我们评分",
+      "shareWithFriends": "分享给朋友",
+      "sendFeedback": "发送反馈"
     },
     "errors": {
       "multipleActivePresetsFound": "期望找到1个激活的预设，实际找到数量",

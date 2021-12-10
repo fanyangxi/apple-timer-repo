@@ -1,70 +1,70 @@
 {
   "translation": {
     "home": {
-      "screenHeader": "Apple Timer-1",
-      "timeRemaining": "Time remaining-1",
-      "totalTime": "Total time-1",
-      "cyclesLeft": "Cycles left-1",
-      "setsLeft": "Sets left-1",
-      "start": "Start-1",
-      "pause": "Pause-1",
-      "resume": "Resume-1",
-      "stop": "Stop-1"
+      "screenHeader": "Apple Timer",
+      "timeRemaining": "Time remaining",
+      "totalTime": "Total time",
+      "cyclesLeft": "Cycles left",
+      "setsLeft": "Sets left",
+      "start": "Start",
+      "pause": "Pause",
+      "resume": "Resume",
+      "stop": "Stop"
     },
     "workoutDetail": {
-      "prepare": "Prepare-1",
-      "workout": "Workout-1",
-      "rest": "Rest-1",
-      "cycles": "Cycles-1",
-      "sets": "Sets-1"
+      "prepare": "Prepare",
+      "workout": "Workout",
+      "rest": "Rest",
+      "cycles": "Cycles",
+      "sets": "Sets"
     },
     "confirmStopping": {
-      "title": "Confirm Stopping-1",
-      "description": "Are you sure to stop current workout timer?-1",
-      "cancel": "Cancel-1",
-      "stop": "Stop!-1"
+      "title": "Confirm Stopping",
+      "description": "Are you sure to stop current workout timer?",
+      "cancel": "Cancel",
+      "stop": "Stop!"
     },
     "presetsSelection": {
-      "title": "My Presets-1",
+      "title": "My Presets",
       "deletePresetFailed": "Delete preset failed"
     },
     "confirmDeletion": {
-      "title": "Confirm Deletion-1",
-      "description": "Are you sure to delete preset-1",
-      "cancel": "Cancel-1",
-      "delete": "Yes, delete it-1"
+      "title": "Confirm Deletion",
+      "description": "Are you sure to delete preset",
+      "cancel": "Cancel",
+      "delete": "Yes, delete it"
     },
     "presetDetail": {
-      "creatingTitle": "Create New Preset-1",
-      "editingTitle": "Edit Preset Detail-1",
-      "prepare": "Prepare Duration-1",
-      "workout": "Workout Duration-1",
-      "rest": "Rest Duration-1",
-      "cycles": "Cycles-1",
-      "sets": "Sets-1",
-      "cancel": "Cancel-1",
-      "save": "Save-1"
+      "creatingTitle": "Create New Preset",
+      "editingTitle": "Edit Preset Detail",
+      "prepare": "Prepare Duration",
+      "workout": "Workout Duration",
+      "rest": "Rest Duration",
+      "cycles": "Cycles",
+      "sets": "Sets",
+      "cancel": "Cancel",
+      "save": "Save"
     },
     "confirmDiscarding": {
-      "title": "Confirm Discarding-1",
-      "description": "Data has been changed. Do you want to discard the changes?-1",
-      "cancel": "Keep Editing-1",
-      "discard": "Discard!-1"
+      "title": "Confirm Discarding",
+      "description": "Data has been changed. Do you want to discard the changes?",
+      "cancel": "Keep Editing",
+      "discard": "Discard!"
     },
     "durationPicker": {
-      "hours": "Hours-1",
-      "minutes": "Minutes-1",
-      "seconds": "Seconds-1"
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
     },
     "settings": {
-      "screenHeader": "Settings-1",
-      "general": "General-1",
-      "language": "Language-1",
-      "voiceAssist": "Voice Assist-1",
-      "shareAndFeedback": "Share & Feedback-1",
-      "rateUs": "Rate us-1",
-      "shareWithFriends": "Share with friends-1",
-      "sendFeedback": "Send feedback-1"
+      "screenHeader": "Settings",
+      "general": "General",
+      "language": "Language",
+      "voiceAssist": "Voice Assist",
+      "shareAndFeedback": "Share & Feedback",
+      "rateUs": "Rate us",
+      "shareWithFriends": "Share with friends",
+      "sendFeedback": "Send feedback"
     },
     "errors": {
       "multipleActivePresetsFound": "Expect 1 active item to be found, actually found",
