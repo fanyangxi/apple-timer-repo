@@ -29,7 +29,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = props => {
   }
 
   const mergedRootContainerStyle = [
-    styles.rootContainer,
+    styles.contentContainer,
     {
       height: NAVIGATION_BAR_HEIGHT,
       backgroundColor: props.backgroundColor || Colors.mineShaft,
@@ -60,7 +60,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = props => {
 }
 
 const styles = StyleSheet.create({
-  rootContainer: {
+  contentContainer: {
     height: NAVIGATION_BAR_HEIGHT,
     flexDirection: 'row',
     justifyContent: 'space-between',

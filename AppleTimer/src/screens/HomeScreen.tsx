@@ -398,8 +398,8 @@ export const HomeScreen: React.FC = (): ReactElement => {
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flexDirection: 'column',
     flex: 1,
+    flexDirection: 'column',
     // backgroundColor: 'lightgrey',
     justifyContent: 'space-around',
     paddingHorizontal: Spacings.s_8,
