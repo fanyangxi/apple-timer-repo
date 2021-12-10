@@ -28,6 +28,7 @@ import { ImageBackground1 } from '@/components/ImageBackground1'
 import { UserSettings } from '@/models/common'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { useTranslation } from 'react-i18next'
+import KeepAwake from 'react-native-keep-awake'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -83,7 +84,9 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setSecsLeftInCurrentWorkout(secsLeft)
     }
     //
-    timerSvc.OnTimerStarted = async () => {}
+    timerSvc.OnTimerStarted = async () => {
+      KeepAwake.activate()
+    }
     timerSvc.OnPaused = async () => {
       logger.info(`${TAG}: timerSvc.OnPaused`)
       workoutDetailViewRef.current?.pauseAnim()
@@ -99,6 +102,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setTickedContext(getRawTickedContext(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
+      KeepAwake.activate()
     }
     timerSvc.OnTimerCompleted = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
