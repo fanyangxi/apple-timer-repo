@@ -1,20 +1,20 @@
 
 ### Concepts:
 Preset:
-- prepare: in Sec
-- work: in Sec
-- rest: in Sec
+- prepare (准备): in Sec
+- work (活动): in Sec
+- rest (休息): in Sec
 - sets-count:
 - cycles-divider: in Sec
 - cycles count: int,
 
-Preset:
+Preset (预设):
 - The user's pre-configuration of a workout timer.
 
-Cycles:
+Cycles (周期):
 - A cycle includes several sets.
 
-Set: has multiple reps/repetitions;
+Set (组): has multiple reps/repetitions;
 - A set is a series of repetitions performed sequentially, with rest interval in between. For example, eight repetitions can be one set of bench presses.
 
 Phase:

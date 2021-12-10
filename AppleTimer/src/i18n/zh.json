@@ -1,10 +1,80 @@
 {
   "translation": {
     "home": {
-      "screenHeader": "苹果计时器"
+      "screenHeader": "苹果计时器-1",
+      "timeRemaining": "剩余时间-1",
+      "totalTime": "总共时间-1",
+      "cyclesLeft": "剩余周期-1",
+      "setsLeft": "剩余组-1",
+      "start": "开始-1",
+      "pause": "暂停-1",
+      "resume": "继续-1",
+      "stop": "停止-1"
+    },
+    "workoutDetail": {
+      "prepare": "准备-1",
+      "workout": "运动-1",
+      "rest": "休息-1",
+      "cycles": "周期-1",
+      "sets": "组-1"
+    },
+    "confirmStopping": {
+      "title": "确认停止-1",
+      "description": "确认要停止当前的运动计时器吗？-1",
+      "cancel": "取消-1",
+      "stop": "停止！-1"
+    },
+    "presetsSelection": {
+      "title": "管理我的预设-1",
+      "deletePresetFailed": "删除预设失败"
+    },
+    "confirmDeletion": {
+      "title": "确认删除-1",
+      "description": "确认要删除这个预设吗-1",
+      "cancel": "取消-1",
+      "delete": "是的, 删除它-1"
+    },
+    "presetDetail": {
+      "creatingTitle": "创建新的预设-1",
+      "editingTitle": "编辑预设信息-1",
+      "prepare": "准备时长-1",
+      "workout": "活动时长-1",
+      "rest": "休息时长-1",
+      "cycles": "周期数-1",
+      "sets": "组数-1",
+      "cancel": "取消-1",
+      "save": "保存-1"
+    },
+    "confirmDiscarding": {
+      "title": "确认放弃更改-1",
+      "description": "数据已经被更改，确认要丢弃这些更改吗？-1",
+      "cancel": "继续编辑-1",
+      "discard": "丢弃！-1"
+    },
+    "durationPicker": {
+      "hours": "小时-1",
+      "minutes": "分钟-1",
+      "seconds": "秒-1"
     },
     "settings": {
-      "screenHeader": "设置"
+      "screenHeader": "设置-1",
+      "general": "通用-1",
+      "language": "语言-1",
+      "voiceAssist": "语音提示-1",
+      "shareAndFeedback": "分享和反馈",
+      "rateUs": "给我们评分-1",
+      "shareWithFriends": "分享给朋友-1",
+      "sendFeedback": "发送反馈-1"
+    },
+    "errors": {
+      "multipleActivePresetsFound": "期望找到1个激活的预设，实际找到数量",
+      "nameDuplicated": "名称已经存在",
+      "idDuplicated": "ID已经存在",
+      "presetCannotFound": "这个预设无法被找到",
+      "deleteActivePresetNotAllowed": "已经激活的预设不允许被删除",
+      "maximumAllowedPresetDurationExceeded": "预设的总不允许超过最大值（72小时），当前为",
+      "presetNameCannotBeEmpty": "预设名称不允许为空",
+      "presetFieldsCannotBeEmpty": "预设的各个字段（准备/活动/休息/组数/周期数）不允许为空"
     }
   }
 }
