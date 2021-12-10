@@ -429,23 +429,23 @@ const styles = StyleSheet.create({
     // backgroundColor: '#3C3C3C', // '#202021',
     borderRadius: RadiusSizes.r8,
   },
-  summaryDetail: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: Spacings.s_4,
-  },
   title: {
     backgroundColor: 'green', // '#202021',
     alignItems: 'center',
-  },
-  presetSelectionButton: {
-    paddingHorizontal: 32,
-    paddingVertical: 12,
   },
   summaryDivider: {
     flexDirection: 'column',
     alignItems: 'center',
     // backgroundColor: 'green',
+  },
+  summaryDetail: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Spacings.s_4,
+  },
+  presetSelectionButton: {
+    paddingHorizontal: 32,
+    paddingVertical: 12,
   },
   timeRemainingContainer: {
     alignItems: 'flex-start',
