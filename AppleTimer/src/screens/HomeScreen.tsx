@@ -109,40 +109,30 @@ export const HomeScreen: React.FC = (): ReactElement => {
       logger.info(`${TAG}: timerSvc.OnPreparePhaseStarted`)
       workoutDetailViewRef.current?.startOrResumePreparePhaseAnim()
     }
-    timerSvc.OnPreparePhaseClosing = async (secsLeft: number, ticked: TickedContext) => {
-      const cycleSetsRemainingCount: number = ticked.cycleSetsRemainingCount
-      notificationServiceRef.current?.playSounds([
-        Sounds.ThreeTwoOne,
-        `num_${cycleSetsRemainingCount}.mp3`,
-        Sounds.RepetitionsToGo,
-        Sounds.Workout,
-      ])
+    timerSvc.OnPreparePhaseClosing = async () => {
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne])
     }
-    timerSvc.OnSetStarted = async () => {
+    timerSvc.OnSetStarted = async (secsLeft: number, ticked: TickedContext) => {
       logger.info(`${TAG}: timerSvc.OnSetStarted`)
       workoutDetailViewRef.current?.resetSetAnim()
+      const cycleSetsRemainingCount: number = ticked.cycleSetsRemainingCount
+      notificationServiceRef.current?.playSounds([`num_${cycleSetsRemainingCount}.mp3`, Sounds.RepetitionsToGo])
     }
     timerSvc.OnWorkoutPhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnWorkoutPhaseStarted`)
       workoutDetailViewRef.current?.startOrResumeWorkoutPhaseAnim()
+      notificationServiceRef.current?.playSounds([Sounds.Workout])
     }
     timerSvc.OnWorkoutPhaseClosing = async () => {
-      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne, Sounds.Rest])
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne])
     }
     timerSvc.OnRestPhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnRestPhaseStarted`)
       workoutDetailViewRef.current?.startOrResumeRestPhaseAnim()
+      notificationServiceRef.current?.playSounds([Sounds.Rest])
     }
-    timerSvc.OnRestPhaseClosing = async (secsLeft: number, ticked: TickedContext) => {
-      // By the time `RestPhaseClosing` event is triggered, the current Set is not finished yet. So, to tell
-      // exactly how many sets left after this, we need to do '-1' here.
-      const cycleSetsLeft: number = ticked.cycleSetsRemainingCount - 1
-      notificationServiceRef.current?.playSounds([
-        Sounds.ThreeTwoOne,
-        `num_${cycleSetsLeft}.mp3`,
-        Sounds.RepetitionsToGo,
-        Sounds.Workout,
-      ])
+    timerSvc.OnRestPhaseClosing = async () => {
+      notificationServiceRef.current?.playSounds([Sounds.ThreeTwoOne])
     }
     return timerSvc
   }
