@@ -171,7 +171,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
     })
   }
 
-  const SUMMARY_HEIGHT = 120
+  const SUMMARY_HEIGHT = Platform.select({ ios: 120, android: 128, default: 120 })
   return (
     <ScreenContainer
       backgroundComponent={() => <ImageBackground1 />}
