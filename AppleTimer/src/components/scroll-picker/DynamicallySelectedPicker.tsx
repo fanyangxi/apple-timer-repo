@@ -19,6 +19,7 @@ type DynamicallySelectedPickerProps = {
   onScrollEndDrag?: (...args: any[]) => any
   initialSelectedIndex?: number
   transparentItemRows?: number
+  // Must be a multiples of 7, refers to line-87 `itemHeight calculation`
   height?: number
   width?: number
   allItemsColor?: string

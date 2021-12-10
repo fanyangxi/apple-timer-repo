@@ -5,25 +5,30 @@ import { Modalize } from 'react-native-modalize'
 import { ScrollEventArgs } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import DynamicallySelectedPicker from '@/components/scroll-picker/DynamicallySelectedPicker'
+import { Languages } from '@/models/common'
 
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
 
 export interface BottomPickerPopupProps {
   popupRef: React.RefObject<Modalize>
-  value?: number
+  value?: Languages
   pickerTitle?: string
-  onValueChanged?: (newValue: number) => void
+  onValueChanged?: (newValue: Languages) => void
 }
 
-const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
+const rawSourceItems = [
+  { value: Languages.English, label: 'English' },
+  { value: Languages.ChineseSimplified, label: '简体中文' },
+]
 
-export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
+export const BottomLanguagePickerPopup: React.FC<BottomPickerPopupProps> = ({
   popupRef,
   value,
   pickerTitle,
   onValueChanged,
 }) => {
-  const [localValue, setLocalValue] = useState<number>(0)
+  const defaultSelected = Languages.English
+  const [localValue, setLocalValue] = useState<Languages>(defaultSelected)
 
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
@@ -45,9 +50,7 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
       panGestureEnabled={false}
       withHandle={false}
       closeOnOverlayTap={true}
-      onOpen={() => {
-        setLocalValue(value || 0)
-      }}
+      onOpen={() => setLocalValue(value || defaultSelected)}
       onClose={() => {
         console.log(`>>> local: ${localValue}`)
         onValueChanged && onValueChanged(localValue)
@@ -57,20 +60,20 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
         <View style={styles.actionButtonsBar} />
         <View style={styles.content}>
           <View style={styles.pickerColumn}>
-            <Text style={styles.pickerColumnTitle}>{pickerTitle ?? 'Number'}</Text>
+            <Text style={styles.pickerColumnTitle}>{pickerTitle ?? 'Language'}</Text>
             <DynamicallySelectedPicker
-              items={numbersSourceItems}
-              initialSelectedIndex={localValue}
-              transparentItemRows={3}
+              items={rawSourceItems}
+              initialSelectedIndex={rawSourceItems.findIndex(item => item.value === localValue)}
               onMomentumScrollEnd={(event: ScrollEventArgs) => {
-                // console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
-                setLocalValue(parseInt(event.item.value, 10))
+                console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
+                setLocalValue(event.item.value)
               }}
               width={PickerColumnsContainerWidth}
-              height={266}
+              height={161}
+              transparentItemRows={1}
               allItemsColor={Colors.text}
               selectedItemBorderColor={Colors.nevada}
-              fontSize={22}
+              fontSize={18}
               topGradientColors={topGradientColors}
               bottomGradientColors={bottomGradientColors}
             />

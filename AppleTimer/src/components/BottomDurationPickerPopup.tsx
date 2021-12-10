@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { Colors, Spacings } from '@/theme/Variables'
+import { Colors, Fonts, Spacings } from '@/theme/Variables'
 import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
 import { ScrollEventArgs } from '@/common/constants'
@@ -58,7 +58,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
         setLocalSeconds(seconds)
       }}
       onClose={() => {
-        console.log(`>>> local: h${localHours}, m${localMinutes}, s${localSeconds}`)
+        console.log(`>>> local: ${localHours}h, ${localMinutes}m, ${localSeconds}s`)
         const newDurationSecs = localHours * 60 * 60 + localMinutes * 60 + localSeconds
         onValueChanged && onValueChanged(newDurationSecs)
       }}
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pickerColumnTitle: {
+    ...Fonts.titleRegular,
     paddingTop: Spacings.s_16,
     fontWeight: 'bold',
   },
