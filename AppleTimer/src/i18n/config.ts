@@ -16,8 +16,8 @@ export const initiateI18n = (language: Languages = Languages.English) => {
     .init({
       lng: language,
       fallbackLng: Languages.English,
-      // TODO: disable this for PROD
-      debug: true,
+      // // TODO: disable this for PROD
+      // debug: true,
       interpolation: {
         escapeValue: false, // not needed for react as it escapes by default
       },
