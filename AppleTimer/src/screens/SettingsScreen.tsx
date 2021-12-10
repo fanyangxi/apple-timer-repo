@@ -10,7 +10,7 @@ import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
-import { handleErr } from '@/utils/common-util'
+import { handleErr, toLanguageText } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { AppStateContext } from '@/common/app-state-context'
@@ -54,7 +54,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         </View>
         {/*Choose Language*/}
         {renderActionButton({
-          title: `${t('settings.language')}: ${appState.userSettings.language}`,
+          title: `${t('settings.language')}: ${toLanguageText(appState.userSettings.language)}`,
           onPress: () => languagePickerRef.current?.open(),
         })}
         {/*Voice Assist*/}

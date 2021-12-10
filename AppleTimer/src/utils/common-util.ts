@@ -72,3 +72,11 @@ export const getDeviceLanguageCode = (function () {
     return deviceLanguageEnum
   }
 })()
+
+export const toLanguageText = (input?: string): string => {
+  const theMaps = {
+    [`${Languages.English}`]: 'English',
+    [`${Languages.ChineseSimplified}`]: '简体中文',
+  }
+  return theMaps[input ?? 'unknown-language-code'] ?? 'UNKNOWN'
+}
