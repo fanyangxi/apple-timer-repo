@@ -1,10 +1,80 @@
 {
   "translation": {
     "home": {
-      "screenHeader": "La la la 3"
+      "screenHeader": "Apple Timer-1",
+      "timeRemaining": "Time remaining-1",
+      "totalTime": "Total time-1",
+      "cyclesLeft": "Cycles left-1",
+      "setsLeft": "Sets left-1",
+      "start": "Start-1",
+      "pause": "Pause-1",
+      "resume": "Resume-1",
+      "stop": "Stop-1"
+    },
+    "workoutDetail": {
+      "prepare": "Prepare-1",
+      "workout": "Workout-1",
+      "rest": "Rest-1",
+      "cycles": "Cycles-1",
+      "sets": "Sets-1"
+    },
+    "confirmStopping": {
+      "title": "Confirm Stopping-1",
+      "description": "Are you sure to stop current workout timer?-1",
+      "cancel": "Cancel-1",
+      "stop": "Stop!-1"
+    },
+    "presetsSelection": {
+      "title": "My Presets-1",
+      "deletePresetFailed": "Delete preset failed"
+    },
+    "confirmDeletion": {
+      "title": "Confirm Deletion-1",
+      "description": "Are you sure to delete preset-1",
+      "cancel": "Cancel-1",
+      "delete": "Yes, delete it-1"
+    },
+    "presetDetail": {
+      "creatingTitle": "Create New Preset-1",
+      "editingTitle": "Edit Preset Detail-1",
+      "prepare": "Prepare Duration-1",
+      "workout": "Workout Duration-1",
+      "rest": "Rest Duration-1",
+      "cycles": "Cycles-1",
+      "sets": "Sets-1",
+      "cancel": "Cancel-1",
+      "save": "Save-1"
+    },
+    "confirmDiscarding": {
+      "title": "Confirm Discarding-1",
+      "description": "Data has been changed. Do you want to discard the changes?-1",
+      "cancel": "Keep Editing-1",
+      "discard": "Discard!-1"
+    },
+    "durationPicker": {
+      "hours": "Hours-1",
+      "minutes": "Minutes-1",
+      "seconds": "Seconds-1"
     },
     "settings": {
-      "screenHeader": "Settings"
+      "screenHeader": "Settings-1",
+      "general": "General-1",
+      "language": "Language-1",
+      "voiceAssist": "Voice Assist-1",
+      "shareAndFeedback": "Share & Feedback-1",
+      "rateUs": "Rate us-1",
+      "shareWithFriends": "Share with friends-1",
+      "sendFeedback": "Send feedback-1"
+    },
+    "errors": {
+      "multipleActivePresetsFound": "Expect 1 active item to be found, actually found",
+      "nameDuplicated": "Name already exists",
+      "idDuplicated": "Id already exists",
+      "presetCannotFound": "Target preset cannot be found",
+      "deleteActivePresetNotAllowed": "Delete active preset is not allowed",
+      "maximumAllowedPresetDurationExceeded": "Maximum allowed duration (72hrs) exceeded, currently",
+      "presetNameCannotBeEmpty": "Empty preset name is not allowed",
+      "presetFieldsCannotBeEmpty": "The prepare/workout/rest/setsCount/cyclesCount of the preset cannot be 0"
     }
   }
 }

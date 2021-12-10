@@ -50,15 +50,18 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       <ScrollView style={styles.rootContainer}>
         {/* ==== General ==== */}
         <View style={styles.sectionTitleContainer}>
-          <Text style={[Fonts.titleRegular, FontColors.white]}>General</Text>
+          <Text style={[Fonts.titleRegular, FontColors.white]}>{t('settings.general')}</Text>
         </View>
         {/*Choose Language*/}
-        {renderActionButton({ title: 'Choose Language', onPress: () => languagePickerRef.current?.open() })}
+        {renderActionButton({
+          title: `${t('settings.language')}: ${appState.userSettings.language}`,
+          onPress: () => languagePickerRef.current?.open(),
+        })}
         {/*Voice Assist*/}
         <View style={styles.row}>
           <NeomorphContainer>
             <View style={styles.card}>
-              <Text style={[Fonts.textRegular, FontColors.white]}>{'Voice Assist'}</Text>
+              <Text style={[Fonts.textRegular, FontColors.white]}>{t('settings.voiceAssist')}</Text>
               <SwitchToggleMy
                 switchOn={appState.userSettings.enableVoiceAssist ?? true}
                 onPress={() => {
@@ -73,17 +76,17 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         </View>
         {/* ==== Share & Feedback ==== */}
         <View style={styles.sectionTitleContainer}>
-          <Text style={[Fonts.titleRegular, FontColors.white]}>Share & Feedback</Text>
+          <Text style={[Fonts.titleRegular, FontColors.white]}>{t('settings.shareAndFeedback')}</Text>
         </View>
-        {renderActionButton({ title: 'Rate us', onPress: () => {} })}
-        {renderActionButton({ title: 'Share with friends', onPress: () => {} })}
-        {renderActionButton({ title: 'Send feedback', onPress: () => {} })}
+        {renderActionButton({ title: t('settings.rateUs'), onPress: () => {} })}
+        {renderActionButton({ title: t('settings.shareWithFriends'), onPress: () => {} })}
+        {renderActionButton({ title: t('settings.sendFeedback'), onPress: () => {} })}
       </ScrollView>
       {/* misc(s) */}
       <BottomLanguagePickerPopup
         popupRef={languagePickerRef}
         value={appState.userSettings.language ?? DEFAULT_USER_SETTINGS.language}
-        pickerTitle={'Language'}
+        pickerTitle={t('settings.language')}
         onValueChanged={newValue => {
           console.log(`Language: ${newValue}`)
           i18n.changeLanguage(newValue, () => logger.info(`Change language to (${newValue}) done`)).catch(handleErr)

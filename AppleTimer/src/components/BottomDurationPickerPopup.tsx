@@ -6,6 +6,7 @@ import { ScrollEventArgs } from '@/common/constants'
 import { DeviceScreen } from '@/common/device'
 import { toDTime } from '@/utils/date-util'
 import DynamicallySelectedPicker from '@/components/scroll-picker/DynamicallySelectedPicker'
+import { useTranslation } from 'react-i18next'
 
 const PickerColumnsContainerWidth = DeviceScreen.width - Spacings.s_24
 const PickerColumnWidth = PickerColumnsContainerWidth / 3
@@ -23,6 +24,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
   duration,
   onValueChanged,
 }) => {
+  const { t } = useTranslation()
   const [localHours, setLocalHours] = useState<number>(0)
   const [localMinutes, setLocalMinutes] = useState<number>(0)
   const [localSeconds, setLocalSeconds] = useState<number>(0)
@@ -67,7 +69,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
         <View style={styles.actionButtonsBar} />
         <View style={styles.content}>
           <View style={styles.pickerColumn}>
-            <Text style={styles.pickerColumnTitle}>Hours</Text>
+            <Text style={styles.pickerColumnTitle}>{t('durationPicker.hours')}</Text>
             <DynamicallySelectedPicker
               items={hoursDataSourceItems}
               initialSelectedIndex={localHours}
@@ -85,7 +87,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
             />
           </View>
           <View style={styles.pickerColumn}>
-            <Text style={styles.pickerColumnTitle}>Minutes</Text>
+            <Text style={styles.pickerColumnTitle}>{t('durationPicker.minutes')}</Text>
             <DynamicallySelectedPicker
               items={minutesDataSourceItems}
               initialSelectedIndex={localMinutes}
@@ -103,7 +105,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
             />
           </View>
           <View style={styles.pickerColumn}>
-            <Text style={styles.pickerColumnTitle}>Seconds</Text>
+            <Text style={styles.pickerColumnTitle}>{t('durationPicker.seconds')}</Text>
             <DynamicallySelectedPicker
               items={secondsDataSourceItems}
               initialSelectedIndex={localSeconds}

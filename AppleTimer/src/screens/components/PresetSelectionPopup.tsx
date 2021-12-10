@@ -16,6 +16,7 @@ import { EditButton } from '@/components/button/EditButton'
 import { DeleteButton } from '@/components/button/DeleteButton'
 import { formatSecs } from '@/utils/date-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
+import { useTranslation } from 'react-i18next'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -32,6 +33,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   onDeleteItemClicked,
   onAddClicked,
 }) => {
+  const { t } = useTranslation()
   const [cachedPresets, setCachedPresets] = useState<Preset[]>([])
   const [deletingPreset, setDeletingPreset] = useState<Preset | undefined>()
   const [isManagingList, setIsManagingList] = useState<boolean>(false)
@@ -66,7 +68,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         Toast.show({
           type: 'error',
           position: 'top',
-          text1: 'Delete preset failed:',
+          text1: t('presetsSelection.deletePresetFailed'),
           text2: `${e}`,
         })
       })
@@ -93,10 +95,12 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           >
             <Text style={[Fonts.titleSmall, it.IsActive ? FontColors.clickable : FontColors.white]}>{it.Name}</Text>
             <Text style={[Fonts.textSmall, FontColors.grey]}>
-              Prepare:{formatSecs(it.PrepareSecs)}, Workout:{formatSecs(it.WorkoutSecs)}, Rest:{formatSecs(it.RestSecs)}
+              {t('workoutDetail.prepare')} {formatSecs(it.PrepareSecs)}, {t('workoutDetail.workout')}
+              {formatSecs(it.WorkoutSecs)}, {t('workoutDetail.rest')}:{formatSecs(it.RestSecs)}
             </Text>
             <Text style={[Fonts.textSmall, FontColors.grey]}>
-              Cycles:{formatSecs(it.CyclesCount)} / Sets:{formatSecs(it.SetsCount)}
+              {t('workoutDetail.cycles')}:{formatSecs(it.CyclesCount)} / {t('workoutDetail.sets')}:
+              {formatSecs(it.SetsCount)}
             </Text>
           </TouchableOpacity>
           <View style={styles.actionButton}>
@@ -131,7 +135,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
         <View style={styles.leftButtonContainer}>
           {!isManagingList && <AddButton onPress={() => onAddClicked && onAddClicked()} />}
         </View>
-        <Text style={[Fonts.titleRegular, FontColors.white]}>My Presets</Text>
+        <Text style={[Fonts.titleRegular, FontColors.white]}>{t('presetsSelection.title')}</Text>
         <View style={styles.rightButtonContainer}>
           {!isManagingList ? (
             <ListButton onPress={() => setIsManagingList(true)} />
@@ -150,16 +154,16 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       </ScrollView>
       <ConfirmDialog
         visible={showConfirmDialog}
-        title={'Confirm Deletion'}
+        title={t('confirmDeletion.title')}
         titleStyle={[Fonts.titleRegular, FontColors.warn]}
-        message={`Are you sure to delete preset (${deletingPreset?.Name})?`}
+        message={`${t('confirmDeletion.description')} (${deletingPreset?.Name})?`}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
-          title: 'Cancel',
+          title: t('confirmDeletion.cancel'),
           onPress: () => setShowConfirmDialog(false),
         }}
         positiveButton={{
-          title: 'Yes, delete it',
+          title: t('confirmDeletion.delete'),
           titleStyle: { color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)

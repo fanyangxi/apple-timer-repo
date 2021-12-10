@@ -5,6 +5,7 @@ import _ from 'lodash'
 import uuid from 'react-native-uuid'
 import { MAX_PRESET_DURATION_ALLOWED_SECS } from '@/common/constants'
 import { formatSecs } from '@/utils/date-util'
+import i18next from 'i18next'
 
 const DATA_TABLE_KEY = 'THE-TIMER-9527'
 
@@ -20,7 +21,7 @@ const getActivePreset = async (): Promise<Preset> => {
 
   const results = items.filter(item => item.isActive)
   if (results.length !== 1) {
-    throw new Error(`Expect 1 active item to be found, actually found: ${results.length}`)
+    throw new Error(`${i18next.t('errors.multipleActivePresetsFound')}: ${results.length}`)
   }
 
   return _toModel(results[0])
@@ -49,11 +50,11 @@ const createPreset = async (model: Preset): Promise<void> => {
   const items = await _getPresetEntities()
   const isNameExistAlready = items.filter(item => item.name === entity.name).length > 0
   if (isNameExistAlready) {
-    throw new Error(`Name:(${entity.name}) already exists`)
+    throw new Error(`${i18next.t('errors.nameDuplicated')}. (${entity.name})`)
   }
   const existing = _.first(items.filter(item => item.id === entity.id))
   if (existing) {
-    throw new Error(`Id:(${entity.id}) already exists`)
+    throw new Error(`${i18next.t('errors.idDuplicated')}. (${entity.id})`)
   }
 
   // saving/create:
@@ -72,11 +73,11 @@ const updatePreset = async (model: Preset): Promise<void> => {
   const items = await _getPresetEntities()
   const isNameExistAlready = items.filter(item => item.id !== model.Id && item.name === entity.name).length > 0
   if (isNameExistAlready) {
-    throw new Error(`Name:(${entity.name}) already exists`)
+    throw new Error(`${i18next.t('errors.nameDuplicated')}. (${entity.name})`)
   }
   const existing = _.first(items.filter(item => item.id === entity.id))
   if (!existing) {
-    throw new Error(`Target with id:(${entity.id}) doesn't exist`)
+    throw new Error(`${i18next.t('errors.idDuplicated')}. (${entity.id})`)
   }
 
   // saving/update:
@@ -89,11 +90,11 @@ const updatePreset = async (model: Preset): Promise<void> => {
 const deletePreset = async (presetId: string): Promise<void> => {
   const entity = await _getPresetEntityById(presetId)
   if (!entity) {
-    throw new Error(`Target preset:id:${presetId} cannot be found`)
+    throw new Error(`${i18next.t('errors.presetCannotFound')}. Id:${presetId}`)
   }
 
   if (entity.isActive) {
-    throw new Error(`Delete is not allowed on active preset:id:${presetId}`)
+    throw new Error(`${i18next.t('errors.deleteActivePresetNotAllowed')}. Id:${presetId}`)
   }
 
   // Only keep target item as `Active`:
@@ -106,7 +107,7 @@ const deletePreset = async (presetId: string): Promise<void> => {
 const setActivePreset = async (presetId: string): Promise<void> => {
   const entity = await _getPresetEntityById(presetId)
   if (!entity) {
-    throw new Error(`Target preset:id:${presetId} cannot be found`)
+    throw new Error(`Target preset cannot be found. Id:${presetId}`)
   }
 
   // Only keep target item as `Active`:
@@ -153,10 +154,10 @@ const _toModel = (entity: PresetEntity): Preset => {
 const _validateInputData = (entity: PresetEntity): void => {
   const duration = (entity.prepareSecs + (entity.workoutSecs + entity.restSecs) * entity.setsCount) * entity.cyclesCount
   if (duration > MAX_PRESET_DURATION_ALLOWED_SECS) {
-    throw new Error(`Maximum allowed duration (72hrs) exceeded, currently: ${formatSecs(duration)}`)
+    throw new Error(`${i18next.t('errors.maximumAllowedPresetDurationExceeded')}: ${formatSecs(duration)}`)
   }
   if (_.isEmpty(entity.name)) {
-    throw new Error('Empty preset name is not allowed')
+    throw new Error(`${i18next.t('errors.presetNameCannotBeEmpty')}`)
   }
   if (
     entity.prepareSecs === 0 ||
@@ -165,7 +166,7 @@ const _validateInputData = (entity: PresetEntity): void => {
     entity.setsCount === 0 ||
     entity.cyclesCount === 0
   ) {
-    throw new Error('The prepare/workout/rest/setsCount/cyclesCount of the preset cannot be 0')
+    throw new Error(`${i18next.t('errors.presetFieldsCannotBeEmpty')}`)
   }
 }
 

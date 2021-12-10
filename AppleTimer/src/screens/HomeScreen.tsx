@@ -250,11 +250,11 @@ export const HomeScreen: React.FC = (): ReactElement => {
               <View style={styles.summaryDetail}>
                 <View style={styles.timeRemainingContainer}>
                   <Text style={styles.itemValue}>{`${format(toDTime(secsLeftInCurrentWorkout ?? 0))}`}</Text>
-                  <Text style={styles.itemLabel}>{'Time remaining'}</Text>
+                  <Text style={styles.itemLabel}>{t('home.timeRemaining')}</Text>
                 </View>
                 <View style={styles.totalTimeContainer}>
                   <Text style={styles.itemValue}>{format(toDTime(getTotalPresetDurationSecs(activePreset)))}</Text>
-                  <Text style={styles.itemLabel}>Total time</Text>
+                  <Text style={styles.itemLabel}>{t('home.totalTime')}</Text>
                 </View>
               </View>
             </View>
@@ -286,17 +286,15 @@ export const HomeScreen: React.FC = (): ReactElement => {
               <View style={styles.summaryDetail}>
                 <View style={styles.cyclesLeftContainer}>
                   <Text style={styles.itemValue}>{tickedContext?.cyclesRemainingCount}</Text>
-                  <Text style={styles.itemLabel}>{'Cycles left'}</Text>
+                  <Text style={styles.itemLabel}>{t('home.cyclesLeft')}</Text>
                 </View>
                 <View style={styles.setsLeftContainer}>
                   <Text style={styles.itemValue}>{tickedContext?.cycleSetsRemainingCount}</Text>
-                  <Text style={styles.itemLabel}>{'Sets left'}</Text>
+                  <Text style={styles.itemLabel}>{t('home.setsLeft')}</Text>
                 </View>
                 <View style={styles.overallProgressBar}>
                   <Progress.Bar
-                    style={{
-                      alignSelf: 'center',
-                    }}
+                    style={{ alignSelf: 'center' }}
                     color={'#5ea8f6'}
                     height={8}
                     progress={toFixedNumber(1 - (secsLeftInCurrentWorkout ?? 0) / presetTotalDurationSecs)}
@@ -313,7 +311,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
           {(!timerStatus || timerStatus === TimerStatus.IDLE) && (
             <View style={styles.buttonsContainer}>
               <AwesomeButtonMy raiseLevel={2} type="whatsapp" stretch={true} onPress={onStartPressed}>
-                {'Start'}
+                {t('home.start')}
               </AwesomeButtonMy>
             </View>
           )}
@@ -321,7 +319,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonLeft}>
                 <AwesomeButtonMy raiseLevel={2} type="secondary" stretch={true} onPress={onResumePressed}>
-                  {'Resume'}
+                  {t('home.resume')}
                 </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
@@ -331,7 +329,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
                   stretch={true}
                   onPress={() => setShowConfirmDialog(true)}
                 >
-                  {'Stop'}
+                  {t('home.stop')}
                 </AwesomeButtonMy>
               </View>
             </View>
@@ -340,7 +338,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonLeft}>
                 <AwesomeButtonMy raiseLevel={2} type="secondary" stretch={true} onPress={onPausedPressed}>
-                  {'Pause'}
+                  {t('home.pause')}
                 </AwesomeButtonMy>
               </View>
               <View style={styles.buttonRight}>
@@ -350,7 +348,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
                   stretch={true}
                   onPress={() => setShowConfirmDialog(true)}
                 >
-                  {'Stop'}
+                  {t('home.stop')}
                 </AwesomeButtonMy>
               </View>
             </View>
@@ -376,16 +374,16 @@ export const HomeScreen: React.FC = (): ReactElement => {
 
       <ConfirmDialog
         visible={showConfirmDialog}
-        title={'Confirm Stopping'}
+        title={t('confirmStopping.title')}
         titleStyle={[Fonts.titleRegular, FontColors.warn]}
-        message={'Are you sure to stop current workout timer?'}
+        message={t('confirmStopping.description')}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
-          title: 'Cancel',
+          title: t('confirmStopping.cancel'),
           onPress: () => setShowConfirmDialog(false),
         }}
         positiveButton={{
-          title: 'Stop!',
+          title: t('confirmStopping.stop'),
           onPress: () => {
             setShowConfirmDialog(false)
             onStopPressed().catch(() => {})

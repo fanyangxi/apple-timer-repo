@@ -21,8 +21,10 @@ import AwesomeButtonMy from '@/components/button/AwesomeButtonMy'
 import { formatSecs } from '@/utils/date-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useTranslation } from 'react-i18next'
 
 export const PresetDetailScreen: React.FC = (): ReactElement => {
+  const { t } = useTranslation()
   const { goBack } = useNavigation()
   const route = useRoute()
 
@@ -183,7 +185,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar
-        title={isCreatingNewMode ? 'Create New Preset' : 'Edit Preset Detail'}
+        title={isCreatingNewMode ? t('presetDetail.creatingTitle') : t('presetDetail.editingTitle')}
         showBackButton={true}
         backButtonAction={() => cancel()}
       />
@@ -239,7 +241,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textRegular, FontColors.white]}>Prepare:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{t('presetDetail.prepare')}:</Text>
                 <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.PrepareSecs)}</Text>
               </View>
             </Neomorph>
@@ -260,7 +262,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textRegular, FontColors.white]}>Workout Secs:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{t('presetDetail.workout')}:</Text>
                 <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.WorkoutSecs)}</Text>
               </View>
             </Neomorph>
@@ -281,7 +283,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
               }}
             >
               <View style={styles.barItemContent}>
-                <Text style={[Fonts.textRegular, FontColors.white]}>Rest Secs:</Text>
+                <Text style={[Fonts.textRegular, FontColors.white]}>{t('presetDetail.rest')}:</Text>
                 <Text style={[Fonts.textRegular, FontColors.white]}>{formatSecs(current.RestSecs)}</Text>
               </View>
             </Neomorph>
@@ -304,7 +306,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 }}
               >
                 <View style={styles.barItemContent}>
-                  <Text style={[Fonts.textRegular, FontColors.white]}>Cycles:</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>{t('presetDetail.cycles')}:</Text>
                   <Text style={[Fonts.textRegular, FontColors.white]}>{current.CyclesCount}</Text>
                 </View>
               </Neomorph>
@@ -325,7 +327,7 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
                 }}
               >
                 <View style={styles.barItemContent}>
-                  <Text style={[Fonts.textRegular, FontColors.white]}>Sets:</Text>
+                  <Text style={[Fonts.textRegular, FontColors.white]}>{t('presetDetail.sets')}:</Text>
                   <Text style={[Fonts.textRegular, FontColors.white]}>{current.SetsCount}</Text>
                 </View>
               </Neomorph>
@@ -335,13 +337,13 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
         <View style={styles.actionsSection}>
           <View style={styles.buttonLeft}>
             <AwesomeButtonMy raiseLevel={1} type="secondary" stretch={true} onPress={() => cancel()}>
-              {'Cancel'}
+              {t('presetDetail.cancel')}
             </AwesomeButtonMy>
           </View>
           <View style={styles.buttonSeparator} />
           <View style={styles.buttonRight}>
             <AwesomeButtonMy raiseLevel={1} type="whatsapp" stretch={true} onPress={() => saveChanges()}>
-              {'Save'}
+              {t('presetDetail.save')}
             </AwesomeButtonMy>
           </View>
         </View>
@@ -376,21 +378,22 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
       />
       <ConfirmDialog
         visible={showConfirmDialog}
-        title={'Confirmation'}
+        title={t('confirmDiscarding.title')}
         titleStyle={[Fonts.titleRegular, FontColors.warn]}
-        message={'Data has been changed. Do you want to discard the changes?'}
+        message={t('confirmDiscarding.description')}
         onTouchOutside={() => setShowConfirmDialog(false)}
         negativeButton={{
-          title: 'Discard!',
+          title: t('confirmDiscarding.cancel'),
           onPress: () => {
             setShowConfirmDialog(false)
-            goBack()
           },
         }}
         positiveButton={{
-          title: 'Keep Editing',
+          title: t('confirmDiscarding.discard'),
+          titleStyle: { color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
+            goBack()
           },
         }}
       />

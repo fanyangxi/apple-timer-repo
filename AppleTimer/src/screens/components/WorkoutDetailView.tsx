@@ -8,6 +8,7 @@ import { format, toDTime } from '@/utils/date-util'
 import CircularSliderV2, { CircularSliderRefObject } from '@/screens/components/CircularSliderV2'
 import { getCurrentPhaseRemainingSecs } from '@/utils/preset-util'
 import { TimerPhase } from '@/models/timer-phase'
+import { useTranslation } from 'react-i18next'
 
 export type WorkoutDetailViewRefObject = {
   startOrResumePreparePhaseAnim: () => void
@@ -43,6 +44,7 @@ export interface WorkoutDetailViewProps {
  * -- on-timer-completed
  * */
 export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forwardRef((props, ref) => {
+  const { t } = useTranslation()
   const { activePreset, tickedContext } = props
   const prepareSliderRef = useRef<CircularSliderRefObject>()
   const workoutSliderRef = useRef<CircularSliderRefObject>()
@@ -175,7 +177,7 @@ export const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = React.forward
         <View style={styles.hintContainer}>
           <View style={styles.itemsContainer}>
             <Text style={styles.timeCountdown}>{format(toDTime(getCurrentPhaseRemainingSecs(tickedContext)))}</Text>
-            <Text style={styles.hint}>{tickedContext?.cycleCurrentPhase}</Text>
+            <Text style={styles.hint}>{t(`workoutDetail.${tickedContext?.cycleCurrentPhase?.toLowerCase()}`)}</Text>
           </View>
         </View>
       </View>
