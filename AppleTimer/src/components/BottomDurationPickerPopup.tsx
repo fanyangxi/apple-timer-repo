@@ -26,8 +26,11 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
 }) => {
   const { t } = useTranslation()
   const [localHours, setLocalHours] = useState<number>(0)
+  const [isScrollingHours, setIsScrollingHours] = useState<boolean>(false)
   const [localMinutes, setLocalMinutes] = useState<number>(0)
+  const [isScrollingMinutes, setIsScrollingMinutes] = useState<boolean>(false)
   const [localSeconds, setLocalSeconds] = useState<number>(0)
+  const [isScrollingSeconds, setIsScrollingSeconds] = useState<boolean>(false)
 
   const hoursDataSourceItems = rawPickerItems.slice(0, 24)
   const minutesDataSourceItems = rawPickerItems
@@ -52,7 +55,7 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
       modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
       panGestureEnabled={false}
       withHandle={false}
-      closeOnOverlayTap={true}
+      closeOnOverlayTap={!isScrollingHours && !isScrollingMinutes && !isScrollingSeconds}
       onOpen={() => {
         const { hours, minutes, seconds } = toDTime(duration || 0)
         setLocalHours(hours)
@@ -74,7 +77,11 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={hoursDataSourceItems}
               initialSelectedIndex={localHours}
               transparentItemRows={3}
+              onScrollBeginDrag={() => {
+                setIsScrollingHours(true)
+              }}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                setIsScrollingHours(false)
                 setLocalHours(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}
@@ -92,7 +99,11 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={minutesDataSourceItems}
               initialSelectedIndex={localMinutes}
               transparentItemRows={3}
+              onScrollBeginDrag={() => {
+                setIsScrollingMinutes(true)
+              }}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                setIsScrollingMinutes(false)
                 setLocalMinutes(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}
@@ -110,7 +121,11 @@ export const BottomDurationPickerPopup: React.FC<BottomDurationPickerPopupProps>
               items={secondsDataSourceItems}
               initialSelectedIndex={localSeconds}
               transparentItemRows={3}
+              onScrollBeginDrag={() => {
+                setIsScrollingSeconds(true)
+              }}
               onMomentumScrollEnd={(eventArgs: ScrollEventArgs) => {
+                setIsScrollingSeconds(false)
                 setLocalSeconds(parseInt(eventArgs.item.value, 10))
               }}
               width={PickerColumnWidth}

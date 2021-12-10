@@ -29,6 +29,7 @@ export const BottomLanguagePickerPopup: React.FC<BottomPickerPopupProps> = ({
 }) => {
   const defaultSelected = Languages.English
   const [localValue, setLocalValue] = useState<Languages>(defaultSelected)
+  const [isScrolling, setIsScrolling] = useState<boolean>(false)
 
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
@@ -49,7 +50,7 @@ export const BottomLanguagePickerPopup: React.FC<BottomPickerPopupProps> = ({
       modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
       panGestureEnabled={false}
       withHandle={false}
-      closeOnOverlayTap={true}
+      closeOnOverlayTap={!isScrolling}
       onOpen={() => setLocalValue(value || defaultSelected)}
       onClose={() => {
         console.log(`>>> local: ${localValue}`)
@@ -64,8 +65,12 @@ export const BottomLanguagePickerPopup: React.FC<BottomPickerPopupProps> = ({
             <DynamicallySelectedPicker
               items={rawSourceItems}
               initialSelectedIndex={rawSourceItems.findIndex(item => item.value === localValue)}
+              onScrollBeginDrag={() => {
+                setIsScrolling(true)
+              }}
               onMomentumScrollEnd={(event: ScrollEventArgs) => {
                 console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
+                setIsScrolling(false)
                 setLocalValue(event.item.value)
               }}
               width={PickerColumnsContainerWidth}

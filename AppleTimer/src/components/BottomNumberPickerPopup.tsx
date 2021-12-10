@@ -24,6 +24,7 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
   onValueChanged,
 }) => {
   const [localValue, setLocalValue] = useState<number>(0)
+  const [isScrolling, setIsScrolling] = useState<boolean>(false)
 
   const topGradientColors = [
     'rgba( 166, 166, 166, 1 )',
@@ -44,7 +45,7 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
       modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
       panGestureEnabled={false}
       withHandle={false}
-      closeOnOverlayTap={true}
+      closeOnOverlayTap={!isScrolling}
       onOpen={() => {
         setLocalValue(value || 0)
       }}
@@ -62,8 +63,12 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
               items={numbersSourceItems}
               initialSelectedIndex={localValue}
               transparentItemRows={3}
+              onScrollBeginDrag={() => {
+                setIsScrolling(true)
+              }}
               onMomentumScrollEnd={(event: ScrollEventArgs) => {
                 // console.log(`onMomentumScrollEnd: ${event.index}, ${JSON.stringify(event.item)}`)
+                setIsScrolling(false)
                 setLocalValue(parseInt(event.item.value, 10))
               }}
               width={PickerColumnsContainerWidth}
