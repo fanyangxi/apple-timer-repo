@@ -384,6 +384,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
         }}
         positiveButton={{
           title: t('confirmStopping.stop'),
+          titleStyle: { color: Colors.primary },
           onPress: () => {
             setShowConfirmDialog(false)
             onStopPressed().catch(() => {})
