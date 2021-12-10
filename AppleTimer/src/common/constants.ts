@@ -1,7 +1,6 @@
 import { Preset } from '@/models/preset'
-import { Languages, UserSettings } from '@/models/common'
-import { AppStateContextProps } from '@/common/app-state-context'
-import { SetStateAction } from 'react'
+import { UserSettings } from '@/models/common'
+import { getDeviceLanguageCode } from '@/utils/common-util'
 
 export const Screens = {
   Home: 'Home2',
@@ -20,11 +19,6 @@ export type ScrollEventArgs = { index: number; item: any }
 export const MAX_PRESET_DURATION_ALLOWED_SECS = 24 * 60 * 60 * 3 // 72hrs
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
-  language: Languages.English,
+  language: getDeviceLanguageCode(),
   enableVoiceAssist: true,
-}
-
-export const DEFAULT_APP_STATE_CONTEXT: AppStateContextProps = {
-  userSettings: DEFAULT_USER_SETTINGS,
-  setUserSettings: (_: SetStateAction<UserSettings>): void => {},
 }

@@ -1,5 +1,7 @@
 import { Platform } from 'react-native'
 import { logger } from '@/utils/logger'
+import * as RNLocalize from 'react-native-localize'
+import { Languages } from '@/models/common'
 
 export const Sleep = (dely: number): Promise<void> => {
   return new Promise<void>(resolve => setTimeout(() => resolve(), dely))
@@ -54,3 +56,19 @@ export const toFixedNumber = (rawInput: number): number => {
 export const handleErr = (e: Error) => {
   logger.error('Async callback error: ', e)
 }
+
+export const stringToEnumValue = <ET, T>(enumObj: ET, str: string): T => {
+  return (enumObj as any)[Object.keys(enumObj).filter(k => (enumObj as any)[k] === str)[0]]
+}
+
+// Since the user-device locales usually don't change frequently, so we create a closure to make sure it only
+// execute once, to improve efficiency. https://www.w3schools.com/js/js_function_closures.asp
+export const getDeviceLanguageCode = (function () {
+  let deviceLanguageEnum = Languages.English
+  return function (info?: string): Languages {
+    const deviceLanguageCode = RNLocalize.getLocales()[0]?.languageCode
+    deviceLanguageEnum = stringToEnumValue(Languages, deviceLanguageCode) ?? Languages.English
+    logger.info(`${info}: [getDefaultUserSettings] User device device-language-code: ${deviceLanguageCode}`)
+    return deviceLanguageEnum
+  }
+})()
