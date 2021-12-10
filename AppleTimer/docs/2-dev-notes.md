@@ -222,34 +222,6 @@ When do you need context?  You can hold inside the context:
 ```
 
 ```
-  <View style={styles.summaryContent}>
-    <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Rest:</Text>
-      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:15'}</Text>
-    </View>
-    <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Prepare:</Text>
-      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:08'}</Text>
-    </View>
-    <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Workout:</Text>
-      <Text style={[Fonts.textSmall, FontColors.white]}>{'00:40'}</Text>
-    </View>
-  </View>
-  {/*<Divider style={styles.contentDivider} />*/}
-  <View style={styles.summaryContent}>
-    <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Sets:</Text>
-      <Text style={[Fonts.textSmall, FontColors.white]}>{'8'}</Text>
-    </View>
-    <View style={styles.totalTimeContainer}>
-      <Text style={styles.itemLabel}>Cycles:</Text>
-      <Text style={[Fonts.textSmall, FontColors.white]}>{'1'}</Text>
-    </View>
-  </View>
-```
-
-```
 // // phase1RawValue
 // // phase1AnimValue
 // // phase1AnimTiming

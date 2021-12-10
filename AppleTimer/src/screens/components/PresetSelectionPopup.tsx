@@ -93,15 +93,17 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
             disabled={isManagingList}
             onPress={() => onSelectionChanged && onSelectionChanged(it)}
           >
-            <Text style={[Fonts.titleSmall, it.IsActive ? FontColors.clickable : FontColors.white]}>{it.Name}</Text>
-            <Text style={[Fonts.textSmall, FontColors.grey]}>
-              {t('workoutDetail.prepare')} {formatSecs(it.PrepareSecs)}, {t('workoutDetail.workout')}
-              {formatSecs(it.WorkoutSecs)}, {t('workoutDetail.rest')}:{formatSecs(it.RestSecs)}
-            </Text>
-            <Text style={[Fonts.textSmall, FontColors.grey]}>
-              {t('workoutDetail.cycles')}:{formatSecs(it.CyclesCount)} / {t('workoutDetail.sets')}:
-              {formatSecs(it.SetsCount)}
-            </Text>
+            <Text style={[Fonts.titleRegular, it.IsActive ? FontColors.clickable : FontColors.white]}>{it.Name}</Text>
+            <View style={styles.itemDescription}>
+              <Text style={[Fonts.textSmall, FontColors.grey]}>
+                {t('workoutDetail.prepare')} {formatSecs(it.PrepareSecs)}, {t('workoutDetail.workout')}
+                {formatSecs(it.WorkoutSecs)}, {t('workoutDetail.rest')}:{formatSecs(it.RestSecs)}
+              </Text>
+              <Text style={[Fonts.textSmall, FontColors.grey]}>
+                {t('workoutDetail.cycles')}:{formatSecs(it.CyclesCount)} / {t('workoutDetail.sets')}:
+                {formatSecs(it.SetsCount)}
+              </Text>
+            </View>
           </TouchableOpacity>
           <View style={styles.actionButton}>
             {!isManagingList && (
@@ -237,13 +239,21 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   rowContent: {
+    flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingVertical: Spacings.s_8,
   },
   card: {
     flex: 1,
     paddingHorizontal: Spacings.s_12,
     // backgroundColor: '#434343',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  itemDescription: {
+    // backgroundColor: '#434343',
+    marginTop: Spacings.s_8,
   },
   actionButton: {
     justifyContent: 'center',

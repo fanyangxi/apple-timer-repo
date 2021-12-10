@@ -158,7 +158,7 @@ export const Fonts = {
     // lineHeight?: number;
   } as TextStyle,
   textSmall: {
-    fontSize: FontSizes.f12,
+    fontSize: FontSizes.f14,
     fontStyle: 'normal',
     fontWeight: 'normal',
     // fontFamily: '',
@@ -180,7 +180,7 @@ export const Fonts = {
     fontWeight: 'bold',
   } as TextStyle,
   titleRegular: {
-    fontSize: FontSizes.f18,
+    fontSize: FontSizes.f20,
     fontStyle: 'normal',
     fontWeight: 'bold',
   } as TextStyle,

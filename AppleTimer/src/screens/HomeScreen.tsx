@@ -171,6 +171,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
     })
   }
 
+  const SUMMARY_HEIGHT = 120
   return (
     <ScreenContainer
       backgroundComponent={() => <ImageBackground1 />}
@@ -195,7 +196,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
             style={{
               ...styles.neomorphContainer,
               width: DeviceScreen.width - Spacings.s_48,
-              height: 116,
+              height: SUMMARY_HEIGHT,
               zIndex: 0,
             }}
           >
@@ -237,7 +238,6 @@ export const HomeScreen: React.FC = (): ReactElement => {
                     useAngle={true}
                     angle={45}
                     style={{
-                      // padding: 8,
                       width: 240,
                       height: 2,
                       // borderTopLeftRadius: 10,
@@ -283,7 +283,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
             }}
           >
             <View style={styles.footerSummaryContent}>
-              <View style={styles.summaryDetail}>
+              <View style={styles.footerSummaryDetail}>
                 <View style={styles.cyclesLeftContainer}>
                   <Text style={styles.itemValue}>{tickedContext?.cyclesRemainingCount}</Text>
                   <Text style={styles.itemLabel}>{t('home.cyclesLeft')}</Text>
@@ -425,7 +425,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
     paddingBottom: Spacings.s_8,
-    // alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: '#3C3C3C', // '#202021',
     borderRadius: RadiusSizes.r8,
@@ -433,8 +432,10 @@ const styles = StyleSheet.create({
   summaryDetail: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: Spacings.s_4,
   },
   title: {
+    backgroundColor: 'green', // '#202021',
     alignItems: 'center',
   },
   presetSelectionButton: {
@@ -442,7 +443,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   summaryDivider: {
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     // backgroundColor: 'green',
@@ -476,6 +476,13 @@ const styles = StyleSheet.create({
     ...Fonts.textCaption30,
     ...FontColors.white,
   },
+  footerSummaryDetail: {
+    flexGrow: 1,
+    // backgroundColor: '#998801', // '#202021',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   footerSummarySection: {
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
@@ -484,10 +491,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: 'column',
     paddingHorizontal: Spacings.s_16,
-    paddingBottom: Spacings.s_8,
+    paddingVertical: Spacings.s_8,
     // alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: '#3C3C3C', // '#202021',
+    // backgroundColor: 'red', // '#3C3C3C', // '#202021',
     borderRadius: RadiusSizes.r8,
   },
   // @details-section:
