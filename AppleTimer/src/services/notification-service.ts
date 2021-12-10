@@ -1,5 +1,7 @@
 import Sound from 'react-native-sound'
 import { logger } from '@/utils/logger'
+import { UserSettingsDataService } from '@/services/user-settings-data-service'
+import { UserSettings } from '@/models/common'
 
 // - * cycles to go (EG.: 6 cycles to go)
 // - 1,2,3,4,5,6,7,8,9, - 49,
@@ -77,12 +79,16 @@ export class NotificationService {
   constructor() {
     this._soundsMap = new Map<string, Sound>()
     Object.entries(Sounds).forEach(([, value]) => {
-      this._soundsMap.set(value, this.loadSound(value))
+      this._soundsMap.set(value, this._loadSound(value))
     })
   }
 
-  playSounds(sounds: string[]) {
+  async playSounds(sounds: string[]) {
     // logger.info('>>> Playing sounds:', sounds)
+    const settings = await this._reloadUserSettings()
+    if (!settings.enableVoiceAssist) {
+      return
+    }
 
     // 1.Stop all other sounds first
     this._soundsMap.forEach((value: Sound) => {
@@ -109,12 +115,16 @@ export class NotificationService {
     })
   }
 
-  private loadSound(soundName: string) {
+  private _loadSound(soundName: string) {
     return new Sound(soundName, Sound.MAIN_BUNDLE, error => {
       if (error) {
         logger.error(`failed to load the sound: ${soundName}`, error)
         return
       }
     })
+  }
+
+  private async _reloadUserSettings(): Promise<UserSettings> {
+    return await UserSettingsDataService.getUserSettings()
   }
 }
