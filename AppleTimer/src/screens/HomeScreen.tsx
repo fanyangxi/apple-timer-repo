@@ -294,7 +294,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
                 </View>
                 <View style={styles.overallProgressBar}>
                   <Progress.Bar
-                    style={{ alignSelf: 'center' }}
+                    style={{ alignSelf: 'center', marginBottom: Spacings.s_12 }}
                     color={'#5ea8f6'}
                     height={8}
                     progress={toFixedNumber(1 - (secsLeftInCurrentWorkout ?? 0) / presetTotalDurationSecs)}
