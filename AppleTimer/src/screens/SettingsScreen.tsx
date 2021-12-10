@@ -14,6 +14,8 @@ import { handleErr } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { AppStateContext } from '@/common/app-state-context'
+import { useTranslation } from 'react-i18next'
+import { logger } from '@/utils/logger'
 
 interface ActionButtonProps {
   key?: string
@@ -22,6 +24,7 @@ interface ActionButtonProps {
 }
 
 export const SettingsScreen: React.FC = (): ReactElement => {
+  const { t, i18n } = useTranslation()
   const languagePickerRef = useRef<Modalize>(null)
   const appState = useContext(AppStateContext)
 
@@ -43,7 +46,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       bottomInsetBackgroundColor={Colors.transparent}
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
-      <NavigationBar title={'Settings'} showBackButton={true} />
+      <NavigationBar title={t('settings.screenHeader')} showBackButton={true} />
       <ScrollView style={styles.rootContainer}>
         {/* ==== General ==== */}
         <View style={styles.sectionTitleContainer}>
@@ -83,6 +86,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         pickerTitle={'Language'}
         onValueChanged={newValue => {
           console.log(`Language: ${newValue}`)
+          i18n.changeLanguage(newValue, () => logger.info(`Change language to (${newValue}) done`)).catch(handleErr)
           const updated = { language: newValue }
           appState.setUserSettings({ ...appState.userSettings, ...updated })
           UserSettingsDataService.saveUserSettings(updated).catch(handleErr)

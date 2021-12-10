@@ -6,17 +6,21 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 import { initialWindowMetrics } from 'react-native-safe-area-context'
 import './i18n/config'
-// import { useTranslation } from 'react-i18next'
 import { AppStateContext } from '@/common/app-state-context'
 import { UserSettings } from '@/models/common'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
+import { initiateI18n } from '@/i18n/config'
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings>(DEFAULT_USER_SETTINGS)
 
   useEffect(() => {
-    UserSettingsDataService.getUserSettings().then(data => setUserSettings(data))
+    // app initiation-task:
+    UserSettingsDataService.getUserSettings().then(data => {
+      setUserSettings(data)
+      initiateI18n(data.language)
+    })
   }, [])
 
   return (

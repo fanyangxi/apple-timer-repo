@@ -1,6 +1,7 @@
 import { Preset } from '@/models/preset'
 import { Languages, UserSettings } from '@/models/common'
 import { AppStateContextProps } from '@/common/app-state-context'
+import { SetStateAction } from 'react'
 
 export const Screens = {
   Home: 'Home2',
@@ -25,4 +26,5 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 
 export const DEFAULT_APP_STATE_CONTEXT: AppStateContextProps = {
   userSettings: DEFAULT_USER_SETTINGS,
+  setUserSettings: (_: SetStateAction<UserSettings>): void => {},
 }

@@ -10,6 +10,6 @@ export interface UserSettings {
 }
 
 export enum Languages {
-  English = 'english',
-  ChineseSimplified = 'chinese-simplified',
+  English = 'en',
+  ChineseSimplified = 'zh',
 }

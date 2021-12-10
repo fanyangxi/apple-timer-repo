@@ -27,8 +27,10 @@ import { handleErr, toFixedNumber } from '@/utils/common-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import { UserSettings } from '@/models/common'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
+import { useTranslation } from 'react-i18next'
 
 export const HomeScreen: React.FC = (): ReactElement => {
+  const { t } = useTranslation()
   const [secsLeftInCurrentWorkout, setSecsLeftInCurrentWorkout] = useState<number>()
   const [activePreset, setActivePreset] = useState<Preset>()
   const [tickedContext, setTickedContext] = useState<TickedContext>()
@@ -178,7 +180,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
     >
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar
-        title={'Apple Timer'}
+        title={t('home.screenHeader')}
         showBackButton={false}
         right={<SettingsButton onPress={() => navigate(Screens.Settings)} />}
       />

@@ -141,6 +141,7 @@ react-native-localize
 
 ### React Native: useContext
 \- https://dmitripavlutin.com/react-context-and-usecontext/
+\- https://stackoverflow.com/questions/58060118/usecontext-in-react-native
 When do you need context?  You can hold inside the context:
 - global state
 - theme
