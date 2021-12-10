@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   },
   itemDescription: {
     // backgroundColor: '#434343',
-    marginTop: Spacings.s_8,
+    marginTop: Spacings.s_4,
   },
   actionButton: {
     justifyContent: 'center',

@@ -3,12 +3,12 @@ import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { useTheme } from '@/theme'
 import { Colors, Fonts, Spacings } from '@/theme/Variables'
 import SvgComponent from '@/assets/icons/DarkAnd'
-import { Preset, TickedContext } from '@/models/preset'
+import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
 import { TimerService } from '@/services/timer-service'
 import { NotificationService } from '@/services/notification-service'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
-import { getTotalPresetDurationSecs } from '@/utils/preset-util'
+import { getTotalPresetDurationSecs, getUnpackedPresetMap } from '@/utils/preset-util'
 import { logger } from '@/utils/logger'
 import { CircularSliderRefObject } from '@/screens/components/CircularSliderV2'
 import CircleVerticalSlider from '@/screens/components/CircleVerticalSlider'
@@ -30,7 +30,8 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
     notificationServiceRef.current = new NotificationService()
 
     console.log(`>>> active-preset: ${JSON.stringify(preset)}, total:${getTotalPresetDurationSecs(preset) * 1000}-ms`)
-    timerServiceRef.current = new TimerService(preset)
+    const theUnpackedPresetMap: UnpackedPresetMap = getUnpackedPresetMap(preset)
+    timerServiceRef.current = new TimerService(preset, theUnpackedPresetMap)
     //
     timerServiceRef.current.OnTimerStarted = async () => {
       console.log(`OnTimerStarted, execution-count: ${_executionCount}`)
