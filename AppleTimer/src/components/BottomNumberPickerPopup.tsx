@@ -15,7 +15,10 @@ export interface BottomPickerPopupProps {
   onValueChanged?: (newValue: number) => void
 }
 
-const numbersSourceItems = Array.from(Array(50).keys()).map(item => ({ value: item, label: `${item}` }))
+const numbersSourceItems = Array.from(Array(50).keys()).map(item => {
+  const current = item + 1
+  return { value: current, label: `${current}` }
+})
 
 export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
   popupRef,
