@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useContext, useRef } from 'react'
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
@@ -8,12 +8,12 @@ import { DeviceScreen } from '@/common/device'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
-import { UserSettings } from '@/models/common'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
 import { handleErr } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
+import { AppStateContext } from '@/common/app-state-context'
 
 interface ActionButtonProps {
   key?: string
@@ -22,12 +22,8 @@ interface ActionButtonProps {
 }
 
 export const SettingsScreen: React.FC = (): ReactElement => {
-  const [userSettings, setUserSettings] = useState<Partial<UserSettings>>(DEFAULT_USER_SETTINGS)
   const languagePickerRef = useRef<Modalize>(null)
-
-  useEffect(() => {
-    UserSettingsDataService.getUserSettings().then(data => setUserSettings(data))
-  }, [])
+  const appState = useContext(AppStateContext)
 
   const renderActionButton = (buttonProps: ActionButtonProps) => (
     <View style={styles.row}>
@@ -61,11 +57,11 @@ export const SettingsScreen: React.FC = (): ReactElement => {
             <View style={styles.card}>
               <Text style={[Fonts.textRegular, FontColors.white]}>{'Voice Assist'}</Text>
               <SwitchToggleMy
-                switchOn={userSettings.enableVoiceAssist ?? true}
+                switchOn={appState.userSettings.enableVoiceAssist ?? true}
                 onPress={() => {
-                  const updated = { enableVoiceAssist: !userSettings.enableVoiceAssist }
-                  console.log(`Voice Assist: ${!userSettings.enableVoiceAssist}`)
-                  setUserSettings({ ...userSettings, ...updated })
+                  const updated = { enableVoiceAssist: !appState.userSettings.enableVoiceAssist }
+                  console.log(`Voice Assist: ${!appState.userSettings.enableVoiceAssist}`)
+                  appState.setUserSettings({ ...appState.userSettings, ...updated })
                   UserSettingsDataService.saveUserSettings(updated).catch(handleErr)
                 }}
               />
@@ -83,12 +79,12 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       {/* misc(s) */}
       <BottomLanguagePickerPopup
         popupRef={languagePickerRef}
-        value={userSettings.language ?? DEFAULT_USER_SETTINGS.language}
+        value={appState.userSettings.language ?? DEFAULT_USER_SETTINGS.language}
         pickerTitle={'Language'}
         onValueChanged={newValue => {
           console.log(`Language: ${newValue}`)
           const updated = { language: newValue }
-          setUserSettings({ ...userSettings, ...updated })
+          appState.setUserSettings({ ...appState.userSettings, ...updated })
           UserSettingsDataService.saveUserSettings(updated).catch(handleErr)
         }}
       />

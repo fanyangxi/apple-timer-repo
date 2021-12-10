@@ -127,14 +127,31 @@ npm i react-i18next i18next
 i18next ++++
 \- https://www.npmjs.com/package/i18next
 \- https://www.i18next.com/overview/getting-started
-react-i18next ++
+react-i18next +++
 \- https://www.npmjs.com/package/react-i18next
 \- https://github.com/i18next/react-i18next/tree/master/example/react-native
+i18n-iso-countries +++
+\- https://www.npmjs.com/package/i18n-iso-countries
 react-native-localization
 \- https://www.npmjs.com/package/react-native-localization
 react-native-localize
 \- this library gives you access to localization-related device constants
 \- https://www.npmjs.com/package/react-native-localize
+
+
+### React Native: useContext
+\- https://dmitripavlutin.com/react-context-and-usecontext/
+When do you need context?  You can hold inside the context:
+- global state
+- theme
+- application configuration
+- authenticated user name
+- user settings
+- preferred language
+- a collection of services
+
+
+
 
 
 
