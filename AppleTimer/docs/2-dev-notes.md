@@ -120,6 +120,23 @@ React native svg arc path - Stack Overflow
 \- https://www.npmjs.com/package/react-native-switch-toggle
 
 
+### i18n/localization, change language, multiple languages support:
+```
+npm i react-i18next i18next
+```
+i18next ++++
+\- https://www.npmjs.com/package/i18next
+\- https://www.i18next.com/overview/getting-started
+react-i18next ++
+\- https://www.npmjs.com/package/react-i18next
+\- https://github.com/i18next/react-i18next/tree/master/example/react-native
+react-native-localization
+\- https://www.npmjs.com/package/react-native-localization
+react-native-localize
+\- this library gives you access to localization-related device constants
+\- https://www.npmjs.com/package/react-native-localize
+
+
 
 ```
 {/*<ActionSheet*/}
