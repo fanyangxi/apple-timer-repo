@@ -30,8 +30,35 @@ export const MAX_PRESETS_ALLOWED = 6
 
 export const APP_CUSTOMER_SUPPORT_EMAIL = 'apple-timer@gmail.com'
 
+/** Distributing: **/
 export const DISTRIBUTED_APP_LINK = Platform.select({
   ios: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en',
   android: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en',
   default: 'unknown',
 })
+
+// Apple AppStore:
+export const AppleAppStoreDistribution = {
+  AppID: '2193813192',
+  // Bundle Identifiers
+}
+
+// Google PlayStore,
+export const GooglePlayStoreDistribution = {
+  PackageName: 'com.mywebsite.myapp',
+}
+
+// Amazon Appstore: https://en.wikipedia.org/wiki/Amazon_Appstore
+export const AmazonAppstoreDistribution = {
+  PackageName: 'com.mywebsite.myapp',
+}
+
+// SamsungGalaxyStore,
+export const SamsungGalaxyStoreDistribution = {
+  AppID: '2193813192',
+}
+
+// 华为应用市场/AppGallery
+export const HuaweiAppStoreDistribution = {
+  AppID: '2193813192',
+}

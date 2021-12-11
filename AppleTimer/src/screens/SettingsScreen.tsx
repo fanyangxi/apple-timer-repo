@@ -19,13 +19,21 @@ import { ImageBackground1 } from '@/components/ImageBackground1'
 import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
-import { APP_NAME, DEFAULT_USER_SETTINGS, DISTRIBUTED_APP_LINK } from '@/common/constants'
+import {
+  AmazonAppstoreDistribution,
+  APP_NAME,
+  AppleAppStoreDistribution,
+  DEFAULT_USER_SETTINGS,
+  DISTRIBUTED_APP_LINK,
+  GooglePlayStoreDistribution,
+} from '@/common/constants'
 import { handleErr, sendEmailFeedback, toLanguageText } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { AppStateContext } from '@/common/app-state-context'
 import { useTranslation } from 'react-i18next'
 import { logger } from '@/utils/logger'
+import Rate, { AndroidMarket } from 'react-native-rate'
 
 interface ActionButtonProps {
   key?: string
@@ -70,6 +78,31 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       .catch(handleErr)
   }
 
+  const rateUs = () => {
+    // https://www.npmjs.com/package/react-native-rate
+    const options = {
+      AppleAppID: AppleAppStoreDistribution.AppID,
+      GooglePackageName: GooglePlayStoreDistribution.PackageName,
+      AmazonPackageName: AmazonAppstoreDistribution.PackageName,
+      OtherAndroidURL: 'http://www.randomappstore.com/app/47172391',
+      preferredAndroidMarket: AndroidMarket.Google,
+      preferInApp: false,
+      openAppStoreIfInAppFails: true,
+      fallbackPlatformURL: 'http://www.mywebsite.com/myapp.html',
+    }
+    Rate.rate(options, (success, errorMessage) => {
+      if (success) {
+        // this technically only tells us if the user successfully went to the Review Page. Whether they
+        // actually did anything, we do not know.
+        logger.info('Rate with success')
+      }
+      if (errorMessage) {
+        // errorMessage comes from the native code. Useful for debugging, but probably not for users to view
+        logger.error(`Rate with error: ${errorMessage}`)
+      }
+    })
+  }
+
   return (
     <ScreenContainer
       backgroundComponent={() => <ImageBackground1 />}
@@ -109,7 +142,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         <View style={styles.sectionTitleContainer}>
           <Text style={[Fonts.titleRegular, FontColors.white]}>{t('settings.shareAndFeedback')}</Text>
         </View>
-        {renderActionButton({ title: t('settings.rateUs'), onPress: () => {} })}
+        {renderActionButton({ title: t('settings.rateUs'), onPress: () => rateUs() })}
         {renderActionButton({ title: t('settings.shareWithFriends'), onPress: () => shareWithFriends() })}
         {renderActionButton({ title: t('settings.sendFeedback'), onPress: () => sendEmailFeedback() })}
       </ScrollView>
