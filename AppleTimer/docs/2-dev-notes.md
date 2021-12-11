@@ -302,13 +302,13 @@ fifty.
 50，
 ```
 
-### Misc...
-
-
-
-
-
-
+### react-native send email (feedback):
+How to send email from react-native application- Techup
+\- https://www.techup.co.in/how-to-send-email-from-react-native-application/
+How to make your React Native app send emails | Codemagic Blog
+\- https://blog.codemagic.io/how-to-make-your-react-native-app-send-emails/
+react-native-communications
+\- https://www.npmjs.com/package/react-native-communications
 
 
 
