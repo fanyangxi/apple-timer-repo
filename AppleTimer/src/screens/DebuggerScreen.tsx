@@ -174,7 +174,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
             ref={childRef}
             value={0}
             // style={styles.absolute}
-            trackRadius={71}
+            trackRadius={32}
             trackStrokeWidth={1}
             animationDurationMs={2000}
           />
@@ -200,8 +200,9 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.s_24,
     alignItems: 'stretch',
     justifyContent: 'space-between',
-    backgroundColor: 'lightgreen', // '#202021',
+    backgroundColor: '#A2B3A7', // '#202021',
     borderRadius: 2,
+    borderWidth: 2,
   },
   buttons: {
     flexDirection: 'row',
