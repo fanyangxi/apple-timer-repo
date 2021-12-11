@@ -11,7 +11,7 @@ Preset:
 Preset (预设):
 - The user's pre-configuration of a workout timer.
 
-Cycles (周期):
+Cycles (循环):
 - A cycle includes several sets.
 
 Set (组): has multiple reps/repetitions;
