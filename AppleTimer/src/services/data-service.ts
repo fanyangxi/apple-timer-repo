@@ -3,7 +3,7 @@ import { AsyncStorageUtils } from '@/utils/async-storage-utils'
 import { Preset } from '@/models/preset'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
-import { MAX_PRESET_DURATION_ALLOWED_SECS } from '@/common/constants'
+import { MAX_PRESET_DURATION_ALLOWED_SECS, MAX_PRESETS_ALLOWED } from '@/common/constants'
 import { formatSecs } from '@/utils/date-util'
 import i18next from 'i18next'
 
@@ -48,6 +48,9 @@ const createPreset = async (model: Preset): Promise<void> => {
 
   // checking:
   const items = await _getPresetEntities()
+  if (items.length >= MAX_PRESETS_ALLOWED) {
+    throw new Error(`${i18next.t('presetsSelection.maxAllowedPresetExceeded')}. (${entity.id})`)
+  }
   const isNameExistAlready = items.filter(item => item.name === entity.name).length > 0
   if (isNameExistAlready) {
     throw new Error(`${i18next.t('errors.nameDuplicated')}. (${entity.name})`)

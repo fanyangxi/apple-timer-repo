@@ -26,7 +26,9 @@
     },
     "presetsSelection": {
       "title": "管理我的预设",
-      "deletePresetFailed": "删除预设失败"
+      "deletePresetFailed": "删除预设失败",
+      "maxAllowedPresetExceeded": "已达到最大允许数量上限",
+      "maxAllowedPresetExceededDesc": "请尝试先删除部分已有项目，然后再重试"
     },
     "confirmDeletion": {
       "title": "确认删除",

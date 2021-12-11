@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Preset } from '@/models/preset'
 import { DeviceScreen } from '@/common/device'
 import { Neomorph } from 'react-native-neomorph-shadows'
@@ -17,6 +17,7 @@ import { DeleteButton } from '@/components/button/DeleteButton'
 import { formatSecs } from '@/utils/date-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import { useTranslation } from 'react-i18next'
+import { MAX_PRESETS_ALLOWED } from '@/common/constants'
 
 export interface PresetSelectionPopupProps {
   current?: Preset
@@ -38,11 +39,6 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
   const [deletingPreset, setDeletingPreset] = useState<Preset | undefined>()
   const [isManagingList, setIsManagingList] = useState<boolean>(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false)
-
-  useEffect(() => {
-    console.log('>>>> Preset selection-popup loaded')
-    // eslint-disable-next-line
-  }, [])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -72,6 +68,19 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
           text2: `${e}`,
         })
       })
+  }
+
+  function addPreset() {
+    if (cachedPresets.length >= MAX_PRESETS_ALLOWED) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: t('presetsSelection.maxAllowedPresetExceeded'),
+        text2: t('presetsSelection.maxAllowedPresetExceededDesc'),
+      })
+      return
+    }
+    onAddClicked && onAddClicked()
   }
 
   const renderItem = (it: Preset) => (
@@ -127,15 +136,14 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
       </Neomorph>
     </View>
   )
+
   return (
     <View style={styles.rootContainer}>
       <View style={styles.background}>
         <ImageBackground1 style={{ borderTopLeftRadius: RadiusSizes.r12, borderTopRightRadius: RadiusSizes.r12 }} />
       </View>
       <View style={styles.actionButtonsBar}>
-        <View style={styles.leftButtonContainer}>
-          {!isManagingList && <AddButton onPress={() => onAddClicked && onAddClicked()} />}
-        </View>
+        <View style={styles.leftButtonContainer}>{!isManagingList && <AddButton onPress={() => addPreset()} />}</View>
         <Text style={[Fonts.titleRegular, FontColors.white]}>{t('presetsSelection.title')}</Text>
         <View style={styles.rightButtonContainer}>
           {!isManagingList ? (

@@ -26,7 +26,9 @@
     },
     "presetsSelection": {
       "title": "My Presets",
-      "deletePresetFailed": "Delete preset failed"
+      "deletePresetFailed": "Delete preset failed",
+      "maxAllowedPresetExceeded": "Max allowed presets count reached",
+      "maxAllowedPresetExceededDesc": "Please try to remove few existing items first, and then try again"
     },
     "confirmDeletion": {
       "title": "Confirm Deletion",
