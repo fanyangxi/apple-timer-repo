@@ -68,10 +68,10 @@ export const stringToEnumValue = <ET, T>(enumObj: ET, str: string): T => {
 // execute once, to improve efficiency. https://www.w3schools.com/js/js_function_closures.asp
 export const getDeviceLanguageCode = (function () {
   let deviceLanguageEnum = Languages.English
-  return function (info?: string): Languages {
+  return function (): Languages {
     const deviceLanguageCode = RNLocalize.getLocales()[0]?.languageCode
     deviceLanguageEnum = stringToEnumValue(Languages, deviceLanguageCode) ?? Languages.English
-    logger.info(`${info}: [getDefaultUserSettings] User device device-language-code: ${deviceLanguageCode}`)
+    logger.info(`[getDefaultUserSettings] User device device-language-code: ${deviceLanguageCode}`)
     return deviceLanguageEnum
   }
 })()
