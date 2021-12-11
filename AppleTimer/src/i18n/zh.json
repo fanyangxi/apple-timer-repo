@@ -64,7 +64,7 @@
       "shareAndFeedback": "分享和反馈",
       "rateUs": "给我们评分",
       "shareWithFriends": "分享给朋友",
-      "sendFeedback": "发送反馈"
+      "sendFeedback": "发送缺陷/改进建议反馈"
     },
     "errors": {
       "multipleActivePresetsFound": "期望找到1个激活的预设，实际找到数量",

@@ -22,3 +22,5 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   language: getDeviceLanguageCode(),
   enableVoiceAssist: true,
 }
+
+export const APP_CUSTOMER_SUPPORT_EMAIL = 'apple-timer@gmail.com'

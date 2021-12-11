@@ -10,7 +10,7 @@ import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
-import { handleErr, toLanguageText } from '@/utils/common-util'
+import { handleErr, sendEmailFeedback, toLanguageText } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
 import { AppStateContext } from '@/common/app-state-context'
@@ -80,7 +80,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
         </View>
         {renderActionButton({ title: t('settings.rateUs'), onPress: () => {} })}
         {renderActionButton({ title: t('settings.shareWithFriends'), onPress: () => {} })}
-        {renderActionButton({ title: t('settings.sendFeedback'), onPress: () => {} })}
+        {renderActionButton({ title: t('settings.sendFeedback'), onPress: () => sendEmailFeedback() })}
       </ScrollView>
       {/* misc(s) */}
       <BottomLanguagePickerPopup

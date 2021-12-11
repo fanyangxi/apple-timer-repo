@@ -2,6 +2,9 @@ import { Platform } from 'react-native'
 import { logger } from '@/utils/logger'
 import * as RNLocalize from 'react-native-localize'
 import { Languages } from '@/models/common'
+import Communications from 'react-native-communications'
+import { APP_CUSTOMER_SUPPORT_EMAIL } from '@/common/constants'
+import DeviceInfo from 'react-native-device-info'
 
 export const Sleep = (dely: number): Promise<void> => {
   return new Promise<void>(resolve => setTimeout(() => resolve(), dely))
@@ -79,4 +82,26 @@ export const toLanguageText = (input?: string): string => {
     [`${Languages.ChineseSimplified}`]: '简体中文',
   }
   return theMaps[input ?? 'unknown-language-code'] ?? 'UNKNOWN'
+}
+
+export const sendEmailFeedback = async () => {
+  // eslint-disable-next-line prettier/prettier
+  const deviceInfo = '------\n' +
+    `Application Version: ${await DeviceInfo.getReadableVersion()}\n` +
+    `Manufacturer: ${await DeviceInfo.getManufacturer()}\n` +
+    `Brand: ${await DeviceInfo.getBrand()}\n` +
+    `DeviceId: ${await DeviceInfo.getDeviceId()}\n` +
+    `${Platform.OS}: ${await DeviceInfo.getSystemVersion()}` +
+    // `DeviceName: ${await DeviceInfo.getDeviceName()}\n` + // This might contains user configured real-person name.
+    // eslint-disable-next-line prettier/prettier,max-len
+    `${Platform.select({ ios: '', android: `\nDevice: ${await DeviceInfo.getDevice()}, Api: ${await DeviceInfo.getApiLevel()}` })}\n` +
+    '------'
+  console.log(`>>> deviceInfo: ${deviceInfo}`)
+  Communications.email(
+    [APP_CUSTOMER_SUPPORT_EMAIL], // <---- destination emails
+    null, //<--- CC email
+    null, //<--- bcc
+    'Issue report or suggestions', //<--- Subject
+    `${deviceInfo}\n`, // <--- Body Text
+  )
 }
