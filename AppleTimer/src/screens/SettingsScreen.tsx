@@ -1,5 +1,15 @@
 import React, { ReactElement, useContext, useRef } from 'react'
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  ScrollView,
+  Share,
+  ShareContent,
+  ShareOptions,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import { Colors, FontColors, Fonts, Spacings } from '@/theme/Variables'
 import { NavigationBar } from '@/components/NavigationBar'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -9,7 +19,7 @@ import { ImageBackground1 } from '@/components/ImageBackground1'
 import SwitchToggle from 'react-native-switch-toggle'
 import SvgArrowRight from '@/assets/icons/ArrowRight'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
-import { DEFAULT_USER_SETTINGS } from '@/common/constants'
+import { APP_NAME, DEFAULT_USER_SETTINGS, DISTRIBUTED_APP_LINK } from '@/common/constants'
 import { handleErr, sendEmailFeedback, toLanguageText } from '@/utils/common-util'
 import { BottomLanguagePickerPopup } from '@/components/BottomLanguagePickerPopup'
 import { Modalize } from 'react-native-modalize'
@@ -38,6 +48,27 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       </NeomorphContainer>
     </View>
   )
+
+  const shareWithFriends = () => {
+    const content: ShareContent = {
+      title: 'App link',
+      // url: DISTRIBUTED_APP_LINK,
+      message: `Check out this fine timer app (${APP_NAME}), at :${DISTRIBUTED_APP_LINK}`,
+    }
+    const shareOptions: ShareOptions = {
+      // dialogTitle Android
+      dialogTitle: 'dialogTitle',
+      // excludedActivityTypes iOS
+      // excludedActivityTypes?: Array<string>;
+      // tintColor iOS
+      tintColor: 'red',
+      // subject - a subject to share via email iOS
+      subject: 'subject',
+    }
+    Share.share(content, shareOptions)
+      .then(result => logger.info(`Share app with friends result: ${result}`))
+      .catch(handleErr)
+  }
 
   return (
     <ScreenContainer
@@ -79,7 +110,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
           <Text style={[Fonts.titleRegular, FontColors.white]}>{t('settings.shareAndFeedback')}</Text>
         </View>
         {renderActionButton({ title: t('settings.rateUs'), onPress: () => {} })}
-        {renderActionButton({ title: t('settings.shareWithFriends'), onPress: () => {} })}
+        {renderActionButton({ title: t('settings.shareWithFriends'), onPress: () => shareWithFriends() })}
         {renderActionButton({ title: t('settings.sendFeedback'), onPress: () => sendEmailFeedback() })}
       </ScrollView>
       {/* misc(s) */}

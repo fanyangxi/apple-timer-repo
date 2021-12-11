@@ -321,9 +321,15 @@ react-native-communications
 \- https://www.npmjs.com/package/react-native-communications
 
 
-
-
-
+### Add "Rate Us" link (in-app-review):
+react-native-rate
+\- https://www.npmjs.com/package/react-native-rate
+\- https://github.com/KjellConnelly/react-native-rate
+\- https://stackoverflow.com/questions/35612383/how-to-make-a-rate-this-app-link-in-react-native-app/41021128
+react-native-in-app-review:
+\- https://www.npmjs.com/package/react-native-in-app-review
+react-native-store-review
+\- https://www.npmjs.com/package/react-native-store-review
 
 
 
