@@ -39,6 +39,11 @@ export class CountdownTimerV2 {
   }
 
   async start(): Promise<void> {
+    // Only when timer-status is IDLE, then START is allowed
+    if (this.Status !== TimerStatus.IDLE) {
+      return
+    }
+
     logger.info(`[Started] With initial-countdown-secs:${this._initialCountdownSecs}`)
     this._remainingCountdownMilliSecs = this._initialCountdownSecs * 1000
 
@@ -81,6 +86,11 @@ export class CountdownTimerV2 {
   }
 
   stopAndReset(force: boolean = false) {
+    // Only when timer-status is not IDLE, then stop-and-reset is allowed
+    if (this.Status === TimerStatus.IDLE) {
+      return
+    }
+
     this.clear()
     this.changeStatusTo(TimerStatus.IDLE)
     if (force) {
