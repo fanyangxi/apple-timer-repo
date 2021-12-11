@@ -111,9 +111,13 @@ export const HomeScreen: React.FC = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
     }
     //
-    timerSvc.OnCycleStarted = async () => {
+    timerSvc.OnCycleStarted = async (secsLeft: number, ticked: TickedContext) => {
       logger.info(`${TAG}: timerSvc.OnCycleStarted`)
       workoutDetailViewRef.current?.resetCycleAnim()
+      if (ticked.cyclesRemainingCount !== thePreset.CyclesCount) {
+        // Indicates `previous-cycle` completed, and `new-cycle` now started.
+        notificationServiceRef.current?.playSounds([Sounds.CycleCompleted])
+      }
     }
     timerSvc.OnPreparePhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnPreparePhaseStarted`)
