@@ -100,8 +100,7 @@ export const PresetSelectionPopup: React.FC<PresetSelectionPopupProps> = ({
                 {formatSecs(it.WorkoutSecs)}, {t('workoutDetail.rest')}:{formatSecs(it.RestSecs)}
               </Text>
               <Text style={[Fonts.textSmall, FontColors.grey]}>
-                {t('workoutDetail.cycles')}:{formatSecs(it.CyclesCount)} / {t('workoutDetail.sets')}:
-                {formatSecs(it.SetsCount)}
+                {t('workoutDetail.cycles')}: {it.CyclesCount} / {t('workoutDetail.sets')}: {it.SetsCount}
               </Text>
             </View>
           </TouchableOpacity>

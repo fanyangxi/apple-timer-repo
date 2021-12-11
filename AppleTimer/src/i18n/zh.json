@@ -4,7 +4,7 @@
       "screenHeader": "苹果计时器",
       "timeRemaining": "剩余时间",
       "totalTime": "总共时间",
-      "cyclesLeft": "剩余周期",
+      "cyclesLeft": "剩余循环",
       "setsLeft": "剩余组",
       "start": "开始",
       "pause": "暂停",
@@ -15,8 +15,8 @@
       "prepare": "准备",
       "workout": "运动",
       "rest": "休息",
-      "cycles": "周期",
-      "sets": "组"
+      "cycles": "循环数",
+      "sets": "组数"
     },
     "confirmStopping": {
       "title": "确认停止",
@@ -40,7 +40,7 @@
       "prepare": "准备时长",
       "workout": "活动时长",
       "rest": "休息时长",
-      "cycles": "周期数",
+      "cycles": "循环数",
       "sets": "组数",
       "cancel": "取消",
       "save": "保存"
@@ -74,7 +74,7 @@
       "deleteActivePresetNotAllowed": "已经激活的预设不允许被删除",
       "maximumAllowedPresetDurationExceeded": "预设的总不允许超过最大值（72小时），当前为",
       "presetNameCannotBeEmpty": "预设名称不允许为空",
-      "presetFieldsCannotBeEmpty": "预设的各个字段（准备/活动/休息/组数/周期数）不允许为空"
+      "presetFieldsCannotBeEmpty": "预设的各个字段（准备/活动/休息/组数/循环数）不允许为空"
     }
   }
 }
