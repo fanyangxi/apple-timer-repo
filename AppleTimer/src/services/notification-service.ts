@@ -82,7 +82,7 @@ export class NotificationService {
     const languages = Object.values(Languages) // Output: en, zh
     languages.forEach(language => {
       Object.entries(Sounds).forEach(([, value]) => {
-        const fullName = `${language}/${value}`
+        const fullName = `${language}_${value}`
         this._soundsMap.set(fullName, this._loadSound(fullName))
       })
     })
@@ -106,7 +106,7 @@ export class NotificationService {
         (acc, cur) =>
           acc.then(() => {
             // logger.debug(`>>> Playing: ${cur}`, this._soundsMap.get(cur))
-            const fullName = `${settings.language}/${cur}`
+            const fullName = `${settings.language}_${cur}`
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             return new Promise(resolve => this._soundsMap.get(fullName)?.play(success => resolve()))
           }),
