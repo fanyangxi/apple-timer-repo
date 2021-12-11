@@ -154,9 +154,11 @@ When do you need context?  You can hold inside the context:
 
 ### Text to speech:
 文本转语音 | Microsoft Azure
-https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/#features
+\- https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/#features
 文字转语音_语音朗读_语音播报_语音合成软件_在线语音合成-有道智云AI开放平台
-https://ai.youdao.com/product-tts.s
+\- https://ai.youdao.com/product-tts.s
+Numbers to number words:
+\- https://www.englishclub.com/kids/numbers-chart.htm
 
 
 ```
