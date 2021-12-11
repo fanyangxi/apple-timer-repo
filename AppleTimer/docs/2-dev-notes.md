@@ -166,6 +166,10 @@ For iOS:
 For Android:
 > Save/copy your sound clip files under the directory android/app/src/main/res/raw. Note that files in this directory must be lowercase and underscored (e.g. my_file_name.mp3) and that subdirectories are not supported by Android.
 
+#### `DO NOT use subdirectories`:
+> `Subdirectories` are not supported by `Android`.
+> iOS supports subdirectories.
+
 ```
 three_two_one,		三，二，一
 workout,			开始
