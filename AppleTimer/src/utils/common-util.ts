@@ -5,6 +5,7 @@ import { Languages } from '@/models/common'
 import Communications from 'react-native-communications'
 import { APP_CUSTOMER_SUPPORT_EMAIL } from '@/common/constants'
 import DeviceInfo from 'react-native-device-info'
+import i18next from 'i18next'
 
 export const Sleep = (dely: number): Promise<void> => {
   return new Promise<void>(resolve => setTimeout(() => resolve(), dely))
@@ -101,7 +102,7 @@ export const sendEmailFeedback = async () => {
     [APP_CUSTOMER_SUPPORT_EMAIL], // <---- destination emails
     null, //<--- CC email
     null, //<--- bcc
-    'Issue report or suggestions', //<--- Subject
+    i18next.t('settings.sendFeedbackEmailTitle'), //<--- Subject
     `${deviceInfo}\n`, // <--- Body Text
   )
 }
