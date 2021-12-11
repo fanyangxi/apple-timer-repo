@@ -194,14 +194,14 @@ const CircularSliderV2: React.FC<CircularSliderProps> = React.forwardRef((props,
 
   const _pauseAnim = () => {
     theAnimValue.stopAnimation(stoppedAt => {
-      console.log(`IN:pauseAnim:${stoppedAt}`)
+      // console.log(`IN:pauseAnim:${stoppedAt}`)
       currentValueRef.current = stoppedAt
     })
   }
 
   const _stopAndResetAnim = () => {
     theAnimValue.stopAnimation(() => {
-      console.log('IN:stopAndResetAnim:')
+      // console.log('IN:stopAndResetAnim:')
       theAnimValue.setValue(minValue)
       currentValueRef.current = minValue
     })

@@ -1,7 +1,7 @@
 import Sound from 'react-native-sound'
 import { logger } from '@/utils/logger'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
-import { UserSettings } from '@/models/common'
+import { Languages, UserSettings } from '@/models/common'
 
 // - * cycles to go (EG.: 6 cycles to go)
 // - 1,2,3,4,5,6,7,8,9, - 49,
@@ -78,8 +78,13 @@ export class NotificationService {
 
   constructor() {
     this._soundsMap = new Map<string, Sound>()
-    Object.entries(Sounds).forEach(([, value]) => {
-      this._soundsMap.set(value, this._loadSound(value))
+    // Pre-load all languages (en/zh) audio files, it's not very big, usually take 40ms to load all audio files:
+    const languages = Object.values(Languages) // Output: en, zh
+    languages.forEach(language => {
+      Object.entries(Sounds).forEach(([, value]) => {
+        const fullName = `${language}/${value}`
+        this._soundsMap.set(fullName, this._loadSound(fullName))
+      })
     })
   }
 
@@ -101,8 +106,9 @@ export class NotificationService {
         (acc, cur) =>
           acc.then(() => {
             // logger.debug(`>>> Playing: ${cur}`, this._soundsMap.get(cur))
+            const fullName = `${settings.language}/${cur}`
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            return new Promise(resolve => this._soundsMap.get(cur)?.play(success => resolve()))
+            return new Promise(resolve => this._soundsMap.get(fullName)?.play(success => resolve()))
           }),
         Promise.resolve(),
       )
@@ -115,10 +121,10 @@ export class NotificationService {
     })
   }
 
-  private _loadSound(soundName: string) {
-    return new Sound(soundName, Sound.MAIN_BUNDLE, error => {
+  private _loadSound(soundFullName: string) {
+    return new Sound(soundFullName, Sound.MAIN_BUNDLE, error => {
       if (error) {
-        logger.error(`failed to load the sound: ${soundName}`, error)
+        logger.error(`failed to load the sound: ${soundFullName}`, error)
         return
       }
     })
