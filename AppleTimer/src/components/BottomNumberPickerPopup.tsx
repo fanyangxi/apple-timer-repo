@@ -64,7 +64,7 @@ export const BottomNumberPickerPopup: React.FC<BottomPickerPopupProps> = ({
             <Text style={styles.pickerColumnTitle}>{pickerTitle ?? 'Number'}</Text>
             <DynamicallySelectedPicker
               items={numbersSourceItems}
-              initialSelectedIndex={localValue}
+              initialSelectedIndex={numbersSourceItems.findIndex(item => item.value === localValue)}
               transparentItemRows={3}
               onScrollBeginDrag={() => {
                 setIsScrolling(true)

@@ -126,7 +126,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       logger.info(`${TAG}: timerSvc.OnSetStarted`)
       workoutDetailViewRef.current?.resetSetAnim()
       const cycleSetsRemainingCount: number = ticked.cycleSetsRemainingCount
-      notificationServiceRef.current?.playSounds([`num_${cycleSetsRemainingCount}.mp3`, Sounds.RepetitionsToGo])
+      notificationServiceRef.current?.playSounds([`num_${cycleSetsRemainingCount}.mp3`, Sounds.SetsToGo])
     }
     timerSvc.OnWorkoutPhaseStarted = async () => {
       logger.info(`${TAG}: timerSvc.OnWorkoutPhaseStarted`)
