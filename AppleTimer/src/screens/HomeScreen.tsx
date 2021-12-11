@@ -102,13 +102,14 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setTickedContext(getRawTickedContext(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
-      KeepAwake.activate()
+      KeepAwake.deactivate()
     }
     timerSvc.OnTimerCompleted = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
       setTickedContext(getRawTickedContext(thePreset))
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
+      KeepAwake.deactivate()
     }
     //
     timerSvc.OnCycleStarted = async (secsLeft: number, ticked: TickedContext) => {
