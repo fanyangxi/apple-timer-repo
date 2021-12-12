@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.appletimer",
+    package = "com.yxfan.appletimer.oniontimer",
 )
 
 android_resource(
     name = "res",
-    package = "com.appletimer",
+    package = "com.yxfan.appletimer.oniontimer",
     res = "src/main/res",
 )
 

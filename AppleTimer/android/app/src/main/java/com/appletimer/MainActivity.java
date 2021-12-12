@@ -1,4 +1,4 @@
-package com.appletimer;
+package com.yxfan.appletimer.oniontimer;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
