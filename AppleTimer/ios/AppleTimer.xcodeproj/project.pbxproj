@@ -134,6 +134,7 @@
 		3E3736A72764B701004801EE /* zh_48.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3E3736312764B701004801EE /* zh_48.mp3 */; };
 		3E3736A82764B701004801EE /* zh_36.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3E3736322764B701004801EE /* zh_36.mp3 */; };
 		3E3736A92764B701004801EE /* zh_18.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3E3736332764B701004801EE /* zh_18.mp3 */; };
+		3EED4798276776A6009DB29F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EED4797276776A6009DB29F /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		833F2006FE004CFBA319C9F2 /* libPods-AppleTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE8F60935CC7F1EA8FB7E0E /* libPods-AppleTimer.a */; };
 /* End PBXBuildFile section */
@@ -289,6 +290,7 @@
 		3E3736312764B701004801EE /* zh_48.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = zh_48.mp3; path = ../../src/assets/sounds/zh_48.mp3; sourceTree = "<group>"; };
 		3E3736322764B701004801EE /* zh_36.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = zh_36.mp3; path = ../../src/assets/sounds/zh_36.mp3; sourceTree = "<group>"; };
 		3E3736332764B701004801EE /* zh_18.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = zh_18.mp3; path = ../../src/assets/sounds/zh_18.mp3; sourceTree = "<group>"; };
+		3EED4797276776A6009DB29F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AppleTimer/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8CE8F60935CC7F1EA8FB7E0E /* libPods-AppleTimer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppleTimer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		968A20F8BD0245E30FBD22A5 /* Pods-AppleTimer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppleTimer.release.xcconfig"; path = "Target Support Files/Pods-AppleTimer/Pods-AppleTimer.release.xcconfig"; sourceTree = "<group>"; };
@@ -526,6 +528,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				18A06528071B6FFBBA9372E2 /* Pods */,
 				3E75D37C266A632100E3B1E3 /* Resources */,
+				3EED4797276776A6009DB29F /* GoogleService-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				4154A44C19B9C3D1A50BAB06 /* [CP] Copy Pods Resources */,
 				05F85629541516737FF642BC /* [CP] Embed Pods Frameworks */,
 				D8E8B57D4EFA877997FE1BB5 /* [CP-User] [RNFB] Core Configuration */,
+				20AD8A4DE4FE26BA23DC49B1 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -772,6 +776,7 @@
 				3E3736A72764B701004801EE /* zh_48.mp3 in Resources */,
 				3E37367A2764B701004801EE /* zh_cycle_completed.mp3 in Resources */,
 				3E3736822764B701004801EE /* zh_24.mp3 in Resources */,
+				3EED4798276776A6009DB29F /* GoogleService-Info.plist in Resources */,
 				3E37369F2764B701004801EE /* zh_9.mp3 in Resources */,
 				3E37369A2764B701004801EE /* en_37.mp3 in Resources */,
 				3E3736A42764B701004801EE /* en_28.mp3 in Resources */,
@@ -859,6 +864,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AppleTimer/Pods-AppleTimer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		20AD8A4DE4FE26BA23DC49B1 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
