@@ -11,11 +11,14 @@ import { UserSettings } from '@/models/common'
 import { DEFAULT_USER_SETTINGS } from '@/common/constants'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { initiateI18n } from '@/i18n/config'
+import analytics from '@react-native-firebase/analytics'
+import { handleErr } from '@/utils/common-util'
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings>(DEFAULT_USER_SETTINGS)
 
   useEffect(() => {
+    analytics().logAppOpen().catch(handleErr)
     // app initiation-task:
     UserSettingsDataService.getUserSettings().then(data => {
       setUserSettings(data)

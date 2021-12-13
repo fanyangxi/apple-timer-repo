@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useRef } from 'react'
+import React, { ReactElement, useContext, useEffect, useRef } from 'react'
 import {
   ScrollView,
   Share,
@@ -34,6 +34,7 @@ import { AppStateContext } from '@/common/app-state-context'
 import { useTranslation } from 'react-i18next'
 import { logger } from '@/utils/logger'
 import Rate, { AndroidMarket } from 'react-native-rate'
+import analytics from '@react-native-firebase/analytics'
 
 interface ActionButtonProps {
   key?: string
@@ -45,6 +46,11 @@ export const SettingsScreen: React.FC = (): ReactElement => {
   const { t, i18n } = useTranslation()
   const languagePickerRef = useRef<Modalize>(null)
   const appState = useContext(AppStateContext)
+
+  useEffect(() => {
+    analytics().logScreenView({ screen_name: 'settings-screen' }).catch(handleErr)
+    //
+  }, [])
 
   const renderActionButton = (buttonProps: ActionButtonProps) => (
     <View style={styles.row}>
@@ -74,7 +80,12 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       subject: 'subject',
     }
     Share.share(content, shareOptions)
-      .then(result => logger.info(`Share app with friends result: ${result}`))
+      .then(result => {
+        logger.info(`Shared app with friends result: ${result}`)
+        analytics()
+          .logShare({ content_type: 'share app with friends', item_id: 'app-id', method: 'react-share' })
+          .catch(handleErr)
+      })
       .catch(handleErr)
   }
 

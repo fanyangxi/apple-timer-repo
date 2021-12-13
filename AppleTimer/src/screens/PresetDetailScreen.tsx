@@ -22,6 +22,8 @@ import { formatSecs } from '@/utils/date-util'
 import { ImageBackground1 } from '@/components/ImageBackground1'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useTranslation } from 'react-i18next'
+import analytics from '@react-native-firebase/analytics'
+import { handleErr } from '@/utils/common-util'
 
 export const PresetDetailScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -43,7 +45,11 @@ export const PresetDetailScreen: React.FC = (): ReactElement => {
   const cyclesPickerRef = useRef<Modalize>(null)
 
   useEffect(() => {
+    analytics()
+      .logScreenView({ screen_name: `${isCreatingNewMode ? 'create' : 'edit'}-preset-detail-screen` })
+      .catch(handleErr)
     console.log('Preset-detail-screen loaded')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

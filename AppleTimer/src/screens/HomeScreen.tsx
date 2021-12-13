@@ -29,6 +29,8 @@ import { UserSettings } from '@/models/common'
 import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { useTranslation } from 'react-i18next'
 import KeepAwake from 'react-native-keep-awake'
+import crashlytics from '@react-native-firebase/crashlytics'
+import analytics from '@react-native-firebase/analytics'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -48,11 +50,13 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const TAG = '$$[HOME]$$'
 
   useEffect(() => {
+    analytics().logScreenView({ screen_name: 'home-screen' }).catch(handleErr)
+    //
     notificationServiceRef.current = new NotificationService()
-    reloadUserSettings().catch(handleErr)
-    DataService.getActivePreset().then(cachedPreset => {
-      setActivePreset(cachedPreset)
-    })
+    reloadUserSettings().catch(e => crashlytics().recordError(e, 'get-user-settings failed'))
+    DataService.getActivePreset()
+      .then(cachedPreset => setActivePreset(cachedPreset))
+      .catch(e => crashlytics().recordError(e, 'get-active-preset failed'))
     // only called once after first render
     logger.info('>>> HOME-SCREEN LOADED ======================>!')
   }, [])
@@ -86,6 +90,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
     //
     timerSvc.OnTimerStarted = async () => {
       KeepAwake.activate()
+      analytics().logEvent('timer-started', thePreset).catch(handleErr)
     }
     timerSvc.OnPaused = async () => {
       logger.info(`${TAG}: timerSvc.OnPaused`)
@@ -110,6 +115,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
       KeepAwake.deactivate()
+      analytics().logEvent('timer-completed', thePreset).catch(handleErr)
     }
     //
     timerSvc.OnCycleStarted = async (secsLeft: number, ticked: TickedContext) => {
