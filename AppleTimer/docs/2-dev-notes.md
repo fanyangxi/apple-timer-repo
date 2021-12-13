@@ -332,9 +332,13 @@ react-native-store-review
 \- https://www.npmjs.com/package/react-native-store-review
 
 
-
-
-
+### Add ADs:
+react-native-admob-native-ads - npm
+\- https://www.npmjs.com/package/react-native-admob-native-ads
+@react-native-admob/admob - npm
+\- https://www.npmjs.com/package/@react-native-admob/admob
+react-native-admob - npm
+\- https://www.npmjs.com/package/react-native-admob
 
 
 

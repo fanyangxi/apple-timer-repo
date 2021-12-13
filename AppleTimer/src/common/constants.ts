@@ -30,6 +30,10 @@ export const MAX_PRESETS_ALLOWED = 6
 
 export const APP_CUSTOMER_SUPPORT_EMAIL = 'apple-timer@gmail.com'
 
+// Sample AdMob App ID for testing: ca-app-pub-3940256099942544~3347511713
+// TEST adUnitID ca-app-pub-3940256099942544/2247696110
+export const GOOGLE_ADMOB_APP_ID = 'ca-app-pub-1056852286164047~7822725133'
+
 /** Distributing: **/
 export const DISTRIBUTED_APP_LINK = Platform.select({
   ios: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en',
