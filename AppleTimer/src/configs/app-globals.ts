@@ -1,4 +1,8 @@
 import Sound from 'react-native-sound'
+import firebase from '@react-native-firebase/app'
+
+// Display firebase context for debugging:
+console.log('Firebase-context', firebase.apps)
 
 // Decide to use 'Playback':
 // - Enable play-sound in silence mode (using the Ring/Silent switch).
