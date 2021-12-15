@@ -84,10 +84,6 @@ https://www.npmjs.com/package/react-native-toast-message
 https://www.npmjs.com/package/react-native-keep-awake
 
 
-### react-native-reanimated
-https://docs.swmansion.com/react-native-reanimated/docs/tutorials/LayoutAnimations/layoutAnimations
-
-
 ### react-native arc/circular-slider:
 https://www.npmjs.com/package/rn-arc-slider
 rn-arc-slider/index.tsx at next · arpitBhalla/rn-arc-slider (++++)
