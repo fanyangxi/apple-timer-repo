@@ -31,17 +31,7 @@ import { useTranslation } from 'react-i18next'
 import KeepAwake from 'react-native-keep-awake'
 import crashlytics from '@react-native-firebase/crashlytics'
 import analytics from '@react-native-firebase/analytics'
-import NativeAdView, {
-  CallToActionView,
-  IconView,
-  HeadlineView,
-  TaglineView,
-  AdvertiserView,
-  AdBadge,
-  StarRatingView,
-  MediaView,
-  StoreView,
-} from 'react-native-admob-native-ads'
+import { AdView } from '@/components/ads/AdView'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -59,6 +49,8 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
   const TAG = '$$[HOME]$$'
+
+  const nativeAdRef = useRef()
 
   useEffect(() => {
     analytics().logScreenView({ screen_name: 'home-screen' }).catch(handleErr)
@@ -170,7 +162,11 @@ export const HomeScreen: React.FC = (): ReactElement => {
   }
 
   const onStartPressed = async () => {
-    await timerServiceRef.current?.runPreset()
+    // @ts-ignore
+    const result = nativeAdRef.current?.loadAd()
+    console.log('ADs:', result)
+
+    // await timerServiceRef.current?.runPreset()
   }
 
   const onPausedPressed = () => {
@@ -197,12 +193,6 @@ export const HomeScreen: React.FC = (): ReactElement => {
     })
   }
 
-  const NATIVE_AD_ID =
-    Platform.OS === 'ios' ? 'ca-app-pub-3940256099942544/3986624511' : 'ca-app-pub-3940256099942544/2247696110'
-
-  const NATIVE_AD_VIDEO_ID =
-    Platform.OS === 'ios' ? 'ca-app-pub-3940256099942544/2521693316' : 'ca-app-pub-3940256099942544/1044960115'
-
   const SUMMARY_HEIGHT = Platform.select({ ios: 120, android: 128, default: 120 })
   return (
     <ScreenContainer
@@ -211,123 +201,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'red',
-        }}
-      >
-        <NativeAdView
-          // onAdLoaded={_onAdLoaded}
-          // onAdFailedToLoad={_onAdFailedToLoad}
-          onAdLeftApplication={() => {
-            console.log('ad has left the application')
-          }}
-          // onAdClicked={_onAdClicked}
-          // onAdImpression={_onAdImpression}
-          // onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
-          // refreshInterval={60000 * 2}
-          style={{
-            width: '98%',
-            alignSelf: 'center',
-            marginVertical: 10,
-            backgroundColor: 'lightblue',
-          }}
-          // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-          adUnitID={'image' === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID}
-        >
-          <View
-            style={{
-              width: '100%',
-              backgroundColor: 'lightgreen',
-            }}
-          >
-            <View
-              style={{
-                height: 100,
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingHorizontal: 10,
-                backgroundColor: 'lightyellow',
-              }}
-            >
-              <IconView
-                style={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-              <View
-                style={{
-                  width: '60%',
-                  maxWidth: '60%',
-                  paddingHorizontal: 6,
-                }}
-              >
-                <HeadlineView
-                  hello="abc"
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 13,
-                  }}
-                />
-                <TaglineView
-                  numberOfLines={2}
-                  style={{
-                    fontSize: 11,
-                  }}
-                />
-                <AdvertiserView
-                  style={{
-                    fontSize: 10,
-                    color: 'gray',
-                  }}
-                />
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  <StarRatingView
-                    starSize={12}
-                    fullStarColor="orange"
-                    emptyStarColor="gray"
-                    containerStyle={{
-                      width: 65,
-                      marginTop: 4,
-                    }}
-                  />
-
-                  <StoreView
-                    style={{
-                      fontSize: 12,
-                      marginLeft: 10,
-                    }}
-                  />
-                </View>
-              </View>
-              <CallToActionView
-                style={{
-                  minHeight: 45,
-                  paddingHorizontal: 12,
-                  backgroundColor: 'purple',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  elevation: 10,
-                  maxWidth: 100,
-                }}
-                allCaps
-                textStyle={{ color: 'white', fontSize: 13, flexWrap: 'wrap', textAlign: 'center' }}
-              />
-            </View>
-          </View>
-        </NativeAdView>
-      </View>
+      <AdView type="image" media={false} />
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar
         title={t('home.screenHeader')}
