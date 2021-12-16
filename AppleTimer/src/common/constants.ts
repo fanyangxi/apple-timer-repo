@@ -46,7 +46,7 @@ export const DISTRIBUTED_APP_LINK = Platform.select({
 
 // Apple AppStore:
 export const AppleAppStoreDistribution = {
-  AppID: '2193813192',
+  AppID: '1600670975',
   // Bundle Identifiers
 }
 
