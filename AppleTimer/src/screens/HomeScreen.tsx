@@ -109,7 +109,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
     //
     timerSvc.OnTimerStarted = async () => {
       KeepAwake.activate()
-      analytics().logEvent('timer-started', thePreset).catch(handleErr)
+      analytics().logEvent('timer_started', thePreset).catch(handleErr)
     }
     timerSvc.OnPaused = async () => {
       logger.info(`${TAG}: timerSvc.OnPaused`)
@@ -136,7 +136,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
       KeepAwake.deactivate()
-      analytics().logEvent('timer-completed', thePreset).catch(handleErr)
+      analytics().logEvent('timer_completed', thePreset).catch(handleErr)
       // check whether to show ads:
       AdsCounterDataService.increaseAdsCounterAndCheck(() => context.adViewPopupRef?.current?.open()).catch(handleErr)
     }
