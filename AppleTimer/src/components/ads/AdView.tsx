@@ -17,9 +17,12 @@ export interface AdViewProps {
   index?: number
   media?: boolean
   loadOnMount?: boolean
+  onAdLoadingStarted?: () => Promise<void>
+  onAdLoadingFinished?: (result: boolean) => Promise<void>
 }
 
-export const AdView = React.memo<AdViewProps>(({ type, index = 0, media, loadOnMount = true }) => {
+export const AdView = React.memo<AdViewProps>(props => {
+  const { type, index = 0, media, loadOnMount = true, onAdLoadingStarted, onAdLoadingFinished } = props
   const [aspectRatio, setAspectRatio] = useState(1.5)
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -48,10 +51,12 @@ export const AdView = React.memo<AdViewProps>(({ type, index = 0, media, loadOnM
      * a few days until the ads will start showing.
      */
     Logger('AD', 'FAILED', event.error.message)
+    onAdLoadingFinished && onAdLoadingFinished(false).catch(() => {})
   }
 
   const onAdLoaded = () => {
     Logger('AD', 'LOADED', 'Ad has loaded successfully')
+    onAdLoadingFinished && onAdLoadingFinished(true).catch(() => {})
   }
 
   const onAdClicked = () => {
@@ -133,6 +138,7 @@ export const AdView = React.memo<AdViewProps>(({ type, index = 0, media, loadOnM
       setError(false)
       // @ts-ignore
       nativeAdRef.current?.loadAd()
+      onAdLoadingStarted && onAdLoadingStarted().catch(() => {})
     }
     return () => {
       setLoaded(false)

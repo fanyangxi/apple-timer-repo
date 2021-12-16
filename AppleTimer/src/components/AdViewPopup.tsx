@@ -12,7 +12,7 @@ export interface AdViewPopupProps {
 
 export const AdViewPopup: React.FC<AdViewPopupProps> = ({ popupRef, value, onValueChanged }) => {
   const [localValue, setLocalValue] = useState<number>(0)
-  const [isScrolling, setIsScrolling] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   return (
     <Modalize
@@ -22,8 +22,8 @@ export const AdViewPopup: React.FC<AdViewPopupProps> = ({ popupRef, value, onVal
       adjustToContentHeight={false}
       modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
       panGestureEnabled={false}
-      withHandle={false}
-      closeOnOverlayTap={!isScrolling}
+      withHandle={!isLoading}
+      closeOnOverlayTap={!isLoading}
       onOpen={() => {
         setLocalValue(value || 0)
       }}
@@ -32,7 +32,12 @@ export const AdViewPopup: React.FC<AdViewPopupProps> = ({ popupRef, value, onVal
       }}
     >
       <View style={[styles.rootContainer]}>
-        <AdView type="image" media={true} />
+        <AdView
+          type="image"
+          media={true}
+          onAdLoadingStarted={async () => setIsLoading(true)}
+          onAdLoadingFinished={async () => setIsLoading(false)}
+        />
       </View>
     </Modalize>
   )
