@@ -10,7 +10,7 @@ export const Screens = {
   PresetDetail: 'PresetDetail',
 }
 
-export const APP_NAME = 'Apple Timer'
+export const APP_NAME = 'Onion Timer'
 
 export const DEFAULT_NEW_PRESET = new Preset('', 'New Workout', 5, 40, 15, 8, 1)
 
