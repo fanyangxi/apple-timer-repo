@@ -28,7 +28,6 @@ export const AdViewPopup: React.FC<AdViewPopupProps> = ({ popupRef, value, onVal
         setLocalValue(value || 0)
       }}
       onClose={() => {
-        console.log(`>>> local: ${localValue}`)
         onValueChanged && onValueChanged(localValue)
       }}
     >

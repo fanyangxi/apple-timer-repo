@@ -32,6 +32,7 @@ import KeepAwake from 'react-native-keep-awake'
 import crashlytics from '@react-native-firebase/crashlytics'
 import analytics from '@react-native-firebase/analytics'
 import { AppStateContext } from '@/common/app-state-context'
+import { AdsCounterDataService } from '@/services/ads-counter-data-service'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -111,6 +112,8 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(thePreset))
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
       KeepAwake.deactivate()
+      // check whether to show ads:
+      AdsCounterDataService.increaseAdsCounterAndCheck(() => appState.adViewPopupRef?.current?.open()).catch(handleErr)
     }
     timerSvc.OnTimerCompleted = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
@@ -119,6 +122,8 @@ export const HomeScreen: React.FC = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerCompleted])
       KeepAwake.deactivate()
       analytics().logEvent('timer-completed', thePreset).catch(handleErr)
+      // check whether to show ads:
+      AdsCounterDataService.increaseAdsCounterAndCheck(() => appState.adViewPopupRef?.current?.open()).catch(handleErr)
     }
     //
     timerSvc.OnCycleStarted = async (secsLeft: number, ticked: TickedContext) => {
@@ -162,11 +167,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
   }
 
   const onStartPressed = async () => {
-    // @ts-ignore
-    const result = appState.adViewPopupRef?.current?.open()
-    console.log('ADs:', result)
-
-    // await timerServiceRef.current?.runPreset()
+    await timerServiceRef.current?.runPreset()
   }
 
   const onPausedPressed = () => {
