@@ -32,7 +32,10 @@ export const APP_CUSTOMER_SUPPORT_EMAIL = 'apple-timer@gmail.com'
 
 // Sample AdMob App ID for testing: ca-app-pub-3940256099942544~3347511713
 // TEST adUnitID ca-app-pub-3940256099942544/2247696110
-export const GOOGLE_ADMOB_APP_ID = 'ca-app-pub-1056852286164047~7822725133'
+export const GOOGLE_ADMOB_APP_ID_ANDROID = 'ca-app-pub-1056852286164047~7822725133'
+export const GOOGLE_ADMOB_AD_UNIT_ID_ANDROID = 'ca-app-pub-1056852286164047/4875576717'
+export const GOOGLE_ADMOB_APP_ID_IOS = 'ca-app-pub-1056852286164047~9778611119'
+export const GOOGLE_ADMOB_AD_UNIT_ID_IOS = 'ca-app-pub-1056852286164047/9828520491'
 
 /** Distributing: **/
 export const DISTRIBUTED_APP_LINK = Platform.select({
