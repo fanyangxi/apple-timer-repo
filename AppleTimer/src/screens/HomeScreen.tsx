@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext, useEffect, useRef, useState } from 'react'
-import { Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { AppState, AppStateStatus, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
 import { TimerStatus } from '@/services/countdown-timer-v2'
@@ -49,7 +49,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const workoutDetailViewRef = useRef<WorkoutDetailViewRefObject>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
-  const appState = useContext(AppStateContext)
+  const context = useContext(AppStateContext)
 
   const TAG = '$$[HOME]$$'
 
@@ -66,6 +66,20 @@ export const HomeScreen: React.FC = (): ReactElement => {
   }, [])
 
   useEffect(() => {
+    const listener = (nextAppState: AppStateStatus) => {
+      console.log('NextAppState:', nextAppState)
+      if (nextAppState.match(/inactive|background/)) {
+        // Try to pause:
+        timerServiceRef.current?.pause()
+      }
+    }
+    AppState.addEventListener('change', listener)
+    return () => {
+      AppState.removeEventListener('change', listener)
+    }
+  }, [])
+
+  useEffect(() => {
     if (activePreset) {
       console.log(`>>> Current active-preset is: ${JSON.stringify(activePreset)}`)
       const totalDurationSecs = getTotalPresetDurationSecs(activePreset)
@@ -75,6 +89,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       setSecsLeftInCurrentWorkout(getTotalPresetDurationSecs(activePreset))
       timerServiceRef.current = initTimerServiceRef(activePreset, theUnpackedPresetMap)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePreset])
 
   const initTimerServiceRef = (thePreset: Preset, unpackedPresetMap: UnpackedPresetMap): TimerService => {
@@ -113,7 +128,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       notificationServiceRef.current?.playSounds([Sounds.TimerStopped])
       KeepAwake.deactivate()
       // check whether to show ads:
-      AdsCounterDataService.increaseAdsCounterAndCheck(() => appState.adViewPopupRef?.current?.open()).catch(handleErr)
+      AdsCounterDataService.increaseAdsCounterAndCheck(() => context.adViewPopupRef?.current?.open()).catch(handleErr)
     }
     timerSvc.OnTimerCompleted = async () => {
       workoutDetailViewRef.current?.resetCycleAnim()
@@ -123,7 +138,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
       KeepAwake.deactivate()
       analytics().logEvent('timer-completed', thePreset).catch(handleErr)
       // check whether to show ads:
-      AdsCounterDataService.increaseAdsCounterAndCheck(() => appState.adViewPopupRef?.current?.open()).catch(handleErr)
+      AdsCounterDataService.increaseAdsCounterAndCheck(() => context.adViewPopupRef?.current?.open()).catch(handleErr)
     }
     //
     timerSvc.OnCycleStarted = async (secsLeft: number, ticked: TickedContext) => {
