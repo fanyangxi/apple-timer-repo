@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useContext, useEffect, useRef, useState } from 'react'
 import { Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors, FontColors, Fonts, RadiusSizes, Spacings } from '@/theme/Variables'
 import { Preset, TickedContext, UnpackedPresetMap } from '@/models/preset'
@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next'
 import KeepAwake from 'react-native-keep-awake'
 import crashlytics from '@react-native-firebase/crashlytics'
 import analytics from '@react-native-firebase/analytics'
-import { AdView } from '@/components/ads/AdView'
+import { AppStateContext } from '@/common/app-state-context'
 
 export const HomeScreen: React.FC = (): ReactElement => {
   const { t } = useTranslation()
@@ -48,9 +48,9 @@ export const HomeScreen: React.FC = (): ReactElement => {
   const workoutDetailViewRef = useRef<WorkoutDetailViewRefObject>()
   const { navigate } = useNavigation()
   const modalizeRef = useRef<Modalize>(null)
-  const TAG = '$$[HOME]$$'
+  const appState = useContext(AppStateContext)
 
-  const nativeAdRef = useRef()
+  const TAG = '$$[HOME]$$'
 
   useEffect(() => {
     analytics().logScreenView({ screen_name: 'home-screen' }).catch(handleErr)
@@ -163,7 +163,7 @@ export const HomeScreen: React.FC = (): ReactElement => {
 
   const onStartPressed = async () => {
     // @ts-ignore
-    const result = nativeAdRef.current?.loadAd()
+    const result = appState.adViewPopupRef?.current?.open()
     console.log('ADs:', result)
 
     // await timerServiceRef.current?.runPreset()
@@ -201,7 +201,6 @@ export const HomeScreen: React.FC = (): ReactElement => {
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <AdView type="image" media={false} />
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar
         title={t('home.screenHeader')}

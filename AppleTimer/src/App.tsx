@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ApplicationNavigator } from '@/navigators'
 import './translations'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -13,9 +13,12 @@ import { UserSettingsDataService } from '@/services/user-settings-data-service'
 import { initiateI18n } from '@/i18n/config'
 import analytics from '@react-native-firebase/analytics'
 import { handleErr } from '@/utils/common-util'
+import { AdViewPopup } from '@/components/AdViewPopup'
+import { Modalize } from 'react-native-modalize'
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings>(DEFAULT_USER_SETTINGS)
+  const adViewPopupRef = useRef<Modalize>(null)
 
   useEffect(() => {
     analytics().logAppOpen().catch(handleErr)
@@ -27,7 +30,7 @@ const App = () => {
   }, [])
 
   return (
-    <AppStateContext.Provider value={{ userSettings, setUserSettings }}>
+    <AppStateContext.Provider value={{ userSettings, setUserSettings, adViewPopupRef }}>
       <SafeAreaProvider>
         <ApplicationNavigator />
       </SafeAreaProvider>
@@ -36,6 +39,7 @@ const App = () => {
         topOffset={initialWindowMetrics?.insets.top ?? 30}
         visibilityTime={2000}
       />
+      <AdViewPopup popupRef={adViewPopupRef} />
     </AppStateContext.Provider>
   )
 }
