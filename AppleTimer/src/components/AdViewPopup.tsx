@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { Modalize } from 'react-native-modalize'
 import { AdView } from '@/components/ads/AdView'
+import { Spacings } from '@/theme/Variables'
 
 export interface AdViewPopupProps {
   popupRef: React.RefObject<Modalize>
@@ -16,6 +17,8 @@ export const AdViewPopup: React.FC<AdViewPopupProps> = ({ popupRef, value, onVal
   return (
     <Modalize
       ref={popupRef}
+      modalHeight={340}
+      disableScrollIfPossible={true}
       adjustToContentHeight={false}
       modalStyle={{ backgroundColor: 'rgba( 166, 166, 166, 1 )' }}
       panGestureEnabled={false}
@@ -40,10 +43,11 @@ const styles = StyleSheet.create({
   rootContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
+    paddingTop: Spacings.s_4,
     // height: DEFAULT_PICKER_HEIGHT,
     // borderTopLeftRadius: RadiusSizes.r12,
     // borderTopRightRadius: RadiusSizes.r12,
-    backgroundColor: 'red', // == rgb( 166, 166, 166)
+    // backgroundColor: '#e2a6a6', // == rgb( 166, 166, 166)
   },
   actionButtonsBar: {
     flexGrow: 1,

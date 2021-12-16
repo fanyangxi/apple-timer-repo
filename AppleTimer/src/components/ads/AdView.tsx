@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, DeviceEventEmitter, Platform, Text, View, ViewToken } from 'react-native'
+import { ActivityIndicator, DeviceEventEmitter, Platform, StyleSheet, Text, View, ViewToken } from 'react-native'
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -151,125 +151,47 @@ export const AdView = React.memo<AdViewProps>(({ type, index = 0, media, loadOnM
       onAdImpression={onAdImpression}
       onNativeAdLoaded={onNativeAdLoaded}
       refreshInterval={60000 * 2}
-      style={{
-        width: '98%',
-        alignSelf: 'center',
-        backgroundColor: 'transparent',
-      }}
-      videoOptions={{
-        customControlsRequested: true,
-      }}
+      style={styles.root}
+      videoOptions={{ customControlsRequested: true }}
       adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} //REPLACE WITH NATIVE_AD_VIDEO_ID for video ads
       // repository={type === 'image' ? 'imageAd' : 'videoAd'}
     >
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.contentRoot}>
         <View
-          style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#f0f0f0',
-            position: 'absolute',
-            justifyContent: 'center',
-            alignItems: 'center',
-            opacity: !loading && !error && loaded ? 0 : 1,
-            zIndex: !loading && !error && loaded ? 0 : 10,
-          }}
+          style={[
+            styles.loaderAndErrorContent,
+            { opacity: !loading && !error && loaded ? 0 : 1, zIndex: !loading && !error && loaded ? 0 : 10 },
+          ]}
         >
-          {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
-          {error && <Text style={{ color: '#a9a9a9' }}>:-(</Text>}
+          {loading && <ActivityIndicator size={28} color="#fdfdfd" />}
+          {error && <Text style={{ color: '#fdfdfd' }}>:-(</Text>}
         </View>
 
-        <View
-          style={{
-            height: 100,
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 10,
-            opacity: loading || error || !loaded ? 0 : 1,
-          }}
-        >
-          <IconView
-            style={{
-              width: 60,
-              height: 60,
-            }}
-          />
-          <View
-            style={{
-              width: '60%',
-              maxWidth: '60%',
-              paddingHorizontal: 6,
-            }}
-          >
+        <View style={[styles.adContent, { opacity: loading || error || !loaded ? 0 : 1 }]}>
+          <IconView style={styles.leftIcon} />
+          <View style={styles.middle}>
             <HeadlineView
               // @ts-ignore
               hello="abc"
-              style={{
-                fontWeight: 'bold',
-                fontSize: 13,
-              }}
+              style={{ fontWeight: 'bold', fontSize: 13 }}
             />
-            <TaglineView
-              numberOfLines={2}
-              style={{
-                fontSize: 11,
-              }}
-            />
-            <AdvertiserView
-              style={{
-                fontSize: 10,
-                color: 'gray',
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <StoreView
-                style={{
-                  fontSize: 12,
-                }}
-              />
+            <TaglineView numberOfLines={2} style={{ fontSize: 11 }} />
+            <AdvertiserView style={{ fontSize: 10, color: 'gray' }} />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <StoreView style={{ fontSize: 12 }} />
               <StarRatingView
                 // @ts-ignore
                 starSize={12}
                 fullStarColor="orange"
                 emptyStarColor="gray"
-                style={{
-                  width: 65,
-                  marginLeft: 10,
-                }}
+                style={{ width: 65, marginLeft: 10 }}
               />
             </View>
           </View>
-
           <CallToActionView
             style={[
-              {
-                minHeight: 45,
-                paddingHorizontal: 12,
-                justifyContent: 'center',
-                alignItems: 'center',
-                elevation: 10,
-                maxWidth: 100,
-                width: 80,
-              },
-              Platform.OS === 'ios'
-                ? {
-                    backgroundColor: '#00ff00',
-                    borderRadius: 5,
-                  }
-                : {},
+              styles.rightCallToAction,
+              Platform.OS === 'ios' ? { backgroundColor: '#00ff00', borderRadius: 5 } : {},
             ]}
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',
@@ -287,4 +209,50 @@ export const AdView = React.memo<AdViewProps>(({ type, index = 0, media, loadOnM
       </View>
     </NativeAdView>
   )
+})
+
+const styles = StyleSheet.create({
+  root: {
+    width: '92%',
+    alignSelf: 'center',
+    // backgroundColor: 'red', // 'transparent',
+  },
+  contentRoot: {
+    // width: '100%',
+    // flexGrow: 1,
+    alignItems: 'center',
+    // backgroundColor: 'red', // 'transparent',
+  },
+  loaderAndErrorContent: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba( 166, 166, 166, 1 )',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // opacity: !loading && !error && loaded ? 0 : 1,
+    // zIndex: !loading && !error && loaded ? 0 : 10,
+  },
+  adContent: {
+    height: 100,
+    // width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // paddingHorizontal: 10,
+    // opacity: loading || error || !loaded ? 0 : 1,
+    // backgroundColor: 'lightgreen',
+  },
+  leftIcon: { width: 60, height: 60 },
+  middle: { flexShrink: 1, paddingHorizontal: 6 },
+  rightCallToAction: {
+    minHeight: 45,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 10,
+    maxWidth: 100,
+    width: 80,
+  },
 })

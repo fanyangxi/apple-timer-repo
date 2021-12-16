@@ -32,9 +32,9 @@ export const MediaView = ({ aspectRatio = 1.5 }) => {
     <>
       <NativeMediaView
         style={{
-          width: Dimensions.get('window').width - 20,
+          width: '100%', // Dimensions.get('window').width - 20,
           height: Dimensions.get('window').width / aspectRatio,
-          backgroundColor: 'white',
+          backgroundColor: 'rgba( 166, 166, 166, 1 )',
         }}
         onVideoPause={onVideoPause}
         onVideoPlay={onVideoPlay}
@@ -42,20 +42,19 @@ export const MediaView = ({ aspectRatio = 1.5 }) => {
         onVideoProgress={onVideoProgress}
         onVideoMute={onVideoMute}
       />
-
-      <TouchableOpacity
-        onPress={() => {
-          setPause(!pause)
-        }}
-        style={{
-          width: 50,
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text>Pause/Play</Text>
-      </TouchableOpacity>
+      {/*<TouchableOpacity*/}
+      {/*  onPress={() => {*/}
+      {/*    setPause(!pause)*/}
+      {/*  }}*/}
+      {/*  style={{*/}
+      {/*    width: 50,*/}
+      {/*    height: 50,*/}
+      {/*    justifyContent: 'center',*/}
+      {/*    alignItems: 'center',*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <Text>Pause/Play</Text>*/}
+      {/*</TouchableOpacity>*/}
     </>
   )
 }
