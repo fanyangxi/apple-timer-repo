@@ -28,7 +28,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 
 export const MAX_PRESETS_ALLOWED = 6
 
-export const APP_CUSTOMER_SUPPORT_EMAIL = 'apple-timer@gmail.com'
+export const APP_CUSTOMER_SUPPORT_EMAIL = 'info.oniontimer@gmail.com'
 
 // Sample AdMob App ID for testing: ca-app-pub-3940256099942544~3347511713
 // TEST adUnitID ca-app-pub-3940256099942544/2247696110
