@@ -39,8 +39,8 @@ export const GOOGLE_ADMOB_AD_UNIT_ID_IOS = 'ca-app-pub-1056852286164047/98285204
 
 /** Distributing: **/
 export const DISTRIBUTED_APP_LINK = Platform.select({
-  ios: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en',
-  android: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en',
+  ios: 'https://itunes.apple.com/app/id1600670975',
+  android: 'https://play.google.com/store/apps/details?id=com.yxfan.appletimer.oniontimer',
   default: 'unknown',
 })
 
@@ -52,20 +52,20 @@ export const AppleAppStoreDistribution = {
 
 // Google PlayStore,
 export const GooglePlayStoreDistribution = {
-  PackageName: 'com.mywebsite.myapp',
+  PackageName: 'com.yxfan.appletimer.oniontimer',
 }
 
 // Amazon Appstore: https://en.wikipedia.org/wiki/Amazon_Appstore
 export const AmazonAppstoreDistribution = {
-  PackageName: 'com.mywebsite.myapp',
+  PackageName: 'com.yxfan.appletimer.oniontimer',
 }
 
 // SamsungGalaxyStore,
 export const SamsungGalaxyStoreDistribution = {
-  AppID: '2193813192',
+  AppID: '0',
 }
 
 // 华为应用市场/AppGallery
 export const HuaweiAppStoreDistribution = {
-  AppID: '2193813192',
+  AppID: '0',
 }
