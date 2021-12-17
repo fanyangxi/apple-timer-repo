@@ -26,7 +26,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   enableVoiceAssist: true,
 }
 
-export const MAX_PRESETS_ALLOWED = 6
+export const MAX_PRESETS_ALLOWED = 5
 
 export const APP_CUSTOMER_SUPPORT_EMAIL = 'info.oniontimer@gmail.com'
 
