@@ -69,8 +69,9 @@ export const HomeScreen: React.FC = (): ReactElement => {
     const listener = (nextAppState: AppStateStatus) => {
       console.log('NextAppState:', nextAppState)
       if (nextAppState.match(/inactive|background/)) {
-        // Try to pause:
-        timerServiceRef.current?.pause()
+        // // Try to pause when app is switched to background:
+        // timerServiceRef.current?.pause()
+        // logger.info('App now switched to background')
       }
     }
     AppState.addEventListener('change', listener)
