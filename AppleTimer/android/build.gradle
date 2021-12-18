@@ -11,6 +11,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        // Huawei-AGC:
+        maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.1.0")
@@ -18,6 +20,8 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.10'
         // Enable google-firebase-crashlytics:
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+        // Huawei-AGC:
+        classpath 'com.huawei.agconnect:agcp:1.5.2.300'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -38,5 +42,7 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://www.jitpack.io' }
+        // Huawei-AGC:
+        maven {url 'https://developer.huawei.com/repo/'}
     }
 }
