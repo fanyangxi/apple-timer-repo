@@ -120,7 +120,7 @@ export const SettingsScreen: React.FC = (): ReactElement => {
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar title={t('settings.screenHeader')} showBackButton={true} />
       <ScrollView style={styles.rootContainer}>
         {/* ==== General ==== */}

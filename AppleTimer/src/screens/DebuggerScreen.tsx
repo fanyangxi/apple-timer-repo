@@ -116,7 +116,7 @@ export const DebuggerScreen: React.FC<{}> = (): ReactElement => {
       topInsetBackgroundColor={Colors.mineShaft}
       bottomInsetBackgroundColor={Colors.transparent}
     >
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.primary} />
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.transparent} />
       <NavigationBar title={'Debugger'} showBackButton={true} />
       <View style={styles.rootContainer}>
         {/* @action-section: */}
